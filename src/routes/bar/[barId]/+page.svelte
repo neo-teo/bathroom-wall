@@ -30,6 +30,12 @@
 
 <hr />
 
+{#if posts.length === 0}
+	<div>
+		<p style="color:gray">🥱 it's quiet in here... be the first to write something</p>
+	</div>
+{/if}
+
 {#each posts as post}
 	<div>
 		<p><b>{post.message}</b></p>
