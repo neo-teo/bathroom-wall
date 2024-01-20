@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql" // "sqlite"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Bar {
+  id      String @id @default(uuid())
+  name    String
+  address String
+  city    String
+  zipCode String
+  posts   Post[]
+}
+
+model Post {
+  id       String   @id @default(uuid())
+  nickname String
+  message  String
+  // content  String | this will one day be photo video url and that
+  date     DateTime @default(now())
+  Bar      Bar?     @relation(fields: [barId], references: [id])
+  barId    String?
+
+  @@index([barId])
+}
