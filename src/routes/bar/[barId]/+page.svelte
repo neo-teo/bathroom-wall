@@ -17,7 +17,7 @@
 	</div>
 </div>
 
-<form action={`?/createPost`} method="POST" class="flex max-w-[400px] flex-col gap-[10px]">
+<form action={`?/createPost`} method="POST" class="flex flex-col gap-[10px]">
 	<input type="hidden" id="barId" name="barId" value={data.bar.id} />
 	<div class="flex flex-col gap-[5px]">
 		<label for="nickname"> Nickname </label>
@@ -37,7 +37,9 @@
 {/if}
 
 {#each posts as post}
-	<div class="flex flex-col gap-[10px] rounded-md border border-gray-200 bg-gray-50 p-3">
+	<div
+		class="ax-w-[400px] flex flex-col gap-[10px] rounded-md border border-gray-200 bg-gray-50 p-3"
+	>
 		<p>{post.message}</p>
 		<div class="flex justify-between">
 			<p class="font-bold">{post.nickname}</p>
