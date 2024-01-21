@@ -23,7 +23,7 @@
 	particular night
 </p>
 
-<form>
+<form class="flex flex-col">
 	<input type="text" placeholder="bar name, city, address..." bind:value={$searchStore.search} />
 </form>
 

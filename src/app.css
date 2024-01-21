@@ -1,0 +1,33 @@
+@tailwind base;
+
+@layer base {
+    h1 {
+        @apply text-2xl;
+        @apply font-bold
+    }
+
+    h2 {
+        @apply text-xl;
+    }
+
+    h3 {
+        @apply text-lg;
+    }
+
+    a {
+        @apply text-blue-600 underline;
+    }
+
+    input,
+    textarea {
+        @apply border rounded-md p-2
+    }
+
+    label {
+        @apply font-bold
+    }
+}
+
+@tailwind components;
+
+@tailwind utilities;
