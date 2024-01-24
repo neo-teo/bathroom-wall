@@ -20,7 +20,7 @@
 
     input,
     textarea {
-        @apply border rounded-md p-2
+        @apply border rounded-sm p-2
     }
 
     label {

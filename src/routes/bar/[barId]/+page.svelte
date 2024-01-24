@@ -27,23 +27,24 @@
 		<label for="message"> Message </label>
 		<textarea id="message" name="message" rows={3} required />
 	</div>
-	<button class="rounded-md border bg-blue-500 p-0.5 text-white">Post</button>
+	<button class="rounded-sm border bg-blue-500 p-0.5 text-white">Post</button>
 </form>
 
 {#if posts.length === 0}
 	<div>
-		<p class="text-gray-400">🥱 it's quiet in here... be the first to write something</p>
+		<p class="text-gray-400">🥱 it's quiet in here...</p>
 	</div>
 {/if}
 
 {#each posts as post}
-	<div
-		class="ax-w-[400px] flex flex-col gap-[10px] rounded-md border border-gray-200 bg-gray-50 p-3"
-	>
-		<p>{post.message}</p>
+	<div class="flex flex-col gap-[10px] rounded-sm border border-gray-400 p-3">
 		<div class="flex justify-between">
-			<p class="font-bold">{post.nickname}</p>
+			<div class="flex gap-[3px]">
+				#
+				<p class="font-bold">{post.nickname}</p>
+			</div>
 			<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
 		</div>
+		<p>{post.message}</p>
 	</div>
 {/each}
