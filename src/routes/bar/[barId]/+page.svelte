@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { howLongAgo } from '$lib/utils/timeUtils';
 	import type { PageData } from './$types';
+
+	import Post from '$lib/components/Post.svelte';
 
 	export let data: PageData;
 
@@ -12,7 +13,6 @@
 
 	<div class="flex flex-col justify-center text-right">
 		<h2>{data.bar.name}</h2>
-
 		<p class="text-sm">{data.date}</p>
 	</div>
 </div>
@@ -31,20 +31,9 @@
 </form>
 
 {#if posts.length === 0}
-	<div>
-		<p class="text-gray-400">🥱 it's quiet in here...</p>
-	</div>
+	<p class="text-gray-400">🥱 it's quiet in here...</p>
 {/if}
 
 {#each posts as post}
-	<div class="flex flex-col gap-[10px] rounded-sm border border-gray-500 bg-white p-3">
-		<div class="flex justify-between">
-			<div class="flex gap-[3px]">
-				#
-				<p class="font-bold">{post.nickname}</p>
-			</div>
-			<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
-		</div>
-		<p>{post.message}</p>
-	</div>
+	<Post {post} />
 {/each}

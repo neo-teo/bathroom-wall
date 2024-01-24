@@ -2,7 +2,7 @@
 	import '../app.css';
 </script>
 
-<div class="flex grid h-screen justify-center">
+<div class="flex grid min-h-screen justify-center">
 	<div class="flex w-[360px] flex-col gap-[20px] p-5">
 		<slot />
 	</div>
