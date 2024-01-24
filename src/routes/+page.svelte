@@ -27,9 +27,11 @@
 	<input type="text" placeholder="bar name, city, address..." bind:value={$searchStore.search} />
 </form>
 
-{#each $searchStore.filtered as bar}
-	<a href={`/bar/${bar.id}`}>
-		<h2>{bar.name}</h2>
-		<p>{bar.address}, {bar.city} {bar.zipCode}</p>
-	</a>
-{/each}
+<div class="flex flex-col gap-[20px] border border-gray-500 bg-white p-2">
+	{#each $searchStore.filtered as bar}
+		<a href={`/bar/${bar.id}`}>
+			<h2>{bar.name}</h2>
+			<p class="text-sm">{bar.address}, {bar.city} {bar.zipCode}</p>
+		</a>
+	{/each}
+</div>

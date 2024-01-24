@@ -15,12 +15,12 @@
     }
 
     a {
-        @apply text-blue-600 underline;
+        @apply text-black underline;
     }
 
     input,
     textarea {
-        @apply border rounded-sm p-2
+        @apply border border-gray-400 rounded-sm p-2
     }
 
     label {

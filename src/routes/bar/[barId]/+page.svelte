@@ -10,10 +10,10 @@
 <div class="grid grid-cols-2">
 	<a href="/"><h1>bathroom <br /> wall</h1></a>
 
-	<div class="flex flex-col justify-center border-l border-black text-right">
+	<div class="flex flex-col justify-center text-right">
 		<h2>{data.bar.name}</h2>
 
-		<h4>{data.date}</h4>
+		<p class="text-sm">{data.date}</p>
 	</div>
 </div>
 
@@ -37,7 +37,7 @@
 {/if}
 
 {#each posts as post}
-	<div class="flex flex-col gap-[10px] rounded-sm border border-gray-400 p-3">
+	<div class="flex flex-col gap-[10px] rounded-sm border border-gray-500 bg-white p-3">
 		<div class="flex justify-between">
 			<div class="flex gap-[3px]">
 				#
