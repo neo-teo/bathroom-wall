@@ -27,6 +27,7 @@
 		<label for="message"> Message </label>
 		<textarea id="message" name="message" rows={3} required />
 	</div>
+	<!-- <input type="file" id="capture" accept="image/*, video/*, audio/*" capture /> -->
 	<button class="rounded-sm border bg-blue-500 p-0.5 text-white">Post</button>
 </form>
 

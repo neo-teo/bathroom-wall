@@ -3,6 +3,9 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { today, twentyFourAgo } from '$lib/utils/timeUtils';
 
+import { GOOGLE_EMAIL } from '$env/static/private';
+import transporter from '$lib/emailSetup.server';
+
 export const load: PageServerLoad = async ({ params, cookies }) => {
 
     const id = params.barId;
@@ -67,6 +70,14 @@ export const actions: Actions = {
             console.error(err);
             return fail(500, { message: 'Could not create the post.' })
         }
+
+        // await transporter.sendMail({
+        //     from: GOOGLE_EMAIL,
+        //     to: "theodore@tsivranidis.com",
+        //     subject: "new bathroom_wall post",
+        //     text: `A new post was made by: ${nickname}`,
+        //     html: `<p>A new post was made by: ${nickname}. <br> View it <a href="https://bathroom-wall.netlify.app/${barId}">here</a> </p>`
+        // });
 
         return {
             status: 201
