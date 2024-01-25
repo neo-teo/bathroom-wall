@@ -71,13 +71,13 @@ export const actions: Actions = {
             return fail(500, { message: 'Could not create the post.' })
         }
 
-        // await transporter.sendMail({
-        //     from: GOOGLE_EMAIL,
-        //     to: "theodore@tsivranidis.com",
-        //     subject: "new bathroom_wall post",
-        //     text: `A new post was made by: ${nickname}`,
-        //     html: `<p>A new post was made by: ${nickname}. <br> View it <a href="https://bathroom-wall.netlify.app/${barId}">here</a> </p>`
-        // });
+        transporter.sendMail({
+            from: GOOGLE_EMAIL,
+            to: GOOGLE_EMAIL,
+            subject: `new bathroom_wall post by ${nickname}`,
+            text: `view it here https://bathroom-wall.netlify.app/${barId}`,
+            html: `<p>view it <a href="https://bathroom-wall.netlify.app/${barId}">here</a> </p>`
+        });
 
         return {
             status: 201
