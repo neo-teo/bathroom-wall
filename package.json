@@ -37,7 +37,6 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^5.8.1",
-		"@silintl/svelte-google-places-autocomplete": "^1.2.0",
 		"@types/googlemaps": "^3.43.3"
 	}
 }
