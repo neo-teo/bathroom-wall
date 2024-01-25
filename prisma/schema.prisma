@@ -17,8 +17,6 @@ model Bar {
   id      String @id @default(uuid())
   name    String
   address String
-  city    String
-  zipCode String
   posts   Post[]
 }
 
