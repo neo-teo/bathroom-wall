@@ -71,7 +71,7 @@ export const actions: Actions = {
             return fail(500, { message: 'Could not create the post.' })
         }
 
-        transporter.sendMail({
+        await transporter.sendMail({
             from: GOOGLE_EMAIL,
             to: GOOGLE_EMAIL,
             subject: `new bathroom_wall post by ${nickname}`,
