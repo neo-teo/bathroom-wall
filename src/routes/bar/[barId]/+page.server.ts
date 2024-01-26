@@ -73,10 +73,10 @@ export const actions: Actions = {
 
         transporter.sendMail({
             from: GOOGLE_EMAIL,
-            to: GOOGLE_EMAIL,
+            to: "theodore.tsivranidis@gmail.com",
             subject: `new bathroom_wall post by ${nickname}`,
-            text: `view it here https://bathroom-wall.netlify.app/bar/${barId}`,
-            html: `<p>view it <a href="https://bathroom-wall.netlify.app/bar/${barId}">here</a> </p>`
+            text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bar/${barId}`,
+            html: `<p>\"${message}\" <br># ${nickname} <br><br> view it <a href="https://bathroom-wall.netlify.app/bar/${barId}">here</a> </p>`
         }, function (error, info) {
             if (error) {
                 console.error(error);
