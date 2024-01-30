@@ -43,8 +43,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
     const nickname = cookies.get("nickname");
 
     return { bar: barData, date: date, nickname: nickname };
-
-    throw error(404, 'Not found');
 };
 
 export const actions: Actions = {
