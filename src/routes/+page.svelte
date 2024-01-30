@@ -78,15 +78,15 @@
 		</div>
 	{:else}
 		<!-- only render first 5 filtered bars -->
-		{#each $searchStore.filtered.slice(0, 5) as bar}
+		{#each $searchStore.filtered.slice(0, 20) as bar}
 			<a href={`/bar/${bar.id}`}>
 				<h2>{bar.name}</h2>
 				<p class="text-sm">{bar.address}</p>
 			</a>
 		{/each}
-		{#if $searchStore.filtered.length - 5 > 0}
+		{#if $searchStore.filtered.length - 20 > 0}
 			<p class="text-sm text-gray-400">
-				and {$searchStore.filtered.length - 5} more
+				and {$searchStore.filtered.length - 20} more
 			</p>
 		{/if}
 	{/if}

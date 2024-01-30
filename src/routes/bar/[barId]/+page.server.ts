@@ -74,7 +74,7 @@ export const actions: Actions = {
             to: "theodore.tsivranidis@gmail.com",
             subject: `new bathroom_wall post`,
             text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bar/${barId}`,
-            html: `<p><b>${nickname}</b> said: \"${message}\"  <br><br> view it <a href="https://bathroom-wall.netlify.app/bar/${barId}">here</a> </p>`
+            html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bar/${barId}">${message}</a>\"`
         });
 
         return {
