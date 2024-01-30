@@ -1,6 +1,8 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
+import { GOOGLE_EMAIL } from '$env/static/private';
+import transporter from '$lib/emailSetup.server';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
 
@@ -31,6 +33,14 @@ export const actions: Actions = {
             console.error(err);
             return fail(500, { message: 'Unable to create bar.' })
         }
+
+        await transporter.sendMail({
+            from: GOOGLE_EMAIL,
+            to: "theodore.tsivranidis@gmail.com",
+            subject: `someone added a bar to bathroom_wall`,
+            text: `${barData.name} at ${barData.address} got added`,
+            html: `<b>${barData.name}</b> at <i>${barData.address}</i> got added`
+        });
 
         throw redirect(302, `/bar/` + barData.id);
     }
