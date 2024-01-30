@@ -78,11 +78,18 @@
 		</div>
 	{:else}
 		<!-- only render first 5 filtered bars -->
-		{#each $searchStore.filtered.slice(0, 20) as bar}
-			<a href={`/bar/${bar.id}`}>
-				<h2>{bar.name}</h2>
+		{#each $searchStore.filtered
+			.sort((a, b) => b.posts.length - a.posts.length)
+			.slice(0, 20) as bar}
+			<div class="flex flex-col gap-[5px]">
+				<div class="flex items-center justify-between">
+					<a href={`/bar/${bar.id}`}>
+						<h2>{bar.name}</h2>
+					</a>
+					<p class="text-sm text-gray-400 no-underline">{bar.posts.length} tags</p>
+				</div>
 				<p class="text-sm">{bar.address}</p>
-			</a>
+			</div>
 		{/each}
 		{#if $searchStore.filtered.length - 20 > 0}
 			<p class="text-sm text-gray-400">

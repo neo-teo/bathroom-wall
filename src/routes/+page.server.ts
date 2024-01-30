@@ -3,10 +3,24 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
+import { twentyFourAgo } from '$lib/utils/timeUtils';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
 
-    const barData = await db.bar.findMany({});
+    const barData = await db.bar.findMany({
+        include: {
+            posts: {
+                where: {
+                    date: {
+                        gte: new Date(twentyFourAgo()), // Earliest date
+                    }
+                },
+                orderBy: {
+                    date: 'desc'
+                }
+            }
+        }
+    });
 
     return { bars: barData };
 };
