@@ -83,7 +83,7 @@ export const actions: Actions = {
 
                 cloudinary.uploader.upload(captureData,
                     { public_id: mediaFile.id },
-                    function (error, result) {
+                    async function (error, result) {
                         if (error) {
                             return {
                                 statusCode: 404,
