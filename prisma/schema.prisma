@@ -25,10 +25,23 @@ model Post {
   id       String   @id @default(uuid())
   nickname String
   message  String
-  // content  String | this will one day be photo video url and that
   date     DateTime @default(now())
-  Bar      Bar?     @relation(fields: [barId], references: [id])
-  barId    String?
+
+  media MediaFile?
+
+  Bar   Bar    @relation(fields: [barId], references: [id])
+  barId String
 
   @@index([barId])
+}
+
+model MediaFile {
+  id          String @id @default(uuid())
+  type        String // 'image' or 'video' or ...
+  aspectRatio String
+
+  Post   Post   @relation(fields: [postId], references: [id])
+  postId String @unique
+
+  @@index([postId])
 }
