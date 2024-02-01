@@ -7,9 +7,9 @@
 export const readImageFileAndFillInCaptureInfo = (file: File, captureData: HTMLInputElement, captureAR: HTMLInputElement): void => {
     const reader = new FileReader();
 
-    reader.onload = function (event) {
+    reader.onload = async function (event) {
         const img = new Image();
-        img.onload = function () {
+        img.onload = async function () {
             // resizing image and getting its compressed data url, width, and height
             const { url, width, height } = resizeAndConvertToJPEG(img);
             // filling in hidden input components with this compressed info
