@@ -50,7 +50,7 @@
 	</div>
 
 	<!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
-	<input type="file" id="capture" accept="image/*" capture on:change={captureMedia} />
+	<!-- <input type="file" id="capture" accept="image/*" capture on:change={captureMedia} /> -->
 
 	<!-- The following two hidden inputs store the capture's data and aspect ratio -->
 	<input type="text" id="captureData" name="captureData" class="hidden" />
