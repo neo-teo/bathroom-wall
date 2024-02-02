@@ -52,12 +52,12 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 export const actions: Actions = {
     createPost: async ({ request, cookies }) => {
-        const { barId, nickname, message } = Object.fromEntries(await request.formData()) as {
+        const { barId, nickname, message, captureData, captureAR } = Object.fromEntries(await request.formData()) as {
             barId: string,
             nickname: string,
             message: string,
-            // captureData?: string,
-            // captureAR?: string,
+            captureData?: string,
+            captureAR?: string,
         }
 
         cookies.set("nickname", nickname, { path: "/" })
@@ -72,19 +72,19 @@ export const actions: Actions = {
                 }
             });
 
-            // if (captureData && captureAR) {
-            //     const mediaFile = await db.mediaFile.create({
-            //         data: {
-            //             postId: post.id,
-            //             type: 'image',
-            //             aspectRatio: captureAR
-            //         }
-            //     });
+            if (captureData && captureAR) {
+                const mediaFile = await db.mediaFile.create({
+                    data: {
+                        postId: post.id,
+                        type: 'image',
+                        aspectRatio: captureAR
+                    }
+                });
 
-            //     cloudinary.uploader.upload(captureData,
-            //         { public_id: mediaFile.id },
-            //         async function (error, result) { });
-            // }
+                cloudinary.uploader.upload(captureData,
+                    { public_id: mediaFile.id },
+                    async function (error, result) { });
+            }
 
         } catch (err) {
             console.error(err);
