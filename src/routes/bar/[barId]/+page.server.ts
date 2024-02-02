@@ -52,12 +52,12 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 
 export const actions: Actions = {
     createPost: async ({ request, cookies }) => {
-        const { barId, nickname, message, captureData, captureAR } = Object.fromEntries(await request.formData()) as {
+        const { barId, nickname, message } = Object.fromEntries(await request.formData()) as {
             barId: string,
             nickname: string,
             message: string,
-            captureData?: string,
-            captureAR?: string,
+            // captureData?: string,
+            // captureAR?: string,
         }
 
         cookies.set("nickname", nickname, { path: "/" })
