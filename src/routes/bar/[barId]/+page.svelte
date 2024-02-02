@@ -17,7 +17,7 @@
 		if (input && input.files && input.files.length > 0) {
 			const file = input.files[0];
 			if (file.type.includes('image')) {
-				// readImageFileAndFillInCaptureInfo(file, captureData, captureAR);
+				readImageFileAndFillInCaptureInfo(file, captureData, captureAR);
 			}
 		}
 	}

@@ -83,7 +83,7 @@ export const actions: Actions = {
 
                 cloudinary.uploader.upload(captureData,
                     { public_id: mediaFile.id },
-                    async function (error, result) { });
+                    async function (error, result) { console.log(result, error) });
             }
 
         } catch (err) {
@@ -91,13 +91,13 @@ export const actions: Actions = {
             return fail(500, { message: 'Could not create the post.' })
         }
 
-        await transporter.sendMail({
-            from: GOOGLE_EMAIL,
-            to: "theodore.tsivranidis@gmail.com",
-            subject: `new bathroom_wall post`,
-            text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bar/${barId}`,
-            html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bar/${barId}">${message}</a>\"`
-        });
+        // await transporter.sendMail({
+        //     from: GOOGLE_EMAIL,
+        //     to: "theodore.tsivranidis@gmail.com",
+        //     subject: `new bathroom_wall post`,
+        //     text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bar/${barId}`,
+        //     html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bar/${barId}">${message}</a>\"`
+        // });
 
         return {
             status: 201
