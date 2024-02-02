@@ -2,10 +2,6 @@
 	"name": "bathroom-wall",
 	"version": "0.0.1",
 	"private": true,
-	"engines": {
-		"node": ">=20.11.0",
-		"npm": ">=9.6.6"
-	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "npx prisma generate && vite build",
