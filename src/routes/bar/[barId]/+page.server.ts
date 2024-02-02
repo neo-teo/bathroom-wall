@@ -72,30 +72,30 @@ export const actions: Actions = {
                 }
             });
 
-            if (captureData && captureAR) {
-                const mediaFile = await db.mediaFile.create({
-                    data: {
-                        postId: post.id,
-                        type: 'image',
-                        aspectRatio: captureAR
-                    }
-                });
+            // if (captureData && captureAR) {
+            //     const mediaFile = await db.mediaFile.create({
+            //         data: {
+            //             postId: post.id,
+            //             type: 'image',
+            //             aspectRatio: captureAR
+            //         }
+            //     });
 
-                cloudinary.uploader.upload(captureData,
-                    { public_id: mediaFile.id },
-                    async function (error, result) {
-                        if (error) {
-                            return {
-                                statusCode: 404,
-                                body: JSON.stringify(error),
-                            };
-                        }
-                        return {
-                            statusCode: 200,
-                            body: JSON.stringify(result),
-                        };
-                    });
-            }
+            //     cloudinary.uploader.upload(captureData,
+            //         { public_id: mediaFile.id },
+            //         async function (error, result) {
+            //             if (error) {
+            //                 return {
+            //                     statusCode: 404,
+            //                     body: JSON.stringify(error),
+            //                 };
+            //             }
+            //             return {
+            //                 statusCode: 200,
+            //                 body: JSON.stringify(result),
+            //             };
+            //         });
+            // }
 
         } catch (err) {
             console.error(err);
