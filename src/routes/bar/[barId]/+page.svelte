@@ -9,7 +9,7 @@
 
 	let loading = false;
 
-	$: nickname = data.nickname;
+	$: nickname = data.nickname ?? '';
 
 	$: ({ posts } = data.bar);
 
@@ -48,7 +48,7 @@
 		return async ({ update }) => {
 			await update();
 			nickname = '';
-			nickname = data.nickname;
+			nickname = data.nickname ?? '';
 			loading = false;
 		};
 	}}
