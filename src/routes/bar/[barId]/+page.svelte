@@ -3,8 +3,13 @@
 
 	import Post from '$lib/components/Post.svelte';
 	import { readImageFileAndFillInCaptureInfo } from '$lib/utils/fileUtils';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
+
+	let loading = false;
+
+	$: nickname = data.nickname;
 
 	$: ({ posts } = data.bar);
 
@@ -37,11 +42,22 @@
 	method="POST"
 	enctype="multipart/form-data"
 	class="flex flex-col gap-[10px]"
+	use:enhance={() => {
+		loading = true;
+
+		return async ({ update }) => {
+			await update();
+			nickname = '';
+			nickname = data.nickname;
+			loading = false;
+		};
+	}}
 >
 	<input type="hidden" id="barId" name="barId" value={data.bar.id} />
+
 	<div class="flex flex-col gap-[5px]">
 		<label for="nickname"> Nickname </label>
-		<input type="text" id="nickname" name="nickname" value={data.nickname ?? ''} required />
+		<input type="text" id="nickname" name="nickname" value={nickname} required />
 	</div>
 
 	<div class="flex flex-col gap-[5px]">
@@ -56,7 +72,13 @@
 	<input type="text" id="captureData" name="captureData" class="hidden" />
 	<input type="text" id="captureAR" name="captureAR" class="hidden" />
 
-	<button class="rounded-sm border bg-blue-500 p-0.5 text-white">Post</button>
+	<button
+		type="submit"
+		class={`rounded-sm border bg-blue-500 p-0.5 text-white ${loading ? 'bg-blue-600' : ''}`}
+		disabled={loading}
+	>
+		Post
+	</button>
 </form>
 
 {#if posts.length === 0}
