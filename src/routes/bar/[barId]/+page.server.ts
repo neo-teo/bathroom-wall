@@ -81,7 +81,7 @@ export const actions: Actions = {
                     }
                 });
 
-                cloudinary.uploader.upload(captureData,
+                await cloudinary.uploader.upload(captureData,
                     { public_id: mediaFile.id },
                     async function (error, result) { console.log(result, error) });
             }

@@ -24,7 +24,7 @@ export const readImageFileAndFillInCaptureInfo = (file: File, captureData: HTMLI
 
 export const resizeAndConvertToJPEG = (img: HTMLImageElement): { url: string, width: number, height: number } => {
 
-    const maxDimension = 900; // currently maximum height or width is 900px
+    const maxDimension = 600; // currently maximum height or width is 900px
 
     let { width, height } = img;
 
