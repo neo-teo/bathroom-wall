@@ -34,7 +34,17 @@ export const actions: Actions = {
             googlePlaceId: string
         }
 
-        let barData;
+        let barData = await db.bar.findUnique({
+            where: {
+                googleId: googlePlaceId
+            }
+        });
+
+        // if bar already exists, redirect user to its page.
+        if (barData != null) {
+            throw redirect(302, `/bars/` + barData.id);
+        }
+
         try {
             barData = await db.bar.create({
                 data: {
@@ -56,6 +66,6 @@ export const actions: Actions = {
             html: `<b>${barData.name}</b> at <i>${barData.address}</i> got added`
         });
 
-        throw redirect(302, `/bar/` + barData.id);
+        throw redirect(302, `/bars/` + barData.id);
     }
 }

@@ -11,7 +11,7 @@
 
 	$: nickname = data.nickname ?? '';
 
-	$: ({ posts } = data.bar);
+	$: posts = data.bar.posts;
 
 	function captureMedia() {
 		const input = document.getElementById('capture') as HTMLInputElement;

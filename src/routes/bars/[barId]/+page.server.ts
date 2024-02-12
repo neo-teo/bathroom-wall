@@ -1,53 +1,39 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
-import { today, twentyFourAgo } from '$lib/utils/timeUtils';
+import { today } from '$lib/utils/timeUtils';
 
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 
 import { v2 as cloudinary } from 'cloudinary';
+import type { Bar, Post } from '$lib/database.types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
-
+export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
     const id = params.barId;
 
-    // if id isn't in url, redirect to home page.
-    if (id == null) {
-        throw redirect(302, `/`);
-    }
+    const response = await fetch(`/api/bars/${id}`, { method: 'GET' });
 
-    const barData = await db.bar.findUnique({
-        where: {
-            id: id
-        },
-        include: {
-            posts: {
-                where: {
-                    date: {
-                        gte: new Date(twentyFourAgo()), // Earliest date
-                    }
-                },
-                include: {
-                    media: {}
-                },
-                orderBy: {
-                    date: 'desc'
-                }
+    const json = await response.json();
+
+    const barData: Bar = {
+        ...json,
+        posts: json.posts.map((post: any) => {
+            return {
+                ...post,
+                date: new Date(post.date)
             }
-        }
-    });
+        }) as Post[]
+    }
 
     // if barData does not exist for id, redirect to home page.
     if (barData == null) {
         throw redirect(302, `/`);
     }
 
-    const date = today()
-
     const nickname = cookies.get("nickname");
 
-    return { bar: barData, date: date, nickname: nickname };
+    return { bar: barData, date: today(), nickname: nickname };
 };
 
 export const actions: Actions = {
@@ -95,8 +81,8 @@ export const actions: Actions = {
         //     from: GOOGLE_EMAIL,
         //     to: "theodore.tsivranidis@gmail.com",
         //     subject: `new bathroom_wall post`,
-        //     text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bar/${barId}`,
-        //     html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bar/${barId}">${message}</a>\"`
+        //     text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bars/${barId}`,
+        //     html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bars/${barId}">${message}</a>\"`
         // });
 
         return {

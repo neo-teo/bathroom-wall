@@ -25,28 +25,13 @@
 
 	let showModal = false;
 
-	let googleInputBar: Bar;
+	let googleInputBar: { name: string; address: string };
 
 	async function barSelected(data: CustomEvent<any>) {
 		if (data && data.detail && data.detail.place) {
-			const placeId: string = data.detail.place.place_id;
-
-			const response = await fetch('/api/loadBar', {
-				method: 'POST',
-				body: JSON.stringify({ placeId }),
-				headers: {
-					'content-type': 'application/json'
-				}
-			});
-
-			const parsed = await response.json();
-
-			// TODO: maybe this logic could go into the api call ??
-			googleInputBar = parsed.barData ?? {
-				id: undefined,
+			googleInputBar = {
 				name: data.detail.place.name,
-				address: data.detail.place.formatted_address,
-				googleId: data.detail.place.place_id
+				address: data.detail.place.formatted_address
 			};
 
 			showModal = true;
@@ -80,7 +65,7 @@
 			.slice(0, 20) as bar}
 			<div class="flex flex-col gap-[5px]">
 				<div class="flex items-center justify-between">
-					<a href={`/bar/${bar.id}`}>
+					<a href={`/bars/${bar.id}`}>
 						<h2>{bar.name}</h2>
 					</a>
 					<p class="text-sm text-gray-400 no-underline">{bar.posts.length} tags</p>
@@ -103,36 +88,23 @@
 		{#if showModal}
 			<Modal bind:showModal>
 				<div class="flex flex-col gap-[20px]">
-					{#if googleInputBar.id}
-						<h1>This bar is already on bathroom wall</h1>
-					{:else}
-						<h1>Does this look like the right spot?</h1>
-					{/if}
+					<h1>does this look like the right spot?</h1>
 
 					<div class="flex flex-col gap-[5px]">
 						<h2>{googleInputBar.name}</h2>
 						<p class="text-sm">{googleInputBar.address}</p>
 					</div>
 
-					{#if googleInputBar.id}
-						<button
-							class="flex text-blue-400"
-							on:click|preventDefault={() => goto(`/bar/${googleInputBar.id}`)}
-						>
-							go to bar's wall
-						</button>
-					{:else}
-						<div class="flex gap-[20px]">
-							<button class="flex text-blue-400"> yes </button>
+					<div class="flex gap-[20px]">
+						<button class="flex text-xl text-blue-400"> yes </button>
 
-							<button
-								class="flex text-blue-400"
-								on:click|preventDefault={() => (showModal = false)}
-							>
-								no
-							</button>
-						</div>
-					{/if}
+						<button
+							class="flex text-xl text-blue-400"
+							on:click|preventDefault={() => (showModal = false)}
+						>
+							no
+						</button>
+					</div>
 				</div>
 			</Modal>
 		{/if}
