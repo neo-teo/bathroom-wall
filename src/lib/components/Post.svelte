@@ -7,6 +7,8 @@
 
 	export let post: Post;
 
+	let copied = false;
+
 	$: vote = Cookies.get(post.id) ?? '';
 
 	// newVote will be strictly 'u' or 'd'
@@ -34,7 +36,8 @@
 			});
 		} else {
 			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}`);
-			// TODO: show copied to clipboard somewhere
+			copied = true;
+			setTimeout(() => (copied = false), 800);
 		}
 	}
 </script>
@@ -65,9 +68,14 @@
 					<Icon icon="mdi:arrow-down-bold" color={vote === 'd' ? 'black' : 'lightgray'} />
 				</button>
 			</div>
-			<button on:click={share}>
-				<Icon icon="mdi:share" color={'lightgray'} />
-			</button>
+			<div class="flex items-center gap-[5px]">
+				<div class={`text-sm transition-opacity duration-150 ${copied ? '' : 'opacity-0'}`}>
+					copied to clipboard
+				</div>
+				<button on:click={share}>
+					<Icon icon="mdi:share" color={'lightgray'} />
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
