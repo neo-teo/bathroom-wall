@@ -29,9 +29,8 @@
 	function share() {
 		if (navigator.share) {
 			navigator.share({
-				text: 'check out my tag on bathwall.xyz',
-				url: `https://bathwall.xyz/bars/${post.barId}`,
-				title: 'wow!!!'
+				text: `check out this bathroom wall tag by: ${post.nickname}`,
+				url: `https://bathwall.xyz/bars/${post.barId}`
 			});
 		} else {
 			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}`);
