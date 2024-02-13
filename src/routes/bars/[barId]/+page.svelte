@@ -4,6 +4,7 @@
 	import Post from '$lib/components/Post.svelte';
 	import { readImageFileAndFillInCaptureInfo } from '$lib/utils/fileUtils';
 	import { enhance } from '$app/forms';
+	import Icon from '@iconify/svelte';
 
 	export let data: PageData;
 

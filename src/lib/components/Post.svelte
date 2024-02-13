@@ -9,19 +9,11 @@
 
 	$: vote = Cookies.get(post.id) ?? '';
 
+	// newVote will be strictly 'u' or 'd'
 	async function voted(newVote: string) {
-		let change = 0;
+		let change = vote === '' ? 1 : vote === newVote ? -1 : 2;
 
-		// newVote will either be 'u' or 'd'
-		if (newVote === 'u') {
-			if (vote === 'u') change = -1;
-			if (vote === 'd') change = 2;
-			if (vote === '') change = 1;
-		} else {
-			if (vote === 'u') change = -2;
-			if (vote === 'd') change = 1;
-			if (vote === '') change = -1;
-		}
+		if (newVote === 'd') change *= -1;
 
 		post.score = post.score + change;
 
@@ -32,6 +24,19 @@
 			method: 'PATCH',
 			body: JSON.stringify({ change: change })
 		});
+	}
+
+	function share() {
+		if (navigator.share) {
+			navigator.share({
+				text: 'check out my tag on bathwall.xyz',
+				url: `https://bathwall.xyz/bars/${post.barId}`,
+				title: 'wow!!!'
+			});
+		} else {
+			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}`);
+			// TODO: show copied to clipboard somewhere
+		}
 	}
 </script>
 
@@ -49,15 +54,20 @@
 			<PostMedia media={post.media} />
 		{/if}
 
-		<div class="flex items-center gap-[5px]">
-			<button on:click={() => voted('u')}>
-				<Icon icon="mdi:arrow-up-bold" color={vote === 'u' ? 'black' : 'lightgray'} />
-			</button>
-			<div class="flex w-[30px] justify-center">
-				<p class={!vote ? 'text-gray-400' : ''}>{post.score}</p>
+		<div class="flex justify-between">
+			<div class="flex items-center gap-[5px]">
+				<button on:click={() => voted('u')}>
+					<Icon icon="mdi:arrow-up-bold" color={vote === 'u' ? 'black' : 'lightgray'} />
+				</button>
+				<div class="flex w-[30px] justify-center">
+					<p class={!vote ? 'text-gray-400' : ''}>{post.score}</p>
+				</div>
+				<button on:click={() => voted('d')}>
+					<Icon icon="mdi:arrow-down-bold" color={vote === 'd' ? 'black' : 'lightgray'} />
+				</button>
 			</div>
-			<button on:click={() => voted('d')}>
-				<Icon icon="mdi:arrow-down-bold" color={vote === 'd' ? 'black' : 'lightgray'} />
+			<button on:click={share}>
+				<Icon icon="mdi:share" color={'lightgray'} />
 			</button>
 		</div>
 	</div>

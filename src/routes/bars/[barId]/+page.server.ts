@@ -33,7 +33,7 @@ export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
 
     const nickname = cookies.get("nickname");
 
-    return { bar: barData, date: today(), nickname: nickname };
+    return { title: barData.name, bar: barData, date: today(), nickname: nickname };
 };
 
 export const actions: Actions = {

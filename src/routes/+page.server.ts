@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         }
     });
 
-    return { bars: barData };
+    return { title: "bathroom wall", bars: barData };
 };
 
 export const actions: Actions = {
