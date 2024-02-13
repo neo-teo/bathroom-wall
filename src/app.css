@@ -24,6 +24,7 @@
     }
 
     ::file-selector-button {
+        font-weight: 450;
         background-color: rgb(234, 234, 234);
         padding-left: 10px;
         padding-right: 10px;
