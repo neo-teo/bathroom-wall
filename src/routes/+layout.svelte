@@ -13,7 +13,7 @@
 
 	<meta
 		name="og:image"
-		content="https://res.cloudinary.com/dlub8oz6b/image/upload/v1707864526/gdg63xx5i7cgwtobln8d.png"
+		content="https://res.cloudinary.com/dlub8oz6b/image/upload/v1707868939/zefjp7gvtnbdtri5md88.png"
 	/>
 </svelte:head>
 
