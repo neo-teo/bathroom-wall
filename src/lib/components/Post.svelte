@@ -32,50 +32,51 @@
 		if (navigator.share) {
 			navigator.share({
 				text: `check out this bathroom wall tag by: ${post.nickname}`,
-				url: `https://bathwall.xyz/bars/${post.barId}`
+				url: `https://bathwall.xyz/bars/${post.barId}?postId=${post.id}`
 			});
 		} else {
-			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}`);
+			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}?postId=${post.id}`);
 			copied = true;
 			setTimeout(() => (copied = false), 800);
 		}
 	}
 </script>
 
-<div class="flex flex-col gap-[5px]">
-	<div class="flex flex-col gap-[10px] rounded-sm border border-gray-500 bg-white p-3">
-		<div class="flex justify-between">
-			<div class="flex gap-[3px]">
-				#
-				<p class="font-bold">{post.nickname}</p>
-			</div>
-			<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
+<div
+	id={`post_${post.id}`}
+	class="flex flex-col gap-[10px] rounded-sm border border-gray-500 bg-white p-3 transition duration-1000"
+>
+	<div class="flex justify-between">
+		<div class="flex gap-[3px]">
+			#
+			<p class="font-bold">{post.nickname}</p>
 		</div>
-		<p>{post.message}</p>
-		{#if post.media}
-			<PostMedia media={post.media} />
-		{/if}
+		<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
+	</div>
+	<p>{post.message}</p>
+	{#if post.media}
+		<PostMedia media={post.media} />
+	{/if}
 
-		<div class="flex justify-between">
-			<div class="flex items-center gap-[5px]">
-				<button on:click={() => voted('u')}>
-					<Icon icon="mdi:arrow-up-bold" color={vote === 'u' ? 'black' : 'lightgray'} />
-				</button>
-				<div class="flex w-[30px] justify-center">
-					<p class={!vote ? 'text-gray-400' : ''}>{post.score}</p>
-				</div>
-				<button on:click={() => voted('d')}>
-					<Icon icon="mdi:arrow-down-bold" color={vote === 'd' ? 'black' : 'lightgray'} />
-				</button>
+	<div class="flex justify-between">
+		<div class="flex items-center gap-[5px]">
+			<button on:click={() => voted('u')}>
+				<Icon icon="mdi:arrow-up-bold" color={vote === 'u' ? 'black' : 'lightgray'} />
+			</button>
+			<div class="flex w-[30px] justify-center">
+				<p class={!vote ? 'text-gray-400' : ''}>{post.score}</p>
 			</div>
-			<div class="flex items-center gap-[5px]">
-				<div class={`text-sm transition-opacity duration-150 ${copied ? '' : 'opacity-0'}`}>
-					copied to clipboard
-				</div>
-				<button on:click={share}>
-					<Icon icon="mdi:share" color={'lightgray'} />
-				</button>
+			<button on:click={() => voted('d')}>
+				<Icon icon="mdi:arrow-down-bold" color={vote === 'd' ? 'black' : 'lightgray'} />
+			</button>
+		</div>
+		<div class="flex items-center gap-[5px]">
+			<div class={`text-sm transition-opacity duration-150 ${copied ? '' : 'opacity-0'}`}>
+				copied to clipboard
 			</div>
+			<button on:click={share}>
+				<Icon icon="mdi:share" color={'lightgray'} />
+			</button>
 		</div>
 	</div>
 </div>

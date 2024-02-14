@@ -4,7 +4,7 @@
 	import Post from '$lib/components/Post.svelte';
 	import { readImageFileAndFillInCaptureInfo } from '$lib/utils/fileUtils';
 	import { enhance } from '$app/forms';
-	import Icon from '@iconify/svelte';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -27,6 +27,21 @@
 			}
 		}
 	}
+
+	function scrollToPost(postId: string) {
+		const postElement = document.getElementById(`post_${postId}`);
+		if (postElement) {
+			postElement.scrollIntoView({ behavior: 'smooth' });
+			postElement.classList.add('scale-105');
+			setTimeout(() => postElement.classList.remove('scale-105'), 2000);
+		}
+	}
+
+	onMount(async () => {
+		if (data.postId) {
+			scrollToPost(data.postId);
+		}
+	});
 </script>
 
 <div class="grid grid-cols-2">

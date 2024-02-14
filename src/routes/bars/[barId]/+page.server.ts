@@ -9,8 +9,9 @@ import transporter from '$lib/emailSetup.server';
 import { v2 as cloudinary } from 'cloudinary';
 import type { Bar, Post } from '$lib/database.types';
 
-export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
+export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const id = params.barId;
+    const postId = url.searchParams.get("postId");
 
     const response = await fetch(`/api/bars/${id}`, { method: 'GET' });
 
@@ -33,7 +34,7 @@ export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
 
     const nickname = cookies.get("nickname");
 
-    return { title: barData.name, bar: barData, date: today(), nickname: nickname };
+    return { title: barData.name, bar: barData, date: today(), nickname: nickname, postId: postId };
 };
 
 export const actions: Actions = {
