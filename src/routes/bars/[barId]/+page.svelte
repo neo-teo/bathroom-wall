@@ -31,7 +31,11 @@
 	function scrollToPost(postId: string) {
 		const postElement = document.getElementById(`post_${postId}`);
 		if (postElement) {
-			postElement.scrollIntoView({ behavior: 'smooth' });
+			window.scrollTo({
+				top: postElement.getBoundingClientRect().top - 200,
+				behavior: 'smooth'
+			});
+
 			postElement.classList.add('scale-105');
 			setTimeout(() => postElement.classList.remove('scale-105'), 2000);
 		}
