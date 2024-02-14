@@ -42,7 +42,7 @@ export const actions: Actions = {
 
         // if bar already exists, redirect user to its page.
         if (barData != null) {
-            throw redirect(302, `/bars/` + barData.id);
+            redirect(302, `/bars/` + barData.id);
         }
 
         try {
@@ -66,6 +66,6 @@ export const actions: Actions = {
             html: `<b>${barData.name}</b> at <i>${barData.address}</i> got added`
         });
 
-        throw redirect(302, `/bars/` + barData.id);
+        redirect(302, `/bars/` + barData.id);
     }
 }

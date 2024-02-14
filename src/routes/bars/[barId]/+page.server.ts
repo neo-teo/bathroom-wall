@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ params, cookies, fetch }) => {
 
     // if barData does not exist for id, redirect to home page.
     if (barData == null) {
-        throw redirect(302, `/`);
+        redirect(302, `/`);
     }
 
     const nickname = cookies.get("nickname");
