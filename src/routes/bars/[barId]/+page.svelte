@@ -32,7 +32,7 @@
 		const postElement = document.getElementById(`post_${postId}`);
 		if (postElement) {
 			window.scrollTo({
-				top: postElement.getBoundingClientRect().top - 200,
+				top: postElement.getBoundingClientRect().top - 50,
 				behavior: 'smooth'
 			});
 
