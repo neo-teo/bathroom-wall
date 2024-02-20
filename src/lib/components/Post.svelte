@@ -2,44 +2,10 @@
 	import { howLongAgo } from '$lib/utils/timeUtils';
 	import PostMedia from './PostMedia.svelte';
 	import type { Post } from '$lib/database.types';
-	import Cookies from 'js-cookie';
-	import Icon from '@iconify/svelte';
+	import PostShare from './PostShare.svelte';
+	import PostVotes from './PostVotes.svelte';
 
 	export let post: Post;
-
-	let copied = false;
-
-	$: vote = Cookies.get(post.id) ?? '';
-
-	// newVote will be strictly 'u' or 'd'
-	async function voted(newVote: string) {
-		let change = vote === '' ? 1 : vote === newVote ? -1 : 2;
-
-		if (newVote === 'd') change *= -1;
-
-		post.score = post.score + change;
-
-		vote = vote === newVote ? '' : newVote;
-		Cookies.set(post.id, vote);
-
-		await fetch(`/api/posts/${post.id}/score`, {
-			method: 'PATCH',
-			body: JSON.stringify({ change: change })
-		});
-	}
-
-	function share() {
-		if (navigator.share) {
-			navigator.share({
-				text: `check out this bathroom wall tag by: ${post.nickname}`,
-				url: `https://bathwall.xyz/bars/${post.barId}?postId=${post.id}`
-			});
-		} else {
-			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}?postId=${post.id}`);
-			copied = true;
-			setTimeout(() => (copied = false), 800);
-		}
-	}
 </script>
 
 <div
@@ -53,30 +19,15 @@
 		</div>
 		<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
 	</div>
+
 	<p>{post.message}</p>
+
 	{#if post.media}
 		<PostMedia media={post.media} />
 	{/if}
 
 	<div class="flex justify-between">
-		<div class="flex items-center gap-[5px]">
-			<button on:click={() => voted('u')}>
-				<Icon icon="mdi:arrow-up-bold" color={vote === 'u' ? 'black' : 'lightgray'} />
-			</button>
-			<div class="flex w-[30px] justify-center">
-				<p class={!vote ? 'text-gray-400' : ''}>{post.score}</p>
-			</div>
-			<button on:click={() => voted('d')}>
-				<Icon icon="mdi:arrow-down-bold" color={vote === 'd' ? 'black' : 'lightgray'} />
-			</button>
-		</div>
-		<div class="flex items-center gap-[5px]">
-			<div class={`text-sm transition-opacity duration-150 ${copied ? '' : 'opacity-0'}`}>
-				copied to clipboard
-			</div>
-			<button on:click={share}>
-				<Icon icon="mdi:share" color={'lightgray'} />
-			</button>
-		</div>
+		<PostVotes {post} />
+		<PostShare {post} />
 	</div>
 </div>

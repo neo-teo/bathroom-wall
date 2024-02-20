@@ -3,10 +3,8 @@
 
 	import { createSearchStore, searchHandler } from '$lib/stores/search';
 	import { onDestroy } from 'svelte';
-	import GooglePlaceAutoComplete from '$lib/components/GooglePlaceAutoComplete.svelte';
-	import Modal from '$lib/components/Modal.svelte';
-	import type { Bar } from '@prisma/client';
-	import { goto } from '$app/navigation';
+
+	import BarAdder from '$lib/components/BarAdder.svelte';
 
 	export let data: PageData;
 
@@ -22,21 +20,6 @@
 	onDestroy(() => unsubscribe());
 
 	let adding = false;
-
-	let showModal = false;
-
-	let googleInputBar: { name: string; address: string };
-
-	async function barSelected(data: CustomEvent<any>) {
-		if (data && data.detail && data.detail.place) {
-			googleInputBar = {
-				name: data.detail.place.name,
-				address: data.detail.place.formatted_address
-			};
-
-			showModal = true;
-		}
-	}
 </script>
 
 <a href="/"><h1>bathroom <br /> wall</h1></a>
@@ -59,7 +42,6 @@
 			<p class="whitespace-nowrap">a spot.</p>
 		</div>
 	{:else}
-		<!-- only render first 5 filtered bars -->
 		{#each $searchStore.filtered
 			.sort((a, b) => b.posts.length - a.posts.length)
 			.slice(0, 20) as bar}
@@ -68,7 +50,7 @@
 					<a href={`/bars/${bar.id}`}>
 						<h2>{bar.name}</h2>
 					</a>
-					<p class="text-sm text-gray-400 no-underline">{bar.posts.length} tags</p>
+					<p class="text-sm text-gray-400">{bar.posts.length} tags</p>
 				</div>
 				<p class="text-sm">{bar.address}</p>
 			</div>
@@ -82,31 +64,5 @@
 </div>
 
 {#if $searchStore.filtered.length === 0 && adding}
-	<form action={`?/createBar`} method="POST" class="flex flex-col gap-[10px]">
-		<GooglePlaceAutoComplete on:place_changed={(data) => barSelected(data)} />
-
-		{#if showModal}
-			<Modal bind:showModal>
-				<div class="flex flex-col gap-[20px]">
-					<h1>does this look like the right spot?</h1>
-
-					<div class="flex flex-col gap-[5px]">
-						<h2>{googleInputBar.name}</h2>
-						<p class="text-sm">{googleInputBar.address}</p>
-					</div>
-
-					<div class="flex gap-[20px]">
-						<button class="flex text-xl text-blue-400"> yes </button>
-
-						<button
-							class="flex text-xl text-blue-400"
-							on:click|preventDefault={() => (showModal = false)}
-						>
-							no
-						</button>
-					</div>
-				</div>
-			</Modal>
-		{/if}
-	</form>
+	<BarAdder addEndpoint={'?/createBar'} />
 {/if}

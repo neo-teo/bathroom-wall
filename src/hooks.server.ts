@@ -1,8 +1,12 @@
 import { error, type Handle } from "@sveltejs/kit";
 
+export let requestIp: string;
+
 export const handle: Handle = async ({ event, resolve }) => {
 
-    // this is where I can add rate limiting and authentication for all incoming requests
+    requestIp = event.getClientAddress();
+
+    // this is where I should add authentication one day
 
     return await resolve(event);
 }

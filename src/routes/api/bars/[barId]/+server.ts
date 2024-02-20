@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db";
+import { db } from "$lib/db";
 import { twentyFourAgo } from "$lib/utils/timeUtils";
 import { json } from "@sveltejs/kit";
 

@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { db } from '$lib/server/db';
+import { db, rateLimit } from '$lib/db';
 import { today } from '$lib/utils/timeUtils';
 
 import { GOOGLE_EMAIL } from '$env/static/private';
@@ -8,6 +8,7 @@ import transporter from '$lib/emailSetup.server';
 
 import { v2 as cloudinary } from 'cloudinary';
 import type { Bar, Post } from '$lib/database.types';
+import { requestIp } from '../../../hooks.server';
 
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const id = params.barId;
@@ -49,6 +50,14 @@ export const actions: Actions = {
 
         cookies.set("nickname", nickname, { path: "/" })
 
+        const { success } = await rateLimit.createPost.limit(
+            requestIp
+        )
+
+        if (!success) {
+            return { message, captureData, captureAR, error: `You're posting a bit too much atm, try again in a (very) little bit`, status: 429 }
+        }
+
         try {
             const post = await db.post.create({
                 data: {
@@ -78,13 +87,12 @@ export const actions: Actions = {
             return fail(500, { message: 'Could not create the post.' })
         }
 
-        // await transporter.sendMail({
-        //     from: GOOGLE_EMAIL,
-        //     to: "theodore.tsivranidis@gmail.com",
-        //     subject: `new bathroom_wall post`,
-        //     text: `\"${message}\" view it here https://bathroom-wall.netlify.app/bars/${barId}`,
-        //     html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bars/${barId}">${message}</a>\"`
-        // });
+        await transporter.sendMail({
+            from: GOOGLE_EMAIL,
+            to: "theodore.tsivranidis@gmail.com",
+            subject: `new bathroom_wall post`,
+            html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bars/${barId}">${message}</a>\" <br><br> came from ip: ${requestIp}`
+        });
 
         return {
             status: 201

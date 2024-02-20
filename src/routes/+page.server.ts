@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { db } from '$lib/server/db';
+import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 import { twentyFourAgo } from '$lib/utils/timeUtils';
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 };
 
 export const actions: Actions = {
-    createBar: async ({ request, cookies }) => {
+    createBar: async ({ request }) => {
         const { longName, shortName, address, googlePlaceId } = Object.fromEntries(await request.formData()) as {
             longName: string,
             shortName: string,

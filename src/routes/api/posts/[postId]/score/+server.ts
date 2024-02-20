@@ -1,4 +1,4 @@
-import { db } from "$lib/server/db";
+import { db } from "$lib/db";
 import { fail, json } from "@sveltejs/kit";
 
 export const PATCH = async ({ params, request }) => {
