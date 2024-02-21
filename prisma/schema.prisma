@@ -37,9 +37,8 @@ model Post {
 }
 
 model MediaFile {
-  id          String @id @default(uuid())
-  type        String // 'image' or 'video' or ...
-  aspectRatio String
+  id   String @id @default(uuid())
+  type String // 'image' or 'video' or ...
 
   Post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String @unique

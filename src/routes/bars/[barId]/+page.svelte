@@ -2,10 +2,10 @@
 	import type { ActionData, PageData } from './$types';
 
 	import Post from '$lib/components/Post.svelte';
-	import { readImageFileAndFillInCaptureInfo } from '$lib/utils/fileUtils';
 	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
-	import BarAdder from '$lib/components/BarAdder.svelte';
+	import MediaUploader from '$lib/components/MediaUploader.svelte';
+	import Icon from '@iconify/svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -16,19 +16,10 @@
 
 	$: nickname = data.nickname ?? '';
 	$: message = form?.message ?? '';
+	$: imageData = form?.imageData ?? null;
 
-	function captureMedia() {
-		const input = document.getElementById('capture') as HTMLInputElement;
-
-		const captureData = document.getElementById('captureData') as HTMLInputElement;
-		const captureAR = document.getElementById('captureAR') as HTMLInputElement;
-
-		if (input && input.files && input.files.length > 0) {
-			const file = input.files[0];
-			if (file.type.includes('image')) {
-				readImageFileAndFillInCaptureInfo(file, captureData, captureAR);
-			}
-		}
+	function imageDataChanged(event: CustomEvent<any>) {
+		imageData = event.detail.imageData;
 	}
 
 	// onMount if postId is part of query params scroll to that post and do some scaling animation
@@ -84,19 +75,19 @@
 		<textarea id="message" name="message" rows={3} value={message} required />
 	</div>
 
-	<!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
-	<input type="file" id="capture" accept="image/*" on:change={captureMedia} />
-
-	<!-- The following two hidden inputs store the capture's data and aspect ratio -->
-	<input type="text" id="captureData" name="captureData" class="hidden" />
-	<input type="text" id="captureAR" name="captureAR" class="hidden" />
+	<MediaUploader {imageData} on:change={imageDataChanged} />
 
 	<button
 		type="submit"
-		class={`rounded-sm border bg-blue-500 p-0.5 text-white ${loading ? 'bg-blue-600' : ''}`}
+		class={`relative h-[30px] rounded-sm border bg-blue-500 p-0.5 text-white ${loading ? 'bg-blue-600' : ''}`}
 		disabled={loading}
 	>
-		Post
+		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">Post</div>
+		{#if loading}
+			<div class="absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">
+				<Icon icon="line-md:loading-loop" color={'white'} />
+			</div>
+		{/if}
 	</button>
 
 	{#if form?.error}

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { MediaFile } from '@prisma/client';
-	import { CldImage } from 'svelte-cloudinary';
 
 	export let media: MediaFile;
 
-	const [width, height] = media.aspectRatio.split(':');
+	$: url = `https://res.cloudinary.com/dlub8oz6b/image/upload/${media.id}`;
 </script>
 
-<!-- TODO: add logic based on media.type to render video or other types -->
-<CldImage src={media.id} {width} {height} />
+<img src={url} alt={media.id} />

@@ -1,28 +1,4 @@
-
-/**
- * @param file file to process
- * @param captureData hidden capture data input element, which we fill in with the compressed file data
- * @param captureAR hidden capture aspect ratio input element, which we fill in with the compress file aspect ratio
- */
-export const readImageFileAndFillInCaptureInfo = (file: File, captureData: HTMLInputElement, captureAR: HTMLInputElement): void => {
-    const reader = new FileReader();
-
-    reader.onload = function (event) {
-        const img = new Image();
-        img.onload = function () {
-            // resizing image and getting its compressed data url, width, and height
-            const { url, width, height } = resizeAndConvertToJPEG(img);
-            // filling in hidden input components with this compressed info
-            captureData.value = url;
-            captureAR.value = `${width}:${height}`;
-        };
-        img.src = event.target?.result as string;
-    };
-
-    reader.readAsDataURL(file);
-}
-
-export const resizeAndConvertToJPEG = (img: HTMLImageElement): { url: string, width: number, height: number } => {
+export const resizeAndConvertToJPEG = (img: HTMLImageElement): string => {
 
     const maxDimension = 1200; // currently maximum height or width is 1200px
 
@@ -46,5 +22,5 @@ export const resizeAndConvertToJPEG = (img: HTMLImageElement): { url: string, wi
     canvas.height = height;
     ctx.drawImage(img, 0, 0, width, height);
 
-    return { url: canvas.toDataURL('image/jpeg'), width: width, height: height };
+    return canvas.toDataURL('image/jpeg');
 };

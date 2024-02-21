@@ -1,6 +1,6 @@
 ## bathroom wall
 
-on bathroom wall users contribute to a shared wall of text and image at a particular bar on a particular night.
+on bathroom wall users contribute to a shared wall of text and image at a particular place on a particular day.
 
 ## acknowledgements
 

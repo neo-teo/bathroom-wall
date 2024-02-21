@@ -23,7 +23,7 @@
 </script>
 
 <a href="/"><h1>bathroom <br /> wall</h1></a>
-<p>a shared wall of text and image for people at a particular bar on a particular day</p>
+<p>a shared wall of text and image for people at a particular place on a particular day</p>
 
 <form class="flex flex-col">
 	<input

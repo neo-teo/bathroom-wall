@@ -23,16 +23,6 @@
         @apply border border-gray-400 rounded-sm p-2
     }
 
-    ::file-selector-button {
-        font-weight: 450;
-        background-color: rgb(234, 234, 234);
-        padding-left: 10px;
-        padding-right: 10px;
-        border-radius: 20px;
-        border: 0px;
-        color: rgb(59 130 246);
-    }
-
     label {
         @apply font-bold
     }

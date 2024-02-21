@@ -40,12 +40,11 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
 
 export const actions: Actions = {
     createPost: async ({ request, cookies }) => {
-        const { barId, nickname, message, captureData, captureAR } = Object.fromEntries(await request.formData()) as {
+        const { barId, nickname, message, imageData } = Object.fromEntries(await request.formData()) as {
             barId: string,
             nickname: string,
             message: string,
-            captureData?: string,
-            captureAR?: string,
+            imageData?: string,
         }
 
         cookies.set("nickname", nickname, { path: "/" })
@@ -55,7 +54,7 @@ export const actions: Actions = {
         )
 
         if (!success) {
-            return { message, captureData, captureAR, error: `You're posting a bit too much atm, try again in a (very) little bit`, status: 429 }
+            return { message, imageData, error: `You're posting a bit too much atm, try again in a (very) little bit`, status: 429 }
         }
 
         try {
@@ -68,23 +67,22 @@ export const actions: Actions = {
                 }
             });
 
-            if (captureData && captureAR) {
+            if (imageData) {
                 const mediaFile = await db.mediaFile.create({
                     data: {
                         postId: post.id,
-                        type: 'image',
-                        aspectRatio: captureAR
+                        type: 'image'
                     }
                 });
 
-                await cloudinary.uploader.upload(captureData,
+                await cloudinary.uploader.upload(imageData,
                     { public_id: mediaFile.id },
                     async function (error, result) { console.log(result, error) });
             }
 
         } catch (err) {
             console.error(err);
-            return fail(500, { message: 'Could not create the post.' })
+            return fail(500, { error: 'Something went wrong while posting.' })
         }
 
         await transporter.sendMail({
