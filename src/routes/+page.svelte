@@ -27,7 +27,7 @@
 <p>a shared wall of text and image for people at a particular place on a particular day</p>
 
 <div class="mt-[10px] flex flex-col gap-[5px]">
-	{#if data.clientCity}
+	<!-- {#if data.clientCity}
 		<div class="flex justify-between">
 			<div class="flex items-center gap-[5px]">
 				<select name="clientCity" class="dropdown relative w-fit bg-transparent text-sm font-bold">
@@ -46,7 +46,7 @@
 				<Icon icon="octicon:triangle-down" />
 			</div>
 		</div>
-	{/if}
+	{/if} -->
 	<input
 		placeholder="search bars by name or address..."
 		type="text"
