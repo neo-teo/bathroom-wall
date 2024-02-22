@@ -12,7 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (response.ok) {
         const data = await response.json();
         clientCity = data.city;
-xw    } else {
+    } else {
         console.error('Failed to fetch city information:', response.statusText);
     }
 
