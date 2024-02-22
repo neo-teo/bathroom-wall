@@ -5,6 +5,7 @@
 	import { onDestroy } from 'svelte';
 
 	import BarAdder from '$lib/components/BarAdder.svelte';
+	import Icon from '@iconify/svelte';
 
 	export let data: PageData;
 
@@ -25,13 +26,33 @@
 <a href="/"><h1>bathroom <br /> wall</h1></a>
 <p>a shared wall of text and image for people at a particular place on a particular day</p>
 
-<form class="flex flex-col">
+<div class="mt-[10px] flex flex-col gap-[5px]">
+	{#if data.clientCity}
+		<div class="flex justify-between">
+			<div class="flex items-center gap-[5px]">
+				<select name="clientCity" class="dropdown relative w-fit bg-transparent text-sm font-bold">
+					<option value={data.clientCity}>{data.clientCity}</option>
+				</select>
+				<Icon icon="octicon:triangle-down" />
+			</div>
+			<div class="flex items-center gap-[5px]">
+				<select
+					name="sortCriteria"
+					class="dropdown relative w-fit bg-transparent text-sm font-bold"
+				>
+					<option value={'Hottest'}>Hottest</option>
+					<option value={'Closest'}>Closest</option>
+				</select>
+				<Icon icon="octicon:triangle-down" />
+			</div>
+		</div>
+	{/if}
 	<input
 		placeholder="search bars by name or address..."
 		type="text"
 		bind:value={$searchStore.search}
 	/>
-</form>
+</div>
 
 <div class="flex flex-col gap-[20px] border border-gray-500 bg-white p-2">
 	{#if $searchStore.filtered.length === 0}
@@ -66,3 +87,18 @@
 {#if $searchStore.filtered.length === 0 && adding}
 	<BarAdder addEndpoint={'?/createBar'} />
 {/if}
+
+<!-- css to expand clickable area of voteButtons without affecting their size visually -->
+<style lang="postcss">
+	.dropdown {
+		-webkit-appearance: none;
+	}
+	.dropdown::after {
+		content: '';
+		position: absolute;
+		top: -20px;
+		left: -20px;
+		right: -60px;
+		bottom: -20px;
+	}
+</style>

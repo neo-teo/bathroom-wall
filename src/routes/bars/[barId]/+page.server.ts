@@ -8,7 +8,7 @@ import transporter from '$lib/emailSetup.server';
 
 import { v2 as cloudinary } from 'cloudinary';
 import type { Bar, Post } from '$lib/database.types';
-import { requestIp } from '../../../hooks.server';
+import { clientIp } from '../../../hooks.server';
 
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const id = params.barId;
@@ -50,7 +50,7 @@ export const actions: Actions = {
         cookies.set("nickname", nickname, { path: "/" })
 
         const { success } = await rateLimit.createPost.limit(
-            requestIp
+            clientIp
         )
 
         if (!success) {
@@ -89,7 +89,7 @@ export const actions: Actions = {
             from: GOOGLE_EMAIL,
             to: "theodore.tsivranidis@gmail.com",
             subject: `new bathroom_wall post`,
-            html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bars/${barId}">${message}</a>\" <br><br> came from ip: ${requestIp}`
+            html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bars/${barId}">${message}</a>\" <br><br> came from ip: ${clientIp}`
         });
 
         return {

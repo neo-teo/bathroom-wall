@@ -4,6 +4,7 @@ import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 import { twentyFourAgo } from '$lib/utils/timeUtils';
+import { clientCity } from '../hooks.server';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
 
@@ -22,7 +23,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         }
     });
 
-    return { title: "bathroom wall", bars: barData };
+    return { title: "bathroom wall", bars: barData, clientCity };
 };
 
 export const actions: Actions = {
