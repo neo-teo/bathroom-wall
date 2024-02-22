@@ -22,7 +22,7 @@
 		imageData = event.detail.imageData;
 	}
 
-	// onMount if postId is part of query params scroll to that post and do some scaling animation
+	// if postId is part of query params, scroll to that post and do a scaling animation
 	onMount(async () => {
 		if (data.postId) {
 			const postElement = document.getElementById(`post_${data.postId}`);
@@ -39,7 +39,8 @@
 </script>
 
 <div class="grid grid-cols-2">
-	<a href="/"><h1>bathroom <br /> wall</h1></a>
+	<!-- NOTE: w-[300px] is to make the page take up as much width as it can -->
+	<a href="/" class="w-[300px]"><h1>bathroom <br /> wall</h1></a>
 
 	<div class="flex flex-col justify-center text-right">
 		<h2>{data.bar.name}</h2>
@@ -65,7 +66,7 @@
 >
 	<input type="hidden" id="barId" name="barId" value={data.bar.id} />
 
-	<div class="flex flex-col gap-[5px]">
+	<div class="flex grow flex-col gap-[5px]">
 		<label for="nickname"> Nickname </label>
 		<input type="text" id="nickname" name="nickname" value={nickname} required />
 	</div>
