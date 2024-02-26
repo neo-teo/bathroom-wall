@@ -2,6 +2,8 @@
 
 on bathroom wall users contribute to a shared wall of text and image at a particular place on a particular day.
 
+view a live version of the application at [bathwall.xyz](https://bathwall.xyz)
+
 ## acknowledgements
 
 this webapp: 
