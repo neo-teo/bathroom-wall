@@ -89,7 +89,7 @@ export const actions: Actions = {
             from: GOOGLE_EMAIL,
             to: "theodore.tsivranidis@gmail.com",
             subject: `new bathroom_wall post`,
-            html: `<b>${nickname}</b> said: \"<a href="https://bathroom-wall.netlify.app/bars/${barId}">${message}</a>\" <br><br> came from ip: ${clientIp}`
+            html: `<b>${nickname}</b> said: \"<a href="https://bathwall.co/bars/${barId}">${message}</a>\" <br><br> came from ip: ${clientIp}`
         });
 
         return {

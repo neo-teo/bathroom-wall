@@ -18,10 +18,22 @@ export const twentyFourAgo = () => {
     return twentyFourHoursAgo;
 }
 
+export const nearestPast7Am = () => {
+    const date = new Date();
+
+    // If it's before 7 AM, subtract a day to get to yesterday
+    if (date.getHours() < 7) {
+        date.setDate(date.getDate() - 1);
+    }
+
+    return date.setHours(7, 0, 0, 0);
+}
+
 export const howLongAgo = (date: Date) => {
     const now = new Date();
     const timeDifference = now.getTime() - date.getTime();
     const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+    const hoursDifference = Math.floor(minutesDifference / 60);
 
     if (minutesDifference < 1) {
         return 'just now';
@@ -35,6 +47,21 @@ export const howLongAgo = (date: Date) => {
         return 'about an hour ago';
     }
 
-    const hoursDifference = Math.floor(minutesDifference / 60);
-    return `${hoursDifference} hours ago`;
+    if (hoursDifference < 24) {
+        return `${hoursDifference} hours ago`;
+    }
+
+    let formattedDate = date.toLocaleDateString('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: '2-digit'
+    });
+    let formattedTime = date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    // if more than 24 hours ago, just return HH:MM AM/PM
+    return `${formattedDate} ${formattedTime}`
 }

@@ -4,7 +4,7 @@ import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 import { twentyFourAgo } from '$lib/utils/timeUtils';
-import { clientCity } from '../hooks.server';
+import { clientCity, clientIp } from '../hooks.server';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
 
@@ -63,8 +63,7 @@ export const actions: Actions = {
             from: GOOGLE_EMAIL,
             to: "theodore.tsivranidis@gmail.com",
             subject: `someone added a bar to bathroom_wall`,
-            text: `${barData.name} at ${barData.address} got added`,
-            html: `<b>${barData.name}</b> at <i>${barData.address}</i> got added`
+            html: `<b>${barData.name}</b> at <i>${barData.address}</i> got added <br><br> came from ip: ${clientIp}`
         });
 
         redirect(302, `/bars/` + barData.id);

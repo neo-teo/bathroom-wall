@@ -10,10 +10,10 @@
 		if (navigator.share) {
 			navigator.share({
 				text: `check out this bathroom wall tag by: ${post.nickname}`,
-				url: `https://bathwall.xyz/bars/${post.barId}?postId=${post.id}`
+				url: `https://bathwall.co/bars/${post.barId}?postId=${post.id}`
 			});
 		} else {
-			navigator.clipboard.writeText(`https://bathwall.xyz/bars/${post.barId}?postId=${post.id}`);
+			navigator.clipboard.writeText(`https://bathwall.co/bars/${post.barId}?postId=${post.id}`);
 			copied = true;
 			setTimeout(() => (copied = false), 800);
 		}
