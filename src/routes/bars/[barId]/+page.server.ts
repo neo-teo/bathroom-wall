@@ -1,24 +1,30 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db, rateLimit } from '$lib/db';
-import { today } from '$lib/utils/timeUtils';
+import { dateToTimeGroup, timeGroupToDisplayDate, today } from '$lib/utils/timeUtils';
 
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 
 import { v2 as cloudinary } from 'cloudinary';
 import type { Bar, Post } from '$lib/database.types';
-import { clientIp } from '../../../hooks.server';
+import { clientIp, clientTimezone } from '../../../hooks.server';
 
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const id = params.barId;
     const postId = url.searchParams.get("postId");
+    const urlDate = url.searchParams.get("date");
 
-    const response = await fetch(`/api/bars/${id}`, { method: 'GET' });
+    // TODO: should I put timeGroup and displayDate in /api/bars/id so I can share between the two pages ?
+    const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
+
+    const displayDate = urlDate ? timeGroupToDisplayDate(urlDate) : today()
+
+    const response = await fetch(`/api/bars/${id}?date=${timeGroup}`, { method: 'GET' });
 
     const json = await response.json();
 
-    const barData: Bar = {
+    const bar: Bar = {
         ...json,
         posts: json.posts.map((post: any) => {
             return {
@@ -29,13 +35,14 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     }
 
     // if barData does not exist for id, redirect to home page.
-    if (barData == null) {
+    if (bar == null) {
         redirect(302, `/`);
     }
 
     const nickname = cookies.get("nickname");
 
-    return { title: barData.name, bar: barData, date: today(), nickname: nickname, postId: postId };
+    // NOTE: title below is used for site meta check src/routes/+layout.svelte
+    return { title: bar.name, bar, timeGroup, displayDate, nickname, postId };
 };
 
 export const actions: Actions = {
@@ -58,12 +65,14 @@ export const actions: Actions = {
         }
 
         try {
+            const date = new Date();
             const post = await db.post.create({
                 data: {
                     nickname,
                     message,
                     barId,
-                    date: new Date(),
+                    date,
+                    timeGroup: dateToTimeGroup(date, clientTimezone)
                 }
             });
 

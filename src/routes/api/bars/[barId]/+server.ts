@@ -1,9 +1,13 @@
 import { db } from "$lib/db";
-import { twentyFourAgo } from "$lib/utils/timeUtils";
+import { dateToTimeGroup } from "$lib/utils/timeUtils";
 import { json } from "@sveltejs/kit";
+import { clientTimezone } from "../../../../hooks.server";
 
-export const GET = async ({ params, request }) => {
+export const GET = async ({ params, url, request }) => {
     const id = params.barId;
+    const urlDate = url.searchParams.get("date");
+
+    const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
 
     const barData = await db.bar.findUnique({
         where: {
@@ -12,8 +16,8 @@ export const GET = async ({ params, request }) => {
         include: {
             posts: {
                 where: {
-                    date: {
-                        gte: new Date(twentyFourAgo()), // Earliest date
+                    timeGroup: {
+                        equals: timeGroup,
                     }
                 },
                 include: {

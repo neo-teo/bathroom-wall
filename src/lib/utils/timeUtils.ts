@@ -1,3 +1,5 @@
+import moment from "moment-timezone";
+
 export const today = () => {
 
     const date = new Date(); // Current date and time
@@ -18,16 +20,6 @@ export const twentyFourAgo = () => {
     return twentyFourHoursAgo;
 }
 
-export const nearestPast7Am = () => {
-    const date = new Date();
-
-    // If it's before 7 AM, subtract a day to get to yesterday
-    if (date.getHours() < 7) {
-        date.setDate(date.getDate() - 1);
-    }
-
-    return date.setHours(7, 0, 0, 0);
-}
 
 export const howLongAgo = (date: Date) => {
     const now = new Date();
@@ -64,4 +56,20 @@ export const howLongAgo = (date: Date) => {
 
     // if more than 24 hours ago, just return HH:MM AM/PM
     return `${formattedDate} ${formattedTime}`
+}
+
+export const dateToTimeGroup = (ogDate: Date, timezone: string = 'America/New_York') => {
+    let date = moment.tz(ogDate, timezone);
+
+    // Check if the time is before 6 AM and subtract a day if necessary
+    if (date.hour() < 6) {
+        date.subtract(1, 'days');
+    }
+
+    // Format the date as MM-DD-YYYY in the specified time zone
+    return date.format('MM-DD-YYYY');
+}
+
+export const timeGroupToDisplayDate = (timeGroup: string) => {
+    return moment(timeGroup, 'MM-DD-YYYY').format('MMMM D, YYYY')
 }

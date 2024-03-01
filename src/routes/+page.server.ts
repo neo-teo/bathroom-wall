@@ -3,17 +3,19 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
-import { twentyFourAgo } from '$lib/utils/timeUtils';
-import { clientCity, clientIp } from '../hooks.server';
+import { dateToTimeGroup } from '$lib/utils/timeUtils';
+import { clientIp, clientTimezone } from '../hooks.server';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
+
+    const timeGroup = dateToTimeGroup(new Date(), clientTimezone);
 
     const barData = await db.bar.findMany({
         include: {
             posts: {
                 where: {
-                    date: {
-                        gte: new Date(twentyFourAgo()), // Earliest date
+                    timeGroup: {
+                        equals: timeGroup,
                     }
                 },
                 orderBy: {
@@ -23,7 +25,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
         }
     });
 
-    return { title: "bathroom wall", bars: barData, clientCity };
+    return { title: "bathroom wall", bars: barData };
 };
 
 export const actions: Actions = {

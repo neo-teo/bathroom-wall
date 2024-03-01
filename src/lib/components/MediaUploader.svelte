@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resizeAndConvertToJPEG } from '$lib/utils/fileUtils';
+	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	export let imageData: string | null = null;
@@ -34,16 +35,20 @@
 </script>
 
 <div
-	class="flex min-h-[60px] items-center gap-[10px] rounded-sm border border-dashed border-gray-400 px-2"
+	class="flex min-h-[40px] items-center gap-[10px] rounded-sm border-t border-dashed border-gray-200 px-2"
 >
-	<button class="rounded-lg bg-gray-100 px-2 text-blue-400" on:click|preventDefault={openFileInput}>
+	<button
+		class="flex items-center gap-2 rounded-xl bg-gray-100 px-2 text-blue-400"
+		on:click|preventDefault={openFileInput}
+	>
+		<Icon icon="material-symbols:add-photo-alternate" />
 		Choose image
 	</button>
 
 	{#if imageData}
-		<img src={imageData} alt="preview" class="h-[50px]" />
+		<img src={imageData} alt="preview" class="h-[40px]" />
 	{:else}
-		<p>no image selected</p>
+		<p class="text-gray-400">no image selected</p>
 	{/if}
 </div>
 

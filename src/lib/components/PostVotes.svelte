@@ -16,7 +16,7 @@
 		post.score = post.score + change;
 
 		vote = vote === newVote ? '' : newVote;
-		Cookies.set(post.id, vote);
+		Cookies.set(post.id, vote, { path: '/' });
 
 		await fetch(`/api/posts/${post.id}/score`, {
 			method: 'PATCH',

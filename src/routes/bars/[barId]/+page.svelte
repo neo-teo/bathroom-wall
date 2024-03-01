@@ -6,9 +6,13 @@
 	import { onMount } from 'svelte';
 	import MediaUploader from '$lib/components/MediaUploader.svelte';
 	import Icon from '@iconify/svelte';
+	import { dateToTimeGroup, timeGroupToDisplayDate } from '$lib/utils/timeUtils';
 
 	export let data: PageData;
 	export let form: ActionData;
+
+	let todaysTimeGroup = dateToTimeGroup(new Date());
+	let isArchivedWall = todaysTimeGroup !== data.timeGroup;
 
 	let loading = false;
 
@@ -38,63 +42,77 @@
 	});
 </script>
 
-<div class="grid grid-cols-2">
-	<!-- NOTE: w-[300px] is to make the page take up as much width as it can -->
-	<a href="/" class="w-[300px]"><h1>bathroom <br /> wall</h1></a>
-
-	<div class="flex flex-col justify-center text-right">
+<div class="flex justify-between">
+	<a href="/"><h1>bathroom <br /> wall</h1></a>
+	<div class="flex flex-col items-end justify-center text-right">
 		<h2>{data.bar.name}</h2>
-		<p class="text-sm">{data.date}</p>
+		<a
+			href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`}
+			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-white px-2 no-underline"
+		>
+			<p class="text-sm">{data.displayDate}</p>
+		</a>
 	</div>
 </div>
 
-<form
-	action={`?/createPost`}
-	method="POST"
-	enctype="multipart/form-data"
-	class="flex flex-col gap-[10px]"
-	use:enhance={() => {
-		loading = true;
+<!-- Only allow posting when it is "today" -->
+{#if !isArchivedWall}
+	<form
+		action={`?/createPost`}
+		method="POST"
+		enctype="multipart/form-data"
+		class="flex flex-col gap-[10px]"
+		use:enhance={() => {
+			loading = true;
 
-		return async ({ update }) => {
-			await update();
-			nickname = '';
-			nickname = data.nickname ?? '';
-			loading = false;
-		};
-	}}
->
-	<input type="hidden" id="barId" name="barId" value={data.bar.id} />
-
-	<div class="flex grow flex-col gap-[5px]">
-		<label for="nickname"> Nickname </label>
-		<input type="text" id="nickname" name="nickname" value={nickname} required />
-	</div>
-
-	<div class="flex flex-col gap-[5px]">
-		<label for="message"> Message </label>
-		<textarea id="message" name="message" rows={3} value={message} required />
-	</div>
-
-	<MediaUploader {imageData} on:change={imageDataChanged} />
-
-	<button
-		type="submit"
-		class={`relative h-[30px] rounded-sm border bg-blue-500 p-0.5 text-white ${loading ? 'bg-blue-600' : ''}`}
-		disabled={loading}
+			return async ({ update }) => {
+				await update();
+				nickname = '';
+				nickname = data.nickname ?? '';
+				loading = false;
+			};
+		}}
 	>
-		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">Post</div>
-		{#if loading}
-			<div class="absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">
-				<Icon icon="line-md:loading-loop" color={'white'} />
-			</div>
-		{/if}
-	</button>
+		<input type="hidden" id="barId" name="barId" value={data.bar.id} />
 
-	{#if form?.error}
-		<p class="text-sm text-rose-500">{form.error}</p>
-	{/if}
-</form>
+		<div class="flex grow flex-col gap-[5px]">
+			<label for="nickname"> Nickname </label>
+			<input type="text" id="nickname" name="nickname" value={nickname} required />
+		</div>
+
+		<div class="flex flex-col gap-[5px]">
+			<label for="message"> Message </label>
+			<div class="flex flex-col border border-gray-400 bg-white">
+				<textarea
+					id="message"
+					name="message"
+					rows={3}
+					value={message}
+					required={!imageData}
+					class="resize-none border-none"
+				/>
+				<MediaUploader {imageData} on:change={imageDataChanged} />
+			</div>
+		</div>
+
+		<button
+			type="submit"
+			class={`relative h-[30px] rounded-sm border bg-blue-500 p-0.5 text-white ${loading ? 'bg-blue-600' : ''}`}
+			disabled={loading}
+		>
+			<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">Post</div>
+			{#if loading}
+				<div class="absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">
+					<Icon icon="line-md:loading-loop" color={'white'} />
+				</div>
+			{/if}
+		</button>
+
+		{#if form?.error}
+			<p class="text-sm text-rose-500">{form.error}</p>
+		{/if}
+	</form>
+{/if}
 
 {#if posts.length === 0}
 	<p>🥱 it's quiet in here...</p>
@@ -105,5 +123,8 @@
 {/each}
 
 <p class="text-sm text-gray-400">
-	{'showing tags from the past 24 hours only'}
+	{`displaying ${isArchivedWall ? data.displayDate : "today's"} tags. for other days, check ${data.bar.name}'s`}
+	<a href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`} class="text-sm text-gray-400">
+		archive
+	</a>
 </p>

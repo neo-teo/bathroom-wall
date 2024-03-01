@@ -18,7 +18,7 @@
 </svelte:head>
 
 <div class="flex grid min-h-screen justify-center">
-	<div class="flex max-w-[400px] flex-col gap-[20px] p-5">
+	<div class="flex w-screen max-w-[450px] flex-col gap-[20px] p-5">
 		<slot />
 	</div>
 </div>
