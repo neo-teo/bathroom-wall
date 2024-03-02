@@ -1,26 +1,5 @@
 import moment from "moment-timezone";
 
-export const today = () => {
-
-    const date = new Date(); // Current date and time
-
-    const estDate = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-
-    return estDate;
-}
-
-export const twentyFourAgo = () => {
-    const now = new Date();
-    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // Subtract 24 hours in milliseconds
-
-    return twentyFourHoursAgo;
-}
-
-
 export const howLongAgo = (date: Date) => {
     const now = new Date();
     const timeDifference = now.getTime() - date.getTime();
@@ -43,11 +22,6 @@ export const howLongAgo = (date: Date) => {
         return `${hoursDifference} hours ago`;
     }
 
-    let formattedDate = date.toLocaleDateString('en-US', {
-        month: '2-digit',
-        day: '2-digit',
-        year: '2-digit'
-    });
     let formattedTime = date.toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',
@@ -55,7 +29,7 @@ export const howLongAgo = (date: Date) => {
     });
 
     // if more than 24 hours ago, just return HH:MM AM/PM
-    return `${formattedDate} ${formattedTime}`
+    return formattedTime
 }
 
 export const dateToTimeGroup = (ogDate: Date, timezone: string = 'America/New_York') => {

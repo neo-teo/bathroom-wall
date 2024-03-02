@@ -4,6 +4,8 @@
 	import moment from 'moment';
 	import { createEventDispatcher } from 'svelte';
 	import { CalendarDate, type DateValue } from '@internationalized/date';
+	import ActivityIndicatorLegend from './ActivityIndicatorLegend.svelte';
+	import ActivityIndicator from './ActivityIndicator.svelte';
 
 	export let initialValue: string; // initial value
 	export let timeGroupToCount: Map<string, number>;
@@ -23,19 +25,6 @@
 
 	const maxCount = Math.max(...Array.from(timeGroupToCount.values()));
 
-	function getColorIntensity(count: number) {
-		const white = { r: 255, g: 255, b: 255 };
-		const blue = { r: 59, g: 130, b: 246 };
-
-		// interpolate between white and blue based on the ratio
-		const ratio = count / maxCount;
-		const r = Math.round(white.r + (blue.r - white.r) * ratio);
-		const g = Math.round(white.g + (blue.g - white.g) * ratio);
-		const b = Math.round(white.b + (blue.b - white.b) * ratio);
-
-		return `rgb(${r}, ${g}, ${b})`;
-	}
-
 	function countForDate(date: DateValue) {
 		const timeGroup = moment(date, 'YYYY-MM-DD').format('MM-DD-YYYY');
 		return timeGroupToCount.get(timeGroup) ?? 0;
@@ -53,7 +42,7 @@
 </script>
 
 <Calendar.Root
-	class="rounded-sm border border-gray-300 bg-white p-2 text-sm"
+	class="rounded-sm border bg-white p-2 text-sm"
 	let:months
 	let:weekdays
 	{minValue}
@@ -100,10 +89,7 @@
 									class={`flex flex-col items-center py-2 data-[outside-month]:pointer-events-none data-[today]:font-bold data-[outside-month]:text-gray-300 ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
 								>
 									{date.day}
-									<div
-										class="h-4 w-4 rounded-xl border"
-										style="background-color: {getColorIntensity(countForDate(date))}"
-									></div>
+									<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />
 								</Calendar.Day>
 							</Calendar.Cell>
 						{/each}
@@ -114,8 +100,6 @@
 	{/each}
 </Calendar.Root>
 
-<div class="flex items-center justify-center gap-2 text-sm">
-	<div>less</div>
-	<div class="h-2 w-[120px] rounded border bg-gradient-to-r from-white via-blue-100 to-blue-500" />
-	<div>more</div>
+<div class="px-5">
+	<ActivityIndicatorLegend />
 </div>

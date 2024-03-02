@@ -8,25 +8,21 @@
 	export let post: Post;
 </script>
 
-<div
-	id={`post_${post.id}`}
-	class="flex flex-col gap-[10px] rounded-sm border border-gray-500 bg-white p-3 transition duration-1000"
->
-	<div class="flex justify-between">
+<div id={`post_${post.id}`} class="flex flex-col gap-2 py-3 transition duration-1000">
+	<div class="flex justify-between px-5">
 		<div class="flex gap-[3px]">
-			#
 			<p class="font-bold">{post.nickname}</p>
 		</div>
 		<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
 	</div>
 
-	<p>{post.message}</p>
+	<p class="px-5">{post.message}</p>
 
 	{#if post.media}
 		<PostMedia media={post.media} />
 	{/if}
 
-	<div class="flex justify-between">
+	<div class="flex justify-between px-5">
 		<PostVotes {post} />
 		<PostShare {post} />
 	</div>

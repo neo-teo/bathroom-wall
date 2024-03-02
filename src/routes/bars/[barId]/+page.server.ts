@@ -1,7 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db, rateLimit } from '$lib/db';
-import { dateToTimeGroup, timeGroupToDisplayDate, today } from '$lib/utils/timeUtils';
+import { dateToTimeGroup } from '$lib/utils/timeUtils';
 
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
@@ -17,8 +17,6 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
 
     // TODO: should I put timeGroup and displayDate in /api/bars/id so I can share between the two pages ?
     const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
-
-    const displayDate = urlDate ? timeGroupToDisplayDate(urlDate) : today()
 
     const response = await fetch(`/api/bars/${id}?date=${timeGroup}`, { method: 'GET' });
 
@@ -42,7 +40,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const nickname = cookies.get("nickname");
 
     // NOTE: title below is used for site meta check src/routes/+layout.svelte
-    return { title: bar.name, bar, timeGroup, displayDate, nickname, postId };
+    return { title: bar.name, bar, timeGroup, nickname, postId };
 };
 
 export const actions: Actions = {

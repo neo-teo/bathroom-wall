@@ -5,7 +5,8 @@
 	import { onDestroy } from 'svelte';
 
 	import BarAdder from '$lib/components/BarAdder.svelte';
-	import Icon from '@iconify/svelte';
+	import ActivityIndicator from '$lib/components/ActivityIndicator.svelte';
+	import ActivityIndicatorLegend from '$lib/components/ActivityIndicatorLegend.svelte';
 
 	export let data: PageData;
 
@@ -21,20 +22,26 @@
 	onDestroy(() => unsubscribe());
 
 	let adding = false;
+
+	$: maxPosts = Math.max(...searchableBars.map((bar) => bar.posts.length));
 </script>
 
-<a href="/"><h1>bathroom <br /> wall</h1></a>
-<p>a shared wall of text and image for people at a particular place on a particular day</p>
+<a href="/" class="px-5"><h1>bathroom <br /> wall</h1></a>
 
-<div class="mt-[10px] flex flex-col gap-[5px]">
+<p class="px-5">
+	a shared wall of text and image for people at a particular place on a particular day
+</p>
+
+<div class="mx-5 flex flex-col gap-[5px]">
 	<input
+		class="text-sm"
 		placeholder="search bars by name or address..."
 		type="text"
 		bind:value={$searchStore.search}
 	/>
 </div>
 
-<div class="flex flex-col gap-[20px] border border-gray-500 bg-white p-2">
+<div class="flex flex-col gap-[20px] px-5">
 	{#if $searchStore.filtered.length === 0}
 		<!-- if there aren't any items, let the user know they can add one -->
 		<div class="flex flex-wrap gap-[5px]">
@@ -46,12 +53,12 @@
 		{#each $searchStore.filtered
 			.sort((a, b) => b.posts.length - a.posts.length)
 			.slice(0, 20) as bar}
-			<div class="flex flex-col gap-[5px]">
+			<div class="flex flex-col gap-1">
 				<div class="flex items-center justify-between">
 					<a href={`/bars/${bar.id}`}>
-						<h2>{bar.name}</h2>
+						<h3>{bar.name}</h3>
 					</a>
-					<p class="text-sm text-gray-400">{bar.posts.length} tags</p>
+					<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
 				</div>
 				<p class="text-sm">{bar.address}</p>
 			</div>
@@ -61,6 +68,8 @@
 				and {$searchStore.filtered.length - 20} more
 			</p>
 		{/if}
+
+		<ActivityIndicatorLegend />
 	{/if}
 </div>
 

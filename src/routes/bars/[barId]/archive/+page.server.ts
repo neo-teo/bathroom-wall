@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { dateToTimeGroup, timeGroupToDisplayDate, today } from '$lib/utils/timeUtils';
+import { dateToTimeGroup } from '$lib/utils/timeUtils';
 
 import type { Bar } from '$lib/database.types';
 import { db } from '$lib/db';
@@ -11,8 +11,6 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const urlDate = url.searchParams.get("date");
 
     const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
-
-    const displayDate = urlDate ? timeGroupToDisplayDate(urlDate) : today()
 
     const response = await fetch(`/api/bars/${id}`, { method: 'GET' });
 
@@ -42,5 +40,5 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
         redirect(302, `/`);
     }
 
-    return { title: bar.name, bar, timeGroupToCount, timeGroup, displayDate };
+    return { title: bar.name, bar, timeGroupToCount, timeGroup };
 };

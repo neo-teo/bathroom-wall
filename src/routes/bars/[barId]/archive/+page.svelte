@@ -3,9 +3,12 @@
 	import type { PageData } from './$types';
 	import moment from 'moment';
 	import { goto } from '$app/navigation';
-	import { timeGroupToDisplayDate, today } from '$lib/utils/timeUtils';
+	import { dateToTimeGroup, timeGroupToDisplayDate } from '$lib/utils/timeUtils';
 
 	export let data: PageData;
+
+	let todaysTimeGroup = dateToTimeGroup(new Date());
+	let isArchivedWall = todaysTimeGroup !== data.timeGroup;
 
 	$: timeGroupToCount = data.timeGroupToCount;
 
@@ -15,7 +18,7 @@
 	}
 </script>
 
-<div class="flex justify-between">
+<div class="mx-5 flex justify-between">
 	<a href="/"><h1>bathroom <br /> wall</h1></a>
 	<div class="flex flex-col items-end justify-center text-right">
 		<h2>{data.bar.name}</h2>
@@ -23,7 +26,7 @@
 			href={`/bars/${data.bar.id}?date=${data.timeGroup}`}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-black px-2 text-white no-underline"
 		>
-			<p class="text-sm">{data.displayDate}</p>
+			<p class="text-sm">{isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}</p>
 		</a>
 	</div>
 </div>

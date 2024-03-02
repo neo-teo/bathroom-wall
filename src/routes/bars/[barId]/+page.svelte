@@ -42,7 +42,7 @@
 	});
 </script>
 
-<div class="flex justify-between">
+<div class="mx-5 flex justify-between">
 	<a href="/"><h1>bathroom <br /> wall</h1></a>
 	<div class="flex flex-col items-end justify-center text-right">
 		<h2>{data.bar.name}</h2>
@@ -50,7 +50,7 @@
 			href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-white px-2 no-underline"
 		>
-			<p class="text-sm">{data.displayDate}</p>
+			<p class="text-sm">{isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}</p>
 		</a>
 	</div>
 </div>
@@ -61,7 +61,7 @@
 		action={`?/createPost`}
 		method="POST"
 		enctype="multipart/form-data"
-		class="flex flex-col gap-[10px]"
+		class="flex flex-col gap-[10px] px-5"
 		use:enhance={() => {
 			loading = true;
 
@@ -82,11 +82,11 @@
 
 		<div class="flex flex-col gap-[5px]">
 			<label for="message"> Message </label>
-			<div class="flex flex-col border border-gray-400 bg-white">
+			<div class="flex flex-col border border-gray-300 bg-white">
 				<textarea
 					id="message"
 					name="message"
-					rows={3}
+					rows={2}
 					value={message}
 					required={!imageData}
 					class="resize-none border-none"
@@ -115,15 +115,15 @@
 {/if}
 
 {#if posts.length === 0}
-	<p>🥱 it's quiet in here...</p>
+	<p class="px-5">🥱 it's quiet in here...</p>
 {/if}
 
 {#each posts as post}
 	<Post {post} />
 {/each}
 
-<p class="text-sm text-gray-400">
-	{`displaying ${isArchivedWall ? data.displayDate : "today's"} tags. for other days, check ${data.bar.name}'s`}
+<p class="px-5 text-sm text-gray-400">
+	{`displaying ${isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : "today's"} tags. for other days, check ${data.bar.name}'s`}
 	<a href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`} class="text-sm text-gray-400">
 		archive
 	</a>
