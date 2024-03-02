@@ -25,7 +25,7 @@
 
 <style lang="postcss">
 	.grid {
-		background-size: 60px 60px;
+		background-size: 80px 80px;
 		background-position: -1px -1px;
 		background-image: linear-gradient(to right, lightgray 1px, transparent 1px),
 			linear-gradient(to bottom, lightgray 1px, transparent 1px);
