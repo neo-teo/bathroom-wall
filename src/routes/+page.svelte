@@ -34,7 +34,6 @@
 
 <div class="mx-5 flex flex-col gap-[5px]">
 	<input
-		class="text-sm"
 		placeholder="search bars by name or address..."
 		type="text"
 		bind:value={$searchStore.search}
