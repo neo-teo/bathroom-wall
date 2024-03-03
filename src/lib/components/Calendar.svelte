@@ -86,7 +86,7 @@
 								<Calendar.Day
 									{date}
 									month={month.value}
-									class={`flex flex-col items-center py-2 data-[outside-month]:pointer-events-none data-[today]:font-bold data-[outside-month]:text-gray-300 ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
+									class={`flex flex-col items-center py-2 data-[outside-month]:hidden data-[today]:font-bold ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
 								>
 									{date.day}
 									<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />
