@@ -10,7 +10,10 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const id = params.barId;
     const urlDate = url.searchParams.get("date");
 
-    const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
+    let todaysTimeGroup = dateToTimeGroup(new Date(), clientTimezone);
+    const timeGroup = urlDate ?? todaysTimeGroup;
+
+    let isArchivedWall = timeGroup !== todaysTimeGroup;
 
     const response = await fetch(`/api/bars/${id}`, { method: 'GET' });
 
@@ -40,5 +43,5 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
         redirect(302, `/`);
     }
 
-    return { title: bar.name, bar, timeGroupToCount, timeGroup };
+    return { title: bar.name, bar, timeGroupToCount, timeGroup, isArchivedWall };
 };

@@ -7,9 +7,6 @@
 
 	export let data: PageData;
 
-	let todaysTimeGroup = dateToTimeGroup(new Date());
-	let isArchivedWall = todaysTimeGroup !== data.timeGroup;
-
 	$: timeGroupToCount = data.timeGroupToCount;
 
 	function onDateSelected(date: string) {
@@ -26,7 +23,9 @@
 			href={`/bars/${data.bar.id}?date=${data.timeGroup}`}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-black px-2 text-white no-underline"
 		>
-			<p class="text-sm">{isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}</p>
+			<p class="text-sm">
+				{data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}
+			</p>
 		</a>
 	</div>
 </div>

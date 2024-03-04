@@ -32,8 +32,8 @@ export const howLongAgo = (date: Date) => {
     return formattedTime
 }
 
-export const dateToTimeGroup = (ogDate: Date, timezone: string = 'America/New_York') => {
-    let date = moment.tz(ogDate, timezone);
+export const dateToTimeGroup = (ogDate: Date, timezone?: string) => {
+    let date = timezone ? moment.tz(ogDate, timezone) : moment(ogDate);
 
     // Check if the time is before 6 AM and subtract a day if necessary
     if (date.hour() < 6) {

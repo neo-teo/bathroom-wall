@@ -6,6 +6,7 @@
 	import { CalendarDate, type DateValue } from '@internationalized/date';
 	import ActivityIndicatorLegend from './ActivityIndicatorLegend.svelte';
 	import ActivityIndicator from './ActivityIndicator.svelte';
+	import { dateToTimeGroup } from '$lib/utils/timeUtils';
 
 	export let initialValue: string; // initial value
 	export let timeGroupToCount: Map<string, number>;
@@ -19,8 +20,12 @@
 	const dispatch = createEventDispatcher();
 
 	function getTodaysDate() {
-		const date = new Date();
-		return new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+		const todaysTimeGroup = dateToTimeGroup(new Date());
+		return new CalendarDate(
+			+todaysTimeGroup.split('-')[2],
+			+todaysTimeGroup.split('-')[0],
+			+todaysTimeGroup.split('-')[1]
+		);
 	}
 
 	const maxCount = Math.max(...Array.from(timeGroupToCount.values()));
@@ -86,7 +91,7 @@
 								<Calendar.Day
 									{date}
 									month={month.value}
-									class={`flex flex-col items-center py-2 data-[outside-month]:hidden data-[today]:font-bold ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
+									class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) === 0 ? 'font-bold' : ''} ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
 								>
 									{date.day}
 									<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />

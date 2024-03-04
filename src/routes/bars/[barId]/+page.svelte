@@ -11,9 +11,6 @@
 	export let data: PageData;
 	export let form: ActionData;
 
-	let todaysTimeGroup = dateToTimeGroup(new Date());
-	let isArchivedWall = todaysTimeGroup !== data.timeGroup;
-
 	let loading = false;
 
 	$: posts = data.bar.posts;
@@ -50,13 +47,15 @@
 			href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-white px-2 no-underline"
 		>
-			<p class="text-sm">{isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}</p>
+			<p class="text-sm">
+				{data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}
+			</p>
 		</a>
 	</div>
 </div>
 
 <!-- Only allow posting when it is "today" -->
-{#if !isArchivedWall}
+{#if !data.isArchivedWall}
 	<form
 		action={`?/createPost`}
 		method="POST"
@@ -123,7 +122,7 @@
 {/each}
 
 <p class="px-5 text-sm text-gray-400">
-	{`displaying ${isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : "today's"} tags. for other days, check ${data.bar.name}'s`}
+	{`displaying ${data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : "today's"} tags. for other days, check ${data.bar.name}'s`}
 	<a href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`} class="text-sm text-gray-400">
 		archive
 	</a>
