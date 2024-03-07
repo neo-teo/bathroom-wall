@@ -18,7 +18,7 @@
 
     input,
     textarea {
-        @apply border border-gray-300 rounded-sm p-2
+        @apply border border-gray-300 rounded-md p-2
     }
 
     label {

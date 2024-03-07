@@ -7,6 +7,7 @@
 	import ActivityIndicatorLegend from './ActivityIndicatorLegend.svelte';
 	import ActivityIndicator from './ActivityIndicator.svelte';
 	import { dateToTimeGroup } from '$lib/utils/timeUtils';
+	import WallContainer from './WallContainer.svelte';
 
 	export let initialValue: string; // initial value
 	export let timeGroupToCount: Map<string, number>;
@@ -46,64 +47,66 @@
 	let maxValue = getTodaysDate();
 </script>
 
-<Calendar.Root
-	class="rounded-sm border bg-white p-2 text-sm"
-	let:months
-	let:weekdays
-	{minValue}
-	{maxValue}
-	weekdayFormat="short"
-	{value}
-	onValueChange={dateSelected}
-	isDateDisabled={(date) =>
-		// NOTE: commented out line below aims to disable dates that have a count of 0
-		// (date.compare(getTodaysDate()) !== 0 && countForDate(date) === 0) ||
-		date.compare(minValue) < 0 || date.compare(maxValue) > 0}
-	initialFocus
->
-	<Calendar.Header class="mb-4 flex items-center justify-center gap-5 p-2">
-		<Calendar.PrevButton>
-			<Icon icon="radix-icons:caret-left" width="24" />
-		</Calendar.PrevButton>
-		<Calendar.Heading let:headingValue class="w-[150px] text-center text-lg font-medium"
-		></Calendar.Heading>
-		<Calendar.NextButton>
-			<Icon icon="radix-icons:caret-right" width="24" />
-		</Calendar.NextButton>
-	</Calendar.Header>
+<WallContainer>
+	<Calendar.Root
+		class="px-2 text-sm"
+		let:months
+		let:weekdays
+		{minValue}
+		{maxValue}
+		weekdayFormat="short"
+		{value}
+		onValueChange={dateSelected}
+		isDateDisabled={(date) =>
+			// NOTE: commented out line below aims to disable dates that have a count of 0
+			// (date.compare(getTodaysDate()) !== 0 && countForDate(date) === 0) ||
+			date.compare(minValue) < 0 || date.compare(maxValue) > 0}
+		initialFocus
+	>
+		<Calendar.Header class="mb-4 flex items-center justify-center gap-5 p-2">
+			<Calendar.PrevButton>
+				<Icon icon="radix-icons:caret-left" width="24" />
+			</Calendar.PrevButton>
+			<Calendar.Heading let:headingValue class="w-[150px] text-center text-lg font-medium"
+			></Calendar.Heading>
+			<Calendar.NextButton>
+				<Icon icon="radix-icons:caret-right" width="24" />
+			</Calendar.NextButton>
+		</Calendar.Header>
 
-	{#each months as month}
-		<Calendar.Grid class="flex flex-col">
-			<Calendar.GridHead>
-				<Calendar.GridRow class="grid grid-cols-7">
-					{#each weekdays as day}
-						<Calendar.HeadCell class="text-center text-xs font-normal">
-							<div>{day.slice(0, 3)}</div>
-						</Calendar.HeadCell>
-					{/each}
-				</Calendar.GridRow>
-			</Calendar.GridHead>
-			<Calendar.GridBody>
-				{#each month.weeks as weekDates}
+		{#each months as month}
+			<Calendar.Grid class="flex flex-col">
+				<Calendar.GridHead>
 					<Calendar.GridRow class="grid grid-cols-7">
-						{#each weekDates as date}
-							<Calendar.Cell {date} class="py-2 text-center">
-								<Calendar.Day
-									{date}
-									month={month.value}
-									class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) === 0 ? 'font-bold' : ''} ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
-								>
-									{date.day}
-									<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />
-								</Calendar.Day>
-							</Calendar.Cell>
+						{#each weekdays as day}
+							<Calendar.HeadCell class="text-center text-xs font-normal">
+								<div>{day.slice(0, 3)}</div>
+							</Calendar.HeadCell>
 						{/each}
 					</Calendar.GridRow>
-				{/each}
-			</Calendar.GridBody>
-		</Calendar.Grid>
-	{/each}
-</Calendar.Root>
+				</Calendar.GridHead>
+				<Calendar.GridBody>
+					{#each month.weeks as weekDates}
+						<Calendar.GridRow class="grid grid-cols-7">
+							{#each weekDates as date}
+								<Calendar.Cell {date} class="py-2 text-center">
+									<Calendar.Day
+										{date}
+										month={month.value}
+										class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) === 0 ? 'font-bold' : ''} ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
+									>
+										{date.day}
+										<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />
+									</Calendar.Day>
+								</Calendar.Cell>
+							{/each}
+						</Calendar.GridRow>
+					{/each}
+				</Calendar.GridBody>
+			</Calendar.Grid>
+		{/each}
+	</Calendar.Root>
+</WallContainer>
 
 <div class="px-5">
 	<ActivityIndicatorLegend />
