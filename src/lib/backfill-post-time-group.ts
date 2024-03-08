@@ -1,4 +1,4 @@
-// // to run a script like this: npx tsx <filename>.ts
+// // to run this script: cd src/lib && npx tsx backfill-post-time-group.ts
 
 // import { db } from "./db";
 // import { dateToTimeGroup } from "./utils/timeUtils";

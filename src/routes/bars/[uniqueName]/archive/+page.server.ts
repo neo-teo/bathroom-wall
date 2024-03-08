@@ -7,7 +7,7 @@ import { db } from '$lib/db';
 import { clientTimezone } from '../../../../hooks.server';
 
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
-    const id = params.barId;
+    const uniqueName = params.uniqueName;
     const urlDate = url.searchParams.get("date");
 
     let todaysTimeGroup = dateToTimeGroup(new Date(), clientTimezone);
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
 
     let isArchivedWall = timeGroup !== todaysTimeGroup;
 
-    const response = await fetch(`/api/bars/${id}`, { method: 'GET' });
+    const response = await fetch(`/api/bars/${uniqueName}`, { method: 'GET' });
 
     const json = await response.json();
 
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const postData = await db.post.groupBy({
         by: ['timeGroup'],
         where: {
-            barId: id
+            barId: bar.id
         },
         _count: {
             timeGroup: true

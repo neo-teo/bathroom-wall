@@ -3,15 +3,15 @@ import { dateToTimeGroup } from "$lib/utils/timeUtils";
 import { json } from "@sveltejs/kit";
 import { clientTimezone } from "../../../../hooks.server";
 
-export const GET = async ({ params, url, request }) => {
-    const id = params.barId;
+export const GET = async ({ params, url }) => {
+    const uniqueName = params.uniqueName;
     const urlDate = url.searchParams.get("date");
 
     const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
 
     const barData = await db.bar.findUnique({
         where: {
-            id: id
+            uniqueName: uniqueName
         },
         include: {
             posts: {

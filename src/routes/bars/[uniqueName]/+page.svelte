@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 	import MediaUploader from '$lib/components/MediaUploader.svelte';
 	import Icon from '@iconify/svelte';
-	import { dateToTimeGroup, timeGroupToDisplayDate } from '$lib/utils/timeUtils';
+	import { timeGroupToDisplayDate } from '$lib/utils/timeUtils';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -44,7 +44,7 @@
 	<div class="flex flex-col items-end justify-center text-right">
 		<h2>{data.bar.name}</h2>
 		<a
-			href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`}
+			href={`/bars/${data.bar.uniqueName}/archive?date=${data.timeGroup}`}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-white px-2 no-underline"
 		>
 			<p class="text-sm">
@@ -73,6 +73,7 @@
 		}}
 	>
 		<input type="hidden" id="barId" name="barId" value={data.bar.id} />
+		<input type="hidden" id="barUniqueName" name="barUniqueName" value={data.bar.uniqueName} />
 
 		<div class="flex grow flex-col gap-[5px]">
 			<label for="nickname"> Nickname </label>
@@ -118,12 +119,15 @@
 {/if}
 
 {#each posts as post}
-	<Post {post} />
+	<Post {post} barUniqueName={data.bar.uniqueName} />
 {/each}
 
 <p class="px-5 text-sm text-gray-400">
 	{`displaying ${data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : "today's"} tags. for other days, check ${data.bar.name}'s`}
-	<a href={`/bars/${data.bar.id}/archive?date=${data.timeGroup}`} class="text-sm text-gray-400">
+	<a
+		href={`/bars/${data.bar.uniqueName}/archive?date=${data.timeGroup}`}
+		class="text-sm text-gray-400"
+	>
 		archive
 	</a>
 </p>

@@ -14,11 +14,12 @@ datasource db {
 }
 
 model Bar {
-  id       String @id @default(uuid())
-  name     String
-  address  String
-  googleId String @unique
-  posts    Post[]
+  id         String @id @default(uuid())
+  name       String
+  address    String
+  googleId   String @unique
+  uniqueName String @unique
+  posts      Post[]
 }
 
 model Post {

@@ -6,6 +6,7 @@
 	import PostVotes from './PostVotes.svelte';
 	import WallContainer from './WallContainer.svelte';
 
+	export let barUniqueName: string;
 	export let post: Post;
 </script>
 
@@ -27,7 +28,7 @@
 
 			<div class="flex justify-between px-5">
 				<PostVotes {post} />
-				<PostShare {post} />
+				<PostShare {post} {barUniqueName} />
 			</div>
 		</div>
 	</WallContainer>

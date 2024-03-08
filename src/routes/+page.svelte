@@ -56,7 +56,7 @@
 				.slice(0, 20) as bar}
 				<div class="flex flex-col gap-1">
 					<div class="flex items-center justify-between">
-						<a href={`/bars/${bar.id}`}>
+						<a href={`/bars/${bar.uniqueName}`}>
 							<h3>{bar.name}</h3>
 						</a>
 						<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />

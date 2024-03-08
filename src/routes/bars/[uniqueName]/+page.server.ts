@@ -1,17 +1,27 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { db, rateLimit } from '$lib/db';
+import { db } from '$lib/db';
 import { dateToTimeGroup } from '$lib/utils/timeUtils';
 
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 
-import { v2 as cloudinary } from 'cloudinary';
 import type { Bar, Post } from '$lib/database.types';
 import { clientIp, clientTimezone } from '../../../hooks.server';
+import { rateLimit } from '$lib/redis';
+
+import { v2 as cloudinary } from 'cloudinary';
+import { CLOUDINARY_API_SECRET } from '$env/static/private';
+import { PUBLIC_CLOUDINARY_API_KEY, PUBLIC_CLOUDINARY_CLOUD_NAME } from '$env/static/public';
+
+cloudinary.config({
+    cloud_name: PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: PUBLIC_CLOUDINARY_API_KEY,
+    api_secret: CLOUDINARY_API_SECRET
+});
 
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
-    const id = params.barId;
+    const uniqueName = params.uniqueName;
     const postId = url.searchParams.get("postId");
     const urlDate = url.searchParams.get("date");
 
@@ -21,7 +31,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
 
     let isArchivedWall = timeGroup !== todaysTimeGroup;
 
-    const response = await fetch(`/api/bars/${id}?date=${timeGroup}`, { method: 'GET' });
+    const response = await fetch(`/api/bars/${uniqueName}?date=${timeGroup}`, { method: 'GET' });
 
     const json = await response.json();
 
@@ -48,8 +58,9 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
 
 export const actions: Actions = {
     createPost: async ({ request, cookies }) => {
-        const { barId, nickname, message, imageData } = Object.fromEntries(await request.formData()) as {
+        const { barId, barUniqueName, nickname, message, imageData } = Object.fromEntries(await request.formData()) as {
             barId: string,
+            barUniqueName: string,
             nickname: string,
             message: string,
             imageData?: string,
@@ -99,7 +110,7 @@ export const actions: Actions = {
             from: GOOGLE_EMAIL,
             to: "theodore.tsivranidis@gmail.com",
             subject: `new bathroom_wall post`,
-            html: `<b>${nickname}</b> said: \"<a href="https://bathwall.co/bars/${barId}">${message}</a>\" <br><br> came from ip: ${clientIp}`
+            html: `<b>${nickname}</b> said: \"<a href="https://bathwall.co/bars/${barUniqueName}">${message}</a>\" <br><br> came from ip: ${clientIp}`
         });
 
         return {

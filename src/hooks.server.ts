@@ -12,9 +12,13 @@ export const handle: Handle = async ({ event, resolve }) => {
             const response = await fetch(`http://ip-api.com/json/${clientIp}`);
             if (response.ok) {
                 const data = await response.json();
+
                 clientTimezone = data.timezone ?? 'America/New_York';
 
-                event.cookies.set('timezone', clientTimezone, { path: '/' })
+                event.cookies.set('timezone', clientTimezone, {
+                    path: '/',
+                    maxAge: 5 * 60 * 60 // have the cookie expire after 5 hours
+                })
             } else {
                 console.error('ip-api returned with response.ok being false', response.statusText);
             }

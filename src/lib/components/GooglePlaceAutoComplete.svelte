@@ -11,6 +11,7 @@
 	let id = 'google place autocomplete input field';
 	let placeId = '';
 	let address = '';
+	let location = ''; // e.g. New York, Brooklyn, Thessaloniki, Athina -- used for url creation
 
 	type PlaceEvent = {
 		place: google.maps.places.PlaceResult;
@@ -102,6 +103,26 @@
 		placeId = (data && data.place.place_id) || '';
 		address = (data && data.place.formatted_address) || '';
 
+		if (data && data.place.address_components) {
+			const priorityTypes = [
+				'locality',
+				'sublocality_level_1',
+				'administrative_area_level_1',
+				'country'
+			];
+			let foundComponent = undefined;
+
+			for (const type of priorityTypes) {
+				foundComponent = data.place.address_components.find((component) =>
+					component.types.includes(type)
+				);
+				if (foundComponent) {
+					location = foundComponent.short_name;
+					break; // Stop searching once a match is found.
+				}
+			}
+		}
+
 		dispatch('place_changed', data);
 	}
 
@@ -122,3 +143,4 @@
 <input hidden name="shortName" value={shortName} />
 <input hidden name="address" value={address} />
 <input hidden name="googlePlaceId" value={placeId} />
+<input hidden name="location" value={location} />
