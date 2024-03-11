@@ -20,12 +20,13 @@
 					goto(`/?lat=${latitude}&lng=${longitude}`);
 				},
 				(error) => {
-					geolocationError = 'Error occurred requesting device location';
+					geolocationError =
+						'Unable to request location. Check location services settings for this browser.';
 					console.error(error);
 				}
 			);
 		} else {
-			geolocationError = 'This browser does not support geolocation';
+			geolocationError = 'This browser does not support geolocation.';
 			console.error('Geolocation is not supported by this browser');
 		}
 	}
