@@ -3,40 +3,39 @@ import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
-import { dateToTimeGroup } from '$lib/utils/timeUtils';
-import { clientIp, clientTimezone } from '../hooks.server';
+import { clientIp } from '../hooks.server';
 import { normalizeToKebabCase } from '$lib/utils/stringUtils';
+import type { Bar } from '$lib/database.types';
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({ url, fetch }) => {
 
-    const timeGroup = dateToTimeGroup(new Date(), clientTimezone);
+    const lat = url.searchParams.get('lat');
+    const lng = url.searchParams.get('lng');
 
-    const barData = await db.bar.findMany({
-        include: {
-            posts: {
-                where: {
-                    timeGroup: {
-                        equals: timeGroup,
-                    }
-                },
-                orderBy: {
-                    date: 'desc'
-                }
-            }
-        }
+    let endpoint = "/api/bars";
+    if (lat && lng) {
+        endpoint += `?lat=${lat}&lng=${lng}`;
+    }
+
+    const response = await fetch(endpoint, {
+        method: 'GET'
     });
 
-    return { title: "bathroom wall", bars: barData };
+    const bars: Bar[] = await response.json();
+
+    return { title: "bathroom wall", bars };
 };
 
 export const actions: Actions = {
     createBar: async ({ request }) => {
-        const { longName, shortName, address, googlePlaceId, location } = Object.fromEntries(await request.formData()) as {
+        const { longName, shortName, address, googlePlaceId, location, lat, lng } = Object.fromEntries(await request.formData()) as {
             longName: string,
             shortName: string,
             address: string,
             googlePlaceId: string,
-            location: string
+            location: string,
+            lat: string,
+            lng: string
         }
 
         let barData = await db.bar.findUnique({
@@ -58,7 +57,9 @@ export const actions: Actions = {
                     name: shortName,
                     address,
                     googleId: googlePlaceId,
-                    uniqueName
+                    uniqueName,
+                    lat,
+                    lng
                 }
             })
         } catch (err) {
@@ -93,8 +94,8 @@ const uniqueNameForBar = async (name: string, location: string) => {
         if (!exists) break; // Unique name found.
 
         uniqueName = counter === 0
-            ? `${name}-${normalizedLocation}`
-            : `${name}-${normalizedLocation}-${counter}`;
+            ? `${normalizedName}-${normalizedLocation}`
+            : `${normalizedName}-${normalizedLocation}-${counter}`;
 
         counter++; // Increment to ensure uniqueness in the next iteration if needed.
     }

@@ -8,10 +8,24 @@
 	import ActivityIndicator from '$lib/components/ActivityIndicator.svelte';
 	import ActivityIndicatorLegend from '$lib/components/ActivityIndicatorLegend.svelte';
 	import WallContainer from '$lib/components/WallContainer.svelte';
+	import BarSortCriteria from '$lib/components/BarSortCriteria.svelte';
 
 	export let data: PageData;
 
-	const searchableBars = data.bars.map((bar) => ({
+	let adding = false;
+
+	$: {
+		searchStore.set({
+			data: data.bars.map((bar) => ({
+				...bar,
+				searchTerms: `${bar.name} ${bar.address}`
+			})),
+			filtered: $searchStore.filtered,
+			search: $searchStore.search
+		});
+	}
+
+	let searchableBars = data.bars.map((bar) => ({
 		...bar,
 		searchTerms: `${bar.name} ${bar.address}`
 	}));
@@ -22,23 +36,25 @@
 
 	onDestroy(() => unsubscribe());
 
-	let adding = false;
-
 	$: maxPosts = Math.max(...searchableBars.map((bar) => bar.posts.length));
 </script>
 
 <a href="/" class="px-5"><h1>bathroom <br /> wall</h1></a>
 
-<p class="px-5">
+<p class="px-5 text-lg">
 	a shared wall of text and image for people at a particular place on a particular day
 </p>
 
-<div class="mx-5 flex flex-col gap-[5px]">
-	<input
-		placeholder="search bars by name or address..."
-		type="text"
-		bind:value={$searchStore.search}
-	/>
+<div class="mt-3 flex flex-col gap-2">
+	<BarSortCriteria />
+
+	<div class="mx-5 flex flex-col gap-[5px]">
+		<input
+			placeholder="search bars by name or address..."
+			type="text"
+			bind:value={$searchStore.search}
+		/>
+	</div>
 </div>
 
 <WallContainer>
@@ -51,9 +67,7 @@
 				<p class="whitespace-nowrap">a spot.</p>
 			</div>
 		{:else}
-			{#each $searchStore.filtered
-				.sort((a, b) => b.posts.length - a.posts.length)
-				.slice(0, 20) as bar}
+			{#each $searchStore.filtered.slice(0, 20) as bar}
 				<div class="flex flex-col gap-1">
 					<div class="flex items-center justify-between">
 						<a href={`/bars/${bar.uniqueName}`}>

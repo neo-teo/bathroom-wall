@@ -12,6 +12,8 @@
 	let placeId = '';
 	let address = '';
 	let location = ''; // e.g. New York, Brooklyn, Thessaloniki, Athina -- used for url creation
+	let lat = '';
+	let lng = '';
 
 	type PlaceEvent = {
 		place: google.maps.places.PlaceResult;
@@ -102,6 +104,8 @@
 		shortName = (data && data.place.name) || '';
 		placeId = (data && data.place.place_id) || '';
 		address = (data && data.place.formatted_address) || '';
+		lat = (data && data.place.geometry?.location.lat.toString()) || '';
+		lng = (data && data.place.geometry?.location.lng.toString()) || '';
 
 		if (data && data.place.address_components) {
 			const priorityTypes = [
@@ -144,3 +148,5 @@
 <input hidden name="address" value={address} />
 <input hidden name="googlePlaceId" value={placeId} />
 <input hidden name="location" value={location} />
+<input hidden name="lat" value={lat} />
+<input hidden name="lng" value={lng} />

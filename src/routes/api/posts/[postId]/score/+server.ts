@@ -9,7 +9,7 @@ export const PATCH = async ({ params, request }) => {
     const change: number = body.change;
 
     if (!change || Math.abs(change) > 2) {
-        return json(fail(400, { message: 'Must include a valid value for \'change\' (e.x. \'change\': -2), where -2 < change < 2 in the request body' }));
+        return json(fail(400, { message: 'Invalid value for \'change\' in the request body' }));
     }
 
     const postData = await db.post.findUnique({

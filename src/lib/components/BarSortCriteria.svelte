@@ -1,36 +1,53 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
-	export let clientCity: string;
+	let sortByActivity = true;
+	let geolocationError: string | undefined;
+
+	$: {
+		const lat = $page.url.searchParams.get('lat');
+		const lng = $page.url.searchParams.get('lng');
+
+		sortByActivity = !(lat && lng);
+	}
+
+	async function requestGeolocation() {
+		if ('geolocation' in navigator) {
+			navigator.geolocation.getCurrentPosition(
+				async (position) => {
+					const { latitude, longitude } = position.coords;
+					goto(`/?lat=${latitude}&lng=${longitude}`);
+				},
+				(error) => {
+					geolocationError = 'Error occurred requesting device location';
+					console.error(error);
+				}
+			);
+		} else {
+			geolocationError = 'This browser does not support geolocation';
+			console.error('Geolocation is not supported by this browser');
+		}
+	}
 </script>
 
-<div class="flex justify-between">
-	<div class="flex items-center gap-[5px]">
-		<select name="clientCity" class="dropdown relative w-fit bg-transparent text-sm font-bold">
-			<option value={clientCity}>{clientCity}</option>
-		</select>
-		<Icon icon="octicon:triangle-down" />
+<div class="flex flex-col gap-2 px-5">
+	<div class="flex gap-2">
+		sort by:
+		<button
+			on:click={() => goto('/')}
+			class={`rounded-xl border border-gray-400 px-2 ${sortByActivity ? 'bg-black text-white' : 'bg-white'}`}
+		>
+			Activity
+		</button>
+		<button
+			on:click={requestGeolocation}
+			class={`rounded-xl border border-gray-400 px-2 ${sortByActivity ? 'bg-white' : 'bg-black text-white'}`}
+		>
+			Distance
+		</button>
 	</div>
-	<div class="flex items-center gap-[5px]">
-		<select name="sortCriteria" class="dropdown relative w-fit bg-transparent text-sm font-bold">
-			<option value={'Hottest'}>Hottest</option>
-			<option value={'Closest'}>Closest</option>
-		</select>
-		<Icon icon="octicon:triangle-down" />
-	</div>
+	{#if geolocationError}
+		<p class="text-sm text-rose-500">{geolocationError}</p>
+	{/if}
 </div>
-
-<!-- css to expand clickable area of dropdown buttons without affecting their size visually -->
-<style lang="postcss">
-	.dropdown {
-		-webkit-appearance: none;
-	}
-	.dropdown::after {
-		content: '';
-		position: absolute;
-		top: -20px;
-		left: -20px;
-		right: -60px;
-		bottom: -20px;
-	}
-</style>

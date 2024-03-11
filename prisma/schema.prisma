@@ -20,6 +20,8 @@ model Bar {
   googleId   String @unique
   uniqueName String @unique
   posts      Post[]
+  lat        String
+  lng        String
 }
 
 model Post {

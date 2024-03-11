@@ -15,7 +15,6 @@
 				address: data.detail.place.formatted_address
 			};
 
-			console.log('city', data?.detail.place.address_components);
 			showModal = true;
 		}
 	}
