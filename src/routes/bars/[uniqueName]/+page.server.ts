@@ -98,7 +98,14 @@ export const actions: Actions = {
 
                 await cloudinary.uploader.upload(imageData,
                     { public_id: mediaFile.id },
-                    async function (error, result) { console.log(result, error) });
+                    async function (error, result) {
+                        if (result) {
+                            console.log("Cloudinary::Upload result:", result)
+                        }
+                        if (error) {
+                            console.error("Cloudinary::Upload error:", error)
+                        }
+                    });
             }
 
         } catch (err) {
