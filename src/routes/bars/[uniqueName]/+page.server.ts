@@ -35,6 +35,10 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
 
     const json = await response.json();
 
+    if (json.status == 400) {
+        error(404, `Woops! The bar page you're looking for doesn't seem to exist.`);
+    }
+
     const bar: Bar = {
         ...json,
         posts: json.posts.map((post: any) => {

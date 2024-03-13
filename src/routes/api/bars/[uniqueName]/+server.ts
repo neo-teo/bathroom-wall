@@ -1,6 +1,6 @@
 import { db } from "$lib/db";
 import { dateToTimeGroup } from "$lib/utils/timeUtils";
-import { json } from "@sveltejs/kit";
+import { fail, json } from "@sveltejs/kit";
 import { clientTimezone } from "../../../../hooks.server";
 
 export const GET = async ({ params, url }) => {
@@ -30,5 +30,9 @@ export const GET = async ({ params, url }) => {
         }
     });
 
-    return json(barData); // otherwise json(fail(<statusCode>, ...))
+    if (!barData) {
+        return json(fail(400, { message: `Bar with unique name ${uniqueName} not found` }));
+    }
+
+    return json(barData);
 }
