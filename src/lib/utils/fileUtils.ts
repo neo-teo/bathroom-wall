@@ -22,5 +22,16 @@ export const resizeAndConvertToJPEG = (img: HTMLImageElement): string => {
     canvas.height = height;
     ctx.drawImage(img, 0, 0, width, height);
 
-    return canvas.toDataURL('image/jpeg');
+    // Adjust JPEG quality to meet file size limit
+    let quality = 1.0; // Initial JPEG quality
+
+    let dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+    const maxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
+    while (dataUrl.length > maxFileSizeBytes) {
+        quality -= 0.1; // Decrease quality by 10% each iteration
+        dataUrl = canvas.toDataURL('image/jpeg', quality);
+    }
+
+    return dataUrl;
 };

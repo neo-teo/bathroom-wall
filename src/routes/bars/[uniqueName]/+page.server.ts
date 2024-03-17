@@ -80,18 +80,18 @@ export const actions: Actions = {
             return { message, imageData, error: `You're posting a bit too much atm, try again in a (very) little bit`, status: 429 }
         }
 
-        try {
-            const date = new Date();
-            const post = await db.post.create({
-                data: {
-                    nickname,
-                    message,
-                    barId,
-                    date,
-                    timeGroup: dateToTimeGroup(date, clientTimezone)
-                }
-            });
+        const date = new Date();
+        const post = await db.post.create({
+            data: {
+                nickname,
+                message,
+                barId,
+                date,
+                timeGroup: dateToTimeGroup(date, clientTimezone)
+            }
+        });
 
+        try {
             if (imageData) {
                 const mediaFile = await db.mediaFile.create({
                     data: {
@@ -99,7 +99,6 @@ export const actions: Actions = {
                         type: 'image'
                     }
                 });
-
                 await cloudinary.uploader.upload(imageData,
                     { public_id: mediaFile.id },
                     async function (error, result) {
@@ -111,10 +110,14 @@ export const actions: Actions = {
                         }
                     });
             }
-
         } catch (err) {
-            console.error(err);
-            return fail(500, { error: 'Something went wrong while posting.' })
+            // delete the post if something went wrong
+            await db.post.delete({
+                where: {
+                    id: post.id
+                }
+            });
+            return fail(500, { error: 'Something went wrong with the image you tried to upload. :(' })
         }
 
         await transporter.sendMail({
