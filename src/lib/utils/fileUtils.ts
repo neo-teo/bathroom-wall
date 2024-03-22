@@ -1,6 +1,6 @@
 export const resizeAndConvertToJPEG = (img: HTMLImageElement): string => {
 
-    const maxDimension = 1200; // currently maximum height or width is 1200px
+    const maxDimension = 1000;
 
     let { width, height } = img;
 
@@ -27,7 +27,15 @@ export const resizeAndConvertToJPEG = (img: HTMLImageElement): string => {
 
     let dataUrl = canvas.toDataURL('image/jpeg', quality);
 
-    const maxFileSizeBytes = 10 * 1024 * 1024; // 10 MB
+    /**
+     * Yikes! 
+     * 
+     * Cloudinary supports uploads up to 10MB so it really
+     *   could be maxFileSizeBytes = 10 * 1024 * 1024 (Bytes)
+     * However, since we are sending this data to the backend we have a 
+     *   tighter restriction of 524288 bytes .... doioioing
+     */
+    const maxFileSizeBytes = 524288
     while (dataUrl.length > maxFileSizeBytes) {
         quality -= 0.1; // Decrease quality by 10% each iteration
         dataUrl = canvas.toDataURL('image/jpeg', quality);

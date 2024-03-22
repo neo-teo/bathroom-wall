@@ -1,4 +1,4 @@
-<div class="container rounded-md bg-white bg-opacity-5 py-3 backdrop-blur-sm">
+<div class="container rounded-md bg-white bg-opacity-10 py-3 backdrop-blur-sm">
 	<slot />
 </div>
 

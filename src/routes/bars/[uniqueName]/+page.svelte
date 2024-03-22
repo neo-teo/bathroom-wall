@@ -76,17 +76,25 @@
 		<input type="hidden" id="barUniqueName" name="barUniqueName" value={data.bar.uniqueName} />
 
 		<div class="flex grow flex-col gap-[5px]">
-			<label for="nickname"> Nickname </label>
-			<input type="text" id="nickname" name="nickname" value={nickname} required />
+			<label for="nickname" hidden> Nickname </label>
+			<input
+				type="text"
+				id="nickname"
+				name="nickname"
+				placeholder="Nickname"
+				value={nickname}
+				required
+			/>
 		</div>
 
 		<div class="flex flex-col gap-[5px]">
-			<label for="message"> Message </label>
+			<label for="message" hidden> Message </label>
 			<div class="flex flex-col rounded-md border border-gray-300 bg-white">
 				<textarea
 					id="message"
 					name="message"
 					rows={2}
+					placeholder={'Message'}
 					value={message}
 					required={!imageData}
 					class="resize-none border-none"

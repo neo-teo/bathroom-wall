@@ -25,6 +25,7 @@
 
 <style lang="postcss">
 	.grid {
+		background-attachment: fixed;
 		background-size: 80px 80px;
 		background-position: -1px -1px;
 		background-image: linear-gradient(to right, lightgray 1px, transparent 1px),

@@ -47,13 +47,12 @@
 
 	{#if imageData}
 		<img src={imageData} alt="preview" class="h-[40px]" />
-	{:else}
-		<p class="text-gray-400">no image selected</p>
 	{/if}
 </div>
 
 <!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
 <input type="file" id="capture" accept="image/*" on:change={captureMedia} hidden />
+<!-- <input type="file" id="capture" accept="video/*" on:change={captureMedia} hidden /> -->
 
 <!-- The following hidden input stores the capture's data -->
 <input type="text" name="imageData" value={imageData} hidden />
