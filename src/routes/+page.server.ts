@@ -4,8 +4,8 @@ import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 import { clientIp } from '../hooks.server';
-import { normalizeToKebabCase } from '$lib/utils/stringUtils';
 import type { Bar } from '$lib/database.types';
+import { slugify } from 'transliteration';
 
 export const load: PageServerLoad = async ({ url, fetch }) => {
 
@@ -79,8 +79,8 @@ export const actions: Actions = {
 }
 
 const uniqueNameForBar = async (name: string, location: string) => {
-    let normalizedName = normalizeToKebabCase(name);
-    let normalizedLocation = normalizeToKebabCase(location);
+    let normalizedName = slugify(name);
+    let normalizedLocation = slugify(location);
 
     let uniqueName = normalizedName;
 
