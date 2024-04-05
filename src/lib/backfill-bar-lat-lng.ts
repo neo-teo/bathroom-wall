@@ -1,4 +1,4 @@
-// // to run this script: cd src/lib && npx tsx backfill-bar-unique-name.ts
+// // to run this script: cd src/lib && npx tsx backfill-bar-lat-lng.ts
 
 // import { db } from "./db";
 
@@ -7,6 +7,8 @@
 
 //     for (let bar of barsToFix) {
 //         try {
+//             console.log("-------------------");
+
 //             const response = await fetch(
 //                 `https://maps.googleapis.com/maps/api/place/details/json?place_id=${bar.googleId}&key=${"api-key"}`
 //             );
@@ -15,7 +17,9 @@
 //             const data = await response.json();
 //             if (data.status !== 'OK') throw new Error(`API Error: ${data.error_message || 'Unknown error'}`);
 
-//             console.log(data.result.geometry);
+//             console.log("fixing", bar.uniqueName);
+//             console.log("lat", data.result.geometry.location.lat);
+//             console.log("lng", data.result.geometry.location.lng);
 
 //             await db.bar.update({
 //                 where: {
@@ -28,7 +32,7 @@
 //             });
 
 //         } catch (error) {
-//             console.error('Failed to fetch place details:', error);
+//             console.error(`Failed to fix ${bar.uniqueName}:\n`, error);
 //         }
 //     }
 // }

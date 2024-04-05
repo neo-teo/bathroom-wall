@@ -104,8 +104,8 @@
 		shortName = (data && data.place.name) || '';
 		placeId = (data && data.place.place_id) || '';
 		address = (data && data.place.formatted_address) || '';
-		lat = (data && data.place.geometry?.location.lat.toString()) || '';
-		lng = (data && data.place.geometry?.location.lng.toString()) || '';
+		lat = (data && data.place.geometry?.location.lat().toString()) || '';
+		lng = (data && data.place.geometry?.location.lng().toString()) || '';
 
 		if (data && data.place.address_components) {
 			const priorityTypes = [
