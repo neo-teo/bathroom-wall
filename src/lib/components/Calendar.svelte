@@ -9,14 +9,16 @@
 	import { dateToTimeGroup } from '$lib/utils/timeUtils';
 	import WallContainer from './WallContainer.svelte';
 
-	export let initialValue: string; // initial value
+	export let initialValue: string | undefined; // initial value
 	export let timeGroupToCount: Map<string, number>;
 
-	let value: CalendarDate = new CalendarDate(
-		+initialValue.split('-')[2],
-		+initialValue.split('-')[0],
-		+initialValue.split('-')[1]
-	);
+	let value: CalendarDate | undefined = initialValue
+		? new CalendarDate(
+				+initialValue.split('-')[2],
+				+initialValue.split('-')[0],
+				+initialValue.split('-')[1]
+			)
+		: undefined;
 
 	const dispatch = createEventDispatcher();
 
@@ -39,12 +41,12 @@
 	function dateSelected(newValue: DateValue | DateValue[] | undefined) {
 		// if newValue is undefined it means we selected the value that was already selected
 		dispatch('dateSelected', {
-			date: newValue ? (newValue as DateValue).toString() : value.toString()
+			date: newValue ? (newValue as DateValue).toString() : value?.toString()
 		});
 	}
 
 	let minValue = new CalendarDate(2024, 1, 1);
-	let maxValue = getTodaysDate();
+	let maxValue = getTodaysDate().subtract({ days: 1 });
 </script>
 
 <WallContainer>
@@ -61,7 +63,6 @@
 			// NOTE: commented out line below aims to disable dates that have a count of 0
 			// (date.compare(getTodaysDate()) !== 0 && countForDate(date) === 0) ||
 			date.compare(minValue) < 0 || date.compare(maxValue) > 0}
-		initialFocus
 	>
 		<Calendar.Header class="mb-4 flex items-center justify-center gap-5 p-2">
 			<Calendar.PrevButton>
@@ -93,10 +94,15 @@
 									<Calendar.Day
 										{date}
 										month={month.value}
-										class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) === 0 ? 'font-bold' : ''} ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
+										class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
 									>
 										{date.day}
-										<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />
+										{#if date.compare(maxValue) <= 0}
+											<ActivityIndicator value={countForDate(date)} maxValue={maxCount} />
+										{:else}
+											<!-- to make up for lack of ActivityIndicator -->
+											<div class="h-4"></div>
+										{/if}
 									</Calendar.Day>
 								</Calendar.Cell>
 							{/each}

@@ -25,13 +25,12 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const postId = url.searchParams.get("postId");
     const urlDate = url.searchParams.get("date");
 
-    // TODO: should I put timeGroup in /api/bars/id so I can share between the two pages ?
-    let todaysTimeGroup = dateToTimeGroup(new Date(), clientTimezone);
-    const timeGroup = urlDate ?? todaysTimeGroup;
+    let endpoint = `/api/bars/${uniqueName}`
+    if (urlDate) {
+        endpoint += `?date=${urlDate}`
+    }
 
-    let isArchivedWall = timeGroup !== todaysTimeGroup;
-
-    const response = await fetch(`/api/bars/${uniqueName}?date=${timeGroup}`, { method: 'GET' });
+    const response = await fetch(endpoint, { method: 'GET' });
 
     const json = await response.json();
 
@@ -57,7 +56,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const nickname = cookies.get("nickname");
 
     // NOTE: title below is used for site meta check src/routes/+layout.svelte
-    return { title: bar.name, bar, timeGroup, nickname, postId, isArchivedWall };
+    return { title: bar.name, bar, urlDate, nickname, postId };
 };
 
 export const actions: Actions = {

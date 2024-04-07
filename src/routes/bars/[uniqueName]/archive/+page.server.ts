@@ -1,19 +1,12 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { dateToTimeGroup } from '$lib/utils/timeUtils';
 
 import type { Bar } from '$lib/database.types';
 import { db } from '$lib/db';
-import { clientTimezone } from '../../../../hooks.server';
 
-export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
+export const load: PageServerLoad = async ({ params, url, fetch }) => {
     const uniqueName = params.uniqueName;
     const urlDate = url.searchParams.get("date");
-
-    let todaysTimeGroup = dateToTimeGroup(new Date(), clientTimezone);
-    const timeGroup = urlDate ?? todaysTimeGroup;
-
-    let isArchivedWall = timeGroup !== todaysTimeGroup;
 
     const response = await fetch(`/api/bars/${uniqueName}`, { method: 'GET' });
 
@@ -43,5 +36,5 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
         redirect(302, `/`);
     }
 
-    return { title: bar.name, bar, timeGroupToCount, timeGroup, isArchivedWall };
+    return { title: bar.name, bar, timeGroupToCount, urlDate };
 };

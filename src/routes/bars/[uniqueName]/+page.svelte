@@ -18,6 +18,9 @@
 	$: nickname = data.nickname ?? '';
 	$: message = form?.message ?? '';
 	$: imageData = form?.imageData ?? null;
+	$: archiveUrl = data.urlDate
+		? `/bars/${data.bar.uniqueName}/archive?date=${data.urlDate}`
+		: `/bars/${data.bar.uniqueName}/archive`;
 
 	function imageDataChanged(event: CustomEvent<any>) {
 		imageData = event.detail.imageData;
@@ -44,18 +47,18 @@
 	<div class="flex flex-col items-end justify-center text-right">
 		<h2>{data.bar.name}</h2>
 		<a
-			href={`/bars/${data.bar.uniqueName}/archive?date=${data.timeGroup}`}
+			href={archiveUrl}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-white px-2 no-underline"
 		>
 			<p class="text-sm">
-				{data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}
+				{data.urlDate ? timeGroupToDisplayDate(data.urlDate) : 'Most recent'}
 			</p>
 		</a>
 	</div>
 </div>
 
 <!-- Only allow posting when it is "today" -->
-{#if !data.isArchivedWall}
+{#if !data.urlDate}
 	<form
 		action={`?/createPost`}
 		method="POST"
@@ -131,11 +134,11 @@
 {/each}
 
 <p class="px-5 text-sm text-gray-400">
-	{`displaying ${data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : "today's"} tags. for other days, check ${data.bar.name}'s`}
-	<a
-		href={`/bars/${data.bar.uniqueName}/archive?date=${data.timeGroup}`}
-		class="text-sm text-gray-400"
-	>
-		archive
-	</a>
+	{#if data.urlDate}
+		{`displaying ${timeGroupToDisplayDate(data.urlDate)} tags. for other days, check ${data.bar.name}'s`}
+	{:else}
+		{`displaying most recent tags. for more, check ${data.bar.name}'s`}
+	{/if}
+
+	<a href={archiveUrl} class="text-sm text-gray-400"> archive </a>
 </p>

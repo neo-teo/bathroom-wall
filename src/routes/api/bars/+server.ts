@@ -9,18 +9,15 @@ export const GET = async ({ url }) => {
     const lat = url.searchParams.get('lat');
     const lng = url.searchParams.get('lng');
 
-    const timeGroup = dateToTimeGroup(new Date(), clientTimezone);
-
     const barData = await db.bar.findMany({
         include: {
             posts: {
-                where: {
-                    timeGroup: {
-                        equals: timeGroup,
-                    }
-                }
-            }
-        }
+                orderBy: {
+                    date: 'desc', // Order by date in descending order to get the most recent posts first
+                },
+                take: 20, // Limit the results to 10 posts per bar
+            },
+        },
     });
 
     if (lat && lng) {

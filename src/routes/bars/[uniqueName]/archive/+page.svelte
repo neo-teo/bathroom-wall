@@ -7,7 +7,9 @@
 
 	export let data: PageData;
 
-	$: timeGroupToCount = data.timeGroupToCount;
+	$: barUrl = data.urlDate
+		? `/bars/${data.bar.uniqueName}?date=${data.urlDate}`
+		: `/bars/${data.bar.uniqueName}`;
 
 	function onDateSelected(date: string) {
 		const timeGroup = moment(date).format('MM-DD-YYYY');
@@ -20,18 +22,21 @@
 	<div class="flex flex-col items-end justify-center text-right">
 		<h2>{data.bar.name}</h2>
 		<a
-			href={`/bars/${data.bar.uniqueName}?date=${data.timeGroup}`}
+			href={barUrl}
 			class="flex items-center gap-2 rounded-xl border border-gray-400 bg-black px-2 text-white no-underline"
 		>
 			<p class="text-sm">
-				{data.isArchivedWall ? timeGroupToDisplayDate(data.timeGroup) : 'Today'}
+				{data.urlDate ? timeGroupToDisplayDate(data.urlDate) : 'Most recent'}
 			</p>
 		</a>
 	</div>
 </div>
 
-<Calendar
-	on:dateSelected={(e) => onDateSelected(e.detail.date)}
-	{timeGroupToCount}
-	initialValue={data.timeGroup}
-/>
+<div class="flex flex-col items-center gap-2">
+	<Calendar
+		timeGroupToCount={data.timeGroupToCount}
+		initialValue={data.urlDate ?? undefined}
+		on:dateSelected={(e) => onDateSelected(e.detail.date)}
+	/>
+	<a href={`/bars/${data.bar.uniqueName}`} class="px-5">Back to most recent</a>
+</div>
