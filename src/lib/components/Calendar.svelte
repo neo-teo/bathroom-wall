@@ -94,7 +94,7 @@
 									<Calendar.Day
 										{date}
 										month={month.value}
-										class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-300' : ''}`}
+										class={`flex flex-col items-center py-2 data-[outside-month]:hidden ${date.compare(maxValue) > 0 ? 'pointer-events-none text-gray-400' : ''}`}
 									>
 										{date.day}
 										{#if date.compare(maxValue) <= 0}

@@ -7,6 +7,7 @@
 	import WallContainer from './WallContainer.svelte';
 
 	export let barUniqueName: string;
+	export let barTimezone: string;
 	export let post: Post;
 </script>
 
@@ -17,7 +18,7 @@
 				<div class="flex gap-[3px]">
 					<p class="font-bold">{post.nickname}</p>
 				</div>
-				<p class="text-sm text-gray-400">{howLongAgo(post.date)}</p>
+				<p class="text-sm text-gray-400">{howLongAgo(post.date, barTimezone)}</p>
 			</div>
 
 			<p class="px-5">{post.message}</p>

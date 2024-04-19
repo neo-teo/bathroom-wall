@@ -130,7 +130,7 @@
 {/if}
 
 {#each posts as post}
-	<Post {post} barUniqueName={data.bar.uniqueName} />
+	<Post {post} barUniqueName={data.bar.uniqueName} barTimezone={data.timezone} />
 {/each}
 
 <p class="px-5 text-sm text-gray-400">

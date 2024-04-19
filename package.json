@@ -44,6 +44,7 @@
 		"@upstash/ratelimit": "^1.0.1",
 		"bits-ui": "^0.18.4",
 		"cloudinary": "^2.0.0",
+		"geo-tz": "^8.0.2",
 		"js-cookie": "^3.0.5",
 		"moment-timezone": "^0.5.45",
 		"nodemailer": "^6.9.8",

@@ -1,7 +1,5 @@
 import { db } from "$lib/db";
-import { dateToTimeGroup } from "$lib/utils/timeUtils";
 import { json } from "@sveltejs/kit";
-import { clientTimezone } from "../../../hooks.server";
 import { haversine } from "$lib/utils/geoUtils";
 
 export const GET = async ({ url }) => {

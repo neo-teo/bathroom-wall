@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
 
-export const howLongAgo = (date: Date) => {
+export const howLongAgo = (date: Date, timezone?: string) => {
     const now = new Date();
     const timeDifference = now.getTime() - date.getTime();
     const minutesDifference = Math.floor(timeDifference / (1000 * 60));
@@ -26,10 +26,12 @@ export const howLongAgo = (date: Date) => {
         hour: 'numeric',
         minute: '2-digit',
         hour12: true,
+        timeZone: timezone
     })} / ${date.toLocaleDateString('en-US', {
         month: 'short',
         day: '2-digit',
         year: 'numeric',
+        timeZone: timezone
     })}`;
 
     // if more than 24 hours ago, just return HH:MM AM/PM

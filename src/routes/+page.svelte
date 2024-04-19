@@ -39,16 +39,18 @@
 	$: maxPosts = Math.max(...searchableBars.map((bar) => bar.posts.length));
 </script>
 
-<a href="/" class="px-5"><h1>bathroom <br /> wall</h1></a>
+<div class="flex flex-col gap-2">
+	<a href="/" class="px-5"><h1>bathroom <br /> wall</h1></a>
 
-<p class="px-5 text-lg">
-	a shared wall of text and image for people at a particular place on a particular day
-</p>
+	<p class="px-5">
+		a shared wall of text and image for people at a particular place on a particular day
+	</p>
+</div>
 
-<div class="mt-3 flex flex-col gap-2">
+<div class="mt-2 flex flex-col gap-2">
 	<BarSortCriteria />
 
-	<div class="mx-5 flex flex-col gap-[5px]">
+	<div class="mx-5 flex flex-col">
 		<input
 			placeholder="search bars by name or address..."
 			type="text"

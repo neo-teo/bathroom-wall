@@ -10,15 +10,9 @@ import type { Bar, Post } from '$lib/database.types';
 import { clientIp, clientTimezone } from '../../../hooks.server';
 import { rateLimit } from '$lib/redis';
 
-import { v2 as cloudinary } from 'cloudinary';
-import { CLOUDINARY_API_SECRET } from '$env/static/private';
-import { PUBLIC_CLOUDINARY_API_KEY, PUBLIC_CLOUDINARY_CLOUD_NAME } from '$env/static/public';
+import cloudinary from '$lib/cloudinary';
 
-cloudinary.config({
-    cloud_name: PUBLIC_CLOUDINARY_CLOUD_NAME,
-    api_key: PUBLIC_CLOUDINARY_API_KEY,
-    api_secret: CLOUDINARY_API_SECRET
-});
+import { find } from 'geo-tz';
 
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const uniqueName = params.uniqueName;
@@ -54,9 +48,10 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     }
 
     const nickname = cookies.get("nickname");
+    const timezone = find(+bar.lat, +bar.lng)[0];
 
     // NOTE: title below is used for site meta check src/routes/+layout.svelte
-    return { title: bar.name, bar, urlDate, nickname, postId };
+    return { title: bar.name, bar, urlDate, nickname, postId, timezone };
 };
 
 export const actions: Actions = {
@@ -100,7 +95,7 @@ export const actions: Actions = {
                 });
                 await cloudinary.uploader.upload(imageData,
                     { public_id: mediaFile.id },
-                    async function (error, result) {
+                    function (error, result) {
                         if (result) {
                             console.log("Cloudinary::Upload result:", result)
                         }
