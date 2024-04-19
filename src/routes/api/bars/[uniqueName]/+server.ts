@@ -18,7 +18,7 @@ export const GET = async ({ params, url }) => {
             },
         }
         : {
-            take: 10
+            take: 15
         }
 
     const barData = await db.bar.findUnique({

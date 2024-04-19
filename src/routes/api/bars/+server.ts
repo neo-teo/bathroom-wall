@@ -13,7 +13,7 @@ export const GET = async ({ url }) => {
                 orderBy: {
                     date: 'desc', // Order by date in descending order to get the most recent posts first
                 },
-                take: 20, // Limit the results to 10 posts per bar
+                take: 15, // Limit the results to 10 posts per bar
             },
         },
     });
@@ -28,7 +28,20 @@ export const GET = async ({ url }) => {
             return distanceA - distanceB;
         });
     } else {
-        barData.sort((a, b) => b.posts.length - a.posts.length)
+        // Maximums used for normalization
+        const mostPosts = Math.max(...barData.map(bar => bar.posts.length))
+        const latestDate = Math.max(...barData.map(bar => bar.posts[0]?.date.getTime() ?? 0))
+
+        barData.sort((a, b) => {
+            const latestA = a.posts[0]?.date.getTime() ?? 0;
+            const latestB = b.posts[0]?.date.getTime() ?? 0;
+
+            // Weighted score for each bar
+            const scoreA = 1 * (a.posts.length / mostPosts) + 1000 * (latestA / latestDate);
+            const scoreB = 1 * (b.posts.length / mostPosts) + 1000 * (latestB / latestDate);
+
+            return scoreB - scoreA;
+        });
     }
 
     return json(barData); // otherwise json(fail(<statusCode>, ...))
