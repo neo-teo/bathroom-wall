@@ -43,7 +43,7 @@
 	<a href="/" class="px-5"><h1>bathroom <br /> wall</h1></a>
 
 	<p class="px-5">
-		a shared wall of text and image for people at a particular place on a particular day
+		share thoughts with others at a specific spot <br /> (leave your mark on the bathroom wall)
 	</p>
 </div>
 
@@ -60,7 +60,7 @@
 </div>
 
 <WallContainer>
-	<div class="flex flex-col gap-[20px] px-5">
+	<div class="flex flex-col gap-4 px-5">
 		{#if $searchStore.filtered.length === 0}
 			<!-- if there aren't any items, let the user know they can add one -->
 			<div class="flex flex-wrap gap-[5px]">
@@ -70,15 +70,15 @@
 			</div>
 		{:else}
 			{#each $searchStore.filtered.slice(0, 20) as bar}
-				<div class="flex flex-col gap-1">
-					<div class="flex items-center justify-between">
-						<a href={`/bars/${bar.uniqueName}`}>
+				<a href={`/bars/${bar.uniqueName}`}>
+					<div class="flex flex-col gap-1 border-b border-dashed border-gray-400 pb-4">
+						<div class="flex items-center justify-between">
 							<h3>{bar.name}</h3>
-						</a>
-						<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
+							<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
+						</div>
+						<p class="text-sm">{bar.address}</p>
 					</div>
-					<p class="text-sm">{bar.address}</p>
-				</div>
+				</a>
 			{/each}
 			{#if $searchStore.filtered.length - 20 > 0}
 				<p class="text-sm text-gray-400">
