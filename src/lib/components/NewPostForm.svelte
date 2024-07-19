@@ -7,6 +7,9 @@
 	export let data: any;
 	export let form: any;
 
+	export let row: number;
+	export let col: number;
+
 	let showModal = true;
 
 	let loading = false;
@@ -25,7 +28,7 @@
 		action={'?/createPost'}
 		method="POST"
 		enctype="multipart/form-data"
-		class="flex flex-col gap-[10px] px-5"
+		class="flex min-w-[300px] flex-col gap-[10px]"
 		use:enhance={() => {
 			loading = true;
 
@@ -41,17 +44,8 @@
 		<input type="hidden" id="barId" name="barId" value={data.bar.id} />
 		<input type="hidden" id="barUniqueName" name="barUniqueName" value={data.bar.uniqueName} />
 
-		<div class="flex grow flex-col gap-[5px]">
-			<label for="nickname" hidden> Nickname </label>
-			<input
-				type="text"
-				id="nickname"
-				name="nickname"
-				placeholder="Nickname"
-				value={nickname}
-				required
-			/>
-		</div>
+		<input type="hidden" id="tileRow" name="tileRow" value={row} />
+		<input type="hidden" id="tileCol" name="tileCol" value={col} />
 
 		<div class="flex flex-col gap-[5px]">
 			<label for="message" hidden> Message </label>
@@ -60,13 +54,24 @@
 					id="message"
 					name="message"
 					rows={2}
-					placeholder={'Message'}
 					value={message}
 					required={!imageData}
 					class="resize-none border-none"
 				/>
 				<MediaUploader {imageData} on:change={imageDataChanged} />
 			</div>
+		</div>
+
+		<div class="flex flex-col gap-[5px]">
+			<label for="nickname" hidden> Nickname </label>
+			<input
+				type="text"
+				id="nickname"
+				name="nickname"
+				placeholder="nickname (i.e. wall artist)"
+				value={nickname}
+				required
+			/>
 		</div>
 
 		<button

@@ -1,13 +1,12 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/db';
-import { dateToTimeGroup } from '$lib/utils/timeUtils';
 
-import { GOOGLE_EMAIL } from '$env/static/private';
+import { GOOGLE_EMAIL, TILE_WALL_NUM_COLS, TILE_WALL_NUM_ROWS } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 
 import type { Bar, Post } from '$lib/database.types';
-import { clientIp, clientTimezone } from '../../../hooks.server';
+import { clientIp } from '../../../hooks.server';
 import { rateLimit } from '$lib/redis';
 
 import cloudinary from '$lib/cloudinary';
@@ -17,12 +16,8 @@ import { find } from 'geo-tz';
 export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const uniqueName = params.uniqueName;
     const postId = url.searchParams.get("postId");
-    const urlDate = url.searchParams.get("date");
 
     let endpoint = `/api/bars/${uniqueName}`
-    if (urlDate) {
-        endpoint += `?date=${urlDate}`
-    }
 
     const response = await fetch(endpoint, { method: 'GET' });
 
@@ -51,16 +46,18 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const timezone = find(+bar.lat, +bar.lng)[0];
 
     // NOTE: title below is used for site meta check src/routes/+layout.svelte
-    return { title: bar.name, bar, urlDate, nickname, postId, timezone };
+    return { title: bar.name, bar, nickname, postId, timezone, numRows: TILE_WALL_NUM_ROWS, numCols: TILE_WALL_NUM_COLS };
 };
 
 export const actions: Actions = {
     createPost: async ({ request, cookies }) => {
-        const { barId, barUniqueName, nickname, message, imageData } = Object.fromEntries(await request.formData()) as {
+        const { barId, barUniqueName, nickname, message, tileRow, tileCol, imageData } = Object.fromEntries(await request.formData()) as {
             barId: string,
             barUniqueName: string,
             nickname: string,
             message: string,
+            tileRow: string,
+            tileCol: string,
             imageData?: string,
         }
 
@@ -75,13 +72,16 @@ export const actions: Actions = {
         }
 
         const date = new Date();
+        const row = +tileRow;
+        const col = +tileCol;
         const post = await db.post.create({
             data: {
                 nickname,
                 message,
                 barId,
                 date,
-                timeGroup: dateToTimeGroup(date, clientTimezone)
+                row,
+                col
             }
         });
 

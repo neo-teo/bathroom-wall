@@ -7,16 +7,16 @@
 
 	let copied = false;
 
+	let url = `https://bathwall.co/bars/${barUniqueName}?postId=${post.id}`;
+
 	function share() {
 		if (navigator.share) {
 			navigator.share({
 				text: `check out this bathroom wall tag by: ${post.nickname}`,
-				url: `https://bathwall.co/bars/${barUniqueName}?postId=${post.id}&date=${post.timeGroup}`
+				url: url
 			});
 		} else {
-			navigator.clipboard.writeText(
-				`https://bathwall.co/bars/${barUniqueName}?postId=${post.id}&date=${post.timeGroup}`
-			);
+			navigator.clipboard.writeText(url);
 			copied = true;
 			setTimeout(() => (copied = false), 800);
 		}
@@ -27,7 +27,7 @@
 	<div class={`text-sm transition-opacity duration-150 ${copied ? '' : 'opacity-0'}`}>
 		copied to clipboard
 	</div>
-	<button on:click={share}>
+	<button on:click={share} class="focus:outline-none">
 		<Icon icon="mdi:share" color={'lightgray'} />
 	</button>
 </div>

@@ -1,25 +1,9 @@
 import { db } from "$lib/db";
-import { dateToTimeGroup } from "$lib/utils/timeUtils";
+import { calculateFreeSpots, popFreeSpot, postIsOutOfBounds } from "$lib/utils/tileWallUtils";
 import { fail, json } from "@sveltejs/kit";
-import { clientTimezone } from "../../../../hooks.server";
 
 export const GET = async ({ params, url }) => {
     const uniqueName = params.uniqueName;
-    const urlDate = url.searchParams.get("date");
-
-    const timeGroup = urlDate ?? dateToTimeGroup(new Date(), clientTimezone);
-
-    const whichPosts = urlDate
-        ? {
-            where: {
-                timeGroup: {
-                    equals: timeGroup,
-                }
-            },
-        }
-        : {
-            take: 15
-        }
 
     const barData = await db.bar.findUnique({
         where: {
@@ -33,7 +17,6 @@ export const GET = async ({ params, url }) => {
                 orderBy: {
                     date: 'desc'
                 },
-                ...whichPosts
             }
         }
     });
@@ -41,6 +24,32 @@ export const GET = async ({ params, url }) => {
     if (!barData) {
         return json(fail(400, { message: `Bar with unique name ${uniqueName} not found` }));
     }
+
+    // const freeSpots = calculateFreeSpots(barData.posts);
+
+    // for (let i = 0; i < barData.posts.length; i++) {
+    //     const post = barData.posts[i];
+
+    //     if (postIsOutOfBounds(post)) {
+    //         const freeSpot = popFreeSpot(freeSpots);
+    //         if (freeSpot) {
+    //             const [row, col] = freeSpot.split(",");
+
+    //             const updatedPost = await db.post.update({
+    //                 where: { id: post.id },
+    //                 data: {
+    //                     row: +row,
+    //                     col: +col,
+    //                 },
+    //                 include: {
+    //                     media: {}
+    //                 }
+    //             });
+
+    //             barData.posts[i] = updatedPost;
+    //         }
+    //     }
+    // }
 
     return json(barData);
 }

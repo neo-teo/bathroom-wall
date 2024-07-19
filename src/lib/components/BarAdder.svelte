@@ -26,7 +26,7 @@
 	{#if showModal}
 		<Modal bind:showModal>
 			<div class="flex flex-col gap-[20px]">
-				<h1>does this look like the right spot?</h1>
+				<h1>does this look right?</h1>
 
 				<div class="flex flex-col gap-[5px]">
 					<h2>{googleInputBar.name}</h2>

@@ -13,7 +13,7 @@ export const GET = async ({ url }) => {
                 orderBy: {
                     date: 'desc', // Order by date in descending order to get the most recent posts first
                 },
-                take: 15, // Limit the results to 10 posts per bar
+                take: 15,
             },
         },
     });

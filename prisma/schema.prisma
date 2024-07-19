@@ -23,12 +23,12 @@ model Bar {
 }
 
 model Post {
-  id        String   @id @default(uuid())
-  nickname  String
-  message   String
-  date      DateTime @default(now())
-  score     Int      @default(0)
-  timeGroup String
+  id       String   @id @default(uuid())
+  nickname String
+  message  String
+  date     DateTime @default(now())
+  row      Int?
+  col      Int?
 
   media MediaFile?
 

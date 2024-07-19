@@ -1,5 +1,3 @@
-import moment from "moment-timezone";
-
 export const howLongAgo = (date: Date, timezone?: string) => {
     const now = new Date();
     const timeDifference = now.getTime() - date.getTime();
@@ -36,20 +34,4 @@ export const howLongAgo = (date: Date, timezone?: string) => {
 
     // if more than 24 hours ago, just return HH:MM AM/PM
     return formattedTime
-}
-
-export const dateToTimeGroup = (ogDate: Date, timezone?: string) => {
-    let date = timezone ? moment.tz(ogDate, timezone) : moment(ogDate);
-
-    // Check if the time is before 6 AM and subtract a day if necessary
-    if (date.hour() < 6) {
-        date.subtract(1, 'days');
-    }
-
-    // Format the date as MM-DD-YYYY in the specified time zone
-    return date.format('MM-DD-YYYY');
-}
-
-export const timeGroupToDisplayDate = (timeGroup: string) => {
-    return moment(timeGroup, 'MM-DD-YYYY').format('MMMM D, YYYY')
 }
