@@ -1,5 +1,4 @@
 import { db } from "$lib/db";
-import { calculateFreeSpots, popFreeSpot, postIsOutOfBounds } from "$lib/utils/tileWallUtils";
 import { fail, json } from "@sveltejs/kit";
 
 export const GET = async ({ params, url }) => {

@@ -1,23 +1,22 @@
-import { TILE_WALL_NUM_ROWS, TILE_WALL_NUM_COLS } from "$env/static/private";
 import type { Post } from "$lib/database.types";
 
-export function postIsOutOfBounds(post: Post): boolean {
+export function postIsOutOfBounds(numRows: number, numCols: number, post: Post): boolean {
     if (post.row === null || post.col === null) {
         return true;
     }
 
-    if (post.row >= +TILE_WALL_NUM_ROWS || post.col >= +TILE_WALL_NUM_COLS) {
+    if (post.row >= numRows || post.col >= numCols) {
         return true;
     }
 
     return false;
 }
 
-export function calculateFreeSpots(posts: Post[]): Set<string> {
+export function calculateFreeSpots(numRows: number, numCols: number, posts: Post[]): Set<string> {
     const freeSpots: Set<string> = new Set();
 
-    for (let i = 0; i < +TILE_WALL_NUM_ROWS; i++) {
-        for (let j = 0; j < +TILE_WALL_NUM_COLS; j++) {
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols; j++) {
             freeSpots.add(`${i},${j}`);
         }
     }
