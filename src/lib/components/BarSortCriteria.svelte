@@ -58,7 +58,7 @@
 	// });
 </script>
 
-<div class="grid grid-cols-3 border-b border-black">
+<div class="grid grid-cols-[100px_1fr_1fr] border-b border-black">
 	<div class="border-r border-black py-2 pl-5">sort by:</div>
 
 	<button

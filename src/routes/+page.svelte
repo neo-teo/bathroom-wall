@@ -63,7 +63,7 @@
 
 <WhiteTileRow />
 
-<div class="flex flex-col gap-4 border border-black">
+<div class="flex flex-col border border-black">
 	{#if $searchStore.filtered.length === 0}
 		<!-- if there aren't any items, let the user know they can add one -->
 		<div class="flex flex-wrap gap-[5px]">
@@ -91,14 +91,14 @@
 			{/each}
 		</div>
 		{#if $searchStore.filtered.length - 20 > 0}
-			<p class="text-sm text-gray-400">
+			<p class="px-5 py-2 text-sm text-gray-400">
 				and {$searchStore.filtered.length - 20} more
 			</p>
 		{/if}
 	{/if}
 </div>
 
-<!-- This div gives a little space above the activity indicator bc of the flexbox we're in -->
-<div />
+<WhiteTileRow />
+<WhiteTileRow />
 
 <ActivityIndicatorLegend />
