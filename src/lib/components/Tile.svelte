@@ -17,15 +17,19 @@
 	function handleClick() {
 		showModal = true;
 	}
+
+	let colorCss = 'bg-white text-black';
+
+	let borderCss = `border-b border-black border-opacity-80 ${col === 3 ? '' : 'border-r'}`;
 </script>
 
 <button
-	class="flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg border border-black
-          {row % 2 === col % 2 ? 'bg-gray-900 text-white' : 'bg-white text-black'}"
+	class="flex cursor-pointer items-center justify-center
+          {colorCss} {borderCss}"
 	on:click={handleClick}
 >
 	{#if post}
-		<div class="text-ellipsis p-1 text-xs">
+		<div class="text-ellipsis p-0.5 text-xs font-bold">
 			<PostThumbnail {post} />
 		</div>
 	{/if}
@@ -40,3 +44,9 @@
 		<NewPostForm {data} {form} {row} {col} />
 	{/if}
 {/if}
+
+<style lang="postcss">
+	.ridge {
+		border-style: ridge;
+	}
+</style>

@@ -141,6 +141,7 @@
 	on:change={onChange}
 	on:keydown={onKeyDown}
 	{placeholder}
+	class="border-none focus:outline-none"
 	name={'longName'}
 	value={longName}
 />

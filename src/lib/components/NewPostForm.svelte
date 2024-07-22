@@ -66,6 +66,7 @@
 			<label for="nickname" hidden> Nickname </label>
 			<input
 				type="text"
+				class="focus:outline-none"
 				id="nickname"
 				name="nickname"
 				placeholder="nickname (i.e. wall artist)"

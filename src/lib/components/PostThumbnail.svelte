@@ -6,7 +6,7 @@
 
 {#if post.media}
 	<img
-		class="aspect-square object-cover"
+		class="aspect-square rounded-sm object-cover"
 		src={`https://res.cloudinary.com/dlub8oz6b/image/upload/${post.media.id}`}
 		alt={post.media.id}
 	/>

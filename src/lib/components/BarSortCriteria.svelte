@@ -58,31 +58,30 @@
 	// });
 </script>
 
-<div class="flex flex-col gap-2 px-5">
-	<div class="flex gap-2">
-		<div class="text-gray-400">sort by:</div>
+<div class="grid grid-cols-3 border-b border-black">
+	<div class="border-r border-black py-2 pl-5">sort by:</div>
 
-		<button
-			on:click={() => {
-				sortByDistance = true;
-				getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
-			}}
-			class={`rounded-xl border border-gray-400 px-2 ${sortByDistance ? 'bg-black text-white' : 'bg-white'}`}
-		>
-			Distance
-		</button>
+	<button
+		on:click={() => {
+			sortByDistance = true;
+			getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
+		}}
+		class={`border-r border-black ${sortByDistance ? 'bg-rose-300 text-white' : 'bg-white'}`}
+	>
+		Distance
+	</button>
 
-		<button
-			on:click={() => {
-				sortByDistance = false;
-				goto('/');
-			}}
-			class={`rounded-xl border border-gray-400 px-2 ${sortByDistance ? 'bg-white' : 'bg-black text-white'}`}
-		>
-			Activity
-		</button>
-	</div>
-	{#if geolocationError}
-		<p class="text-sm text-rose-500">{geolocationError}</p>
-	{/if}
+	<button
+		on:click={() => {
+			sortByDistance = false;
+			goto('/');
+		}}
+		class={`${sortByDistance ? 'bg-white' : 'bg-rose-300 text-white'}`}
+	>
+		Activity
+	</button>
 </div>
+
+{#if geolocationError}
+	<p class="py-2 text-sm text-rose-500">{geolocationError}</p>
+{/if}

@@ -18,17 +18,7 @@
 </svelte:head>
 
 <div class="flex grid min-h-screen justify-center">
-	<div class="flex w-screen max-w-[450px] flex-col gap-[20px] py-5">
+	<div class="flex w-screen max-w-[450px] flex-col">
 		<slot />
 	</div>
 </div>
-
-<style lang="postcss">
-	.grid {
-		background-attachment: fixed;
-		background-size: 80px 80px;
-		background-position: -1px -1px;
-		background-image: linear-gradient(to right, lightgray 1px, transparent 1px),
-			linear-gradient(to bottom, lightgray 1px, transparent 1px);
-	}
-</style>
