@@ -19,7 +19,7 @@
 
 <Header barName={data.bar.name} />
 
-<div class={`grid grid-cols-4 grid-rows-8 self-center border border-black`}>
+<div class={`grid grid-cols-4 grid-rows-8 self-center`}>
 	{#each Array(numRows) as _, row}
 		{#each Array(numCols) as _, col}
 			<Tile {row} {col} post={getPost(row, col)} {data} {form} />

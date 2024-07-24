@@ -10,6 +10,7 @@
 	import BarSortCriteria from '$lib/components/BarSortCriteria.svelte';
 	import Header from '$lib/components/header/Header.svelte';
 	import WhiteTileRow from '$lib/components/header/WhiteTileRow.svelte';
+	import Icon from '@iconify/svelte';
 
 	export let data: PageData;
 
@@ -40,15 +41,9 @@
 	$: maxPosts = Math.max(...searchableBars.map((bar) => bar.posts.length));
 </script>
 
-<div class="flex flex-col">
-	<Header />
+<Header />
 
-	<p class="border border-black bg-white px-5 py-1 text-black">
-		share thoughts with others at a specific spot <br /> (leave your mark on the bathroom wall)
-	</p>
-</div>
-
-<div class="flex flex-col border-l border-r border-black">
+<div class="flex flex-col border-b border-t border-black">
 	<BarSortCriteria />
 
 	<div class="flex flex-col pl-3">
@@ -62,8 +57,9 @@
 </div>
 
 <WhiteTileRow />
+<WhiteTileRow />
 
-<div class="flex flex-col border border-black">
+<div class="flex flex-col">
 	{#if $searchStore.filtered.length === 0}
 		<!-- if there aren't any items, let the user know they can add one -->
 		<div class="flex flex-wrap gap-[5px]">
@@ -79,7 +75,7 @@
 			{#each $searchStore.filtered.slice(0, 20) as bar, index}
 				<a class={`border-b border-black no-underline`} href={`/bars/${bar.uniqueName}`}>
 					<div class="flex flex-col gap-1 px-5 py-3">
-						<h3 class="border-black font-black">{bar.name}</h3>
+						<h3 class="font-bold">{bar.name}</h3>
 
 						<p class="text-sm font-medium">{bar.address}</p>
 					</div>

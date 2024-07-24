@@ -18,7 +18,7 @@
 		showModal = true;
 	}
 
-	let colorCss = 'bg-white text-black';
+	let colorCss = row % 2 === col % 2 ? 'bg-white text-black' : 'bg-black text-white';
 
 	let borderCss = `border-b border-black border-opacity-80 ${col === 3 ? '' : 'border-r'}`;
 </script>
@@ -29,7 +29,7 @@
 	on:click={handleClick}
 >
 	{#if post}
-		<div class="text-ellipsis p-0.5 text-xs font-bold">
+		<div class="p text-ellipsis text-xs font-bold">
 			<PostThumbnail {post} />
 		</div>
 	{/if}

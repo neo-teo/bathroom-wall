@@ -5,6 +5,16 @@
 	let sortByDistance = false;
 	let geolocationError: string | undefined;
 
+	function toggleSort() {
+		if (!sortByDistance) {
+			sortByDistance = true;
+			getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
+		} else {
+			sortByDistance = false;
+			goto('/');
+		}
+	}
+
 	async function getUserLocation() {
 		const storedLoc = getStoredLocation();
 
@@ -58,17 +68,17 @@
 	// });
 </script>
 
-<div class="grid grid-cols-[100px_1fr_1fr] border-b border-black">
-	<div class="border-r border-black py-2 pl-5">sort by:</div>
+<div class="grid grid-cols-[80px_1fr_1fr] border-b border-black">
+	<div class="border-r border-black py-2 pl-5 text-gray-400">sort:</div>
 
 	<button
 		on:click={() => {
 			sortByDistance = true;
 			getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
 		}}
-		class={`border-r border-black ${sortByDistance ? 'bg-rose-300 text-white' : 'bg-white'}`}
+		class={`border-r border-black ${sortByDistance ? 'bg-black text-white' : 'bg-white'}`}
 	>
-		Distance
+		Closest
 	</button>
 
 	<button
@@ -76,9 +86,9 @@
 			sortByDistance = false;
 			goto('/');
 		}}
-		class={`${sortByDistance ? 'bg-white' : 'bg-rose-300 text-white'}`}
+		class={`${sortByDistance ? 'bg-white' : 'bg-black text-white'}`}
 	>
-		Activity
+		Most Active
 	</button>
 </div>
 

@@ -1,20 +1,25 @@
-<div class="grid h-5 grid-cols-12 border-l border-r border-t border-black">
-	<div class="border-r border-black"></div>
+<script lang="ts">
+	let bgStyle = 'bg-[#B6CFB6]';
+	let borderStyle = 'border-r border-white';
+</script>
 
-	<div class="border-r border-black"></div>
-	<div class="border-r border-black"></div>
-	<div class="border-r border-black"></div>
+<div class="grid h-5 grid-cols-12 border-t">
+	<div class={`${borderStyle} ${bgStyle}`}></div>
 
-	<div class="border-r border-black"></div>
-	<div class="border-r border-black"></div>
-	<div class="border-r border-black"></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
 
-	<div class="border-r border-black"></div>
-	<div class="border-r border-black"></div>
-	<div class="border-r border-black"></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
 
-	<div class="border-r border-black"></div>
-	<div class=""></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+
+	<div class={`${borderStyle} ${bgStyle}`}></div>
+	<div class={bgStyle}></div>
 </div>
 
 <!-- <div class="flex items-center justify-center border-r border-black">
