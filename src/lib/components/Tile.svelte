@@ -24,7 +24,7 @@
 </script>
 
 <button
-	class="flex cursor-pointer items-center justify-center
+	class="flex aspect-square grow cursor-pointer items-center justify-center
           {colorCss} {borderCss}"
 	on:click={handleClick}
 >

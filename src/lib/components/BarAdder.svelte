@@ -20,7 +20,11 @@
 	}
 </script>
 
-<form action={addEndpoint} method="POST" class="flex flex-col gap-[10px]">
+<form
+	action={addEndpoint}
+	method="POST"
+	class="flex flex-col gap-[10px] border-t border-black px-3"
+>
 	<GooglePlaceAutoComplete on:place_changed={(data) => barSelected(data)} />
 
 	{#if showModal}
@@ -34,10 +38,10 @@
 				</div>
 
 				<div class="flex gap-[20px]">
-					<button class="flex text-xl text-blue-400"> yes </button>
+					<button class="flex text-xl text-blue-400 focus:outline-none"> yes </button>
 
 					<button
-						class="flex text-xl text-blue-400"
+						class="flex text-xl text-blue-400 focus:outline-none"
 						on:click|preventDefault={() => (showModal = false)}
 					>
 						no

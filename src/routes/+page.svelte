@@ -62,7 +62,7 @@
 <div class="flex flex-col">
 	{#if $searchStore.filtered.length === 0}
 		<!-- if there aren't any items, let the user know they can add one -->
-		<div class="flex flex-wrap gap-[5px]">
+		<div class="flex flex-wrap gap-[5px] px-5 py-2">
 			<p class="whitespace-nowrap">Don't see the bar you're looking for? Try</p>
 			<button class="text-blue-400" on:click={() => (adding = true)}>adding</button>
 			<p class="whitespace-nowrap">a spot.</p>
