@@ -29,7 +29,7 @@
 	on:click={handleClick}
 >
 	{#if post}
-		<div class="p text-ellipsis text-xs font-bold">
+		<div class="text-ellipsis text-sm font-bold">
 			<PostThumbnail {post} />
 		</div>
 	{/if}
@@ -41,7 +41,9 @@
 			<PostContent {post} barUniqueName="" />
 		</Modal>
 	{:else}
-		<NewPostForm {data} {form} {row} {col} />
+		<Modal bind:showModal>
+			<NewPostForm {data} {form} {row} {col} on:submit={() => (showModal = false)} />
+		</Modal>
 	{/if}
 {/if}
 
