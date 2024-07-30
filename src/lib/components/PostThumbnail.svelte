@@ -8,12 +8,10 @@
 
 	onMount(() => {
 		if (post.media) {
-			const img = new Image();
-			setTimeout(
-				() => (img.src = `https://res.cloudinary.com/dlub8oz6b/image/upload/${post.media?.id}`),
-				2000
-			);
 			loading = true;
+
+			const img = new Image();
+			img.src = `https://res.cloudinary.com/dlub8oz6b/image/upload/${post.media?.id}`;
 
 			img.onload = () => {
 				loading = false;
@@ -26,21 +24,21 @@
 </script>
 
 {#if post.media}
-	<div class="relative aspect-square rounded-sm">
+	<div class="relative aspect-square">
 		{#if loading}
 			<div
 				class="absolute inset-0 flex animate-pulse items-center justify-center rounded-sm bg-gray-200"
 			></div>
 		{/if}
 		<img
-			class="aspect-square rounded-sm object-cover"
+			class="aspect-square object-cover"
 			src={`https://res.cloudinary.com/dlub8oz6b/image/upload/${post.media.id}`}
 			alt={post.media.id}
 			on:load={() => (loading = false)}
 		/>
 	</div>
 {:else}
-	<div class="flex flex-col gap-2">
+	<div class="line-clamp-3 px-2">
 		<div>{post.message}</div>
 	</div>
 {/if}

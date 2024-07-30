@@ -9,8 +9,9 @@
 	import ActivityIndicatorLegend from '$lib/components/ActivityIndicatorLegend.svelte';
 	import BarSortCriteria from '$lib/components/BarSortCriteria.svelte';
 	import Header from '$lib/components/header/Header.svelte';
-	import WhiteTileRow from '$lib/components/header/WhiteTileRow.svelte';
+	import GreenTileRow from '$lib/components/GreenTileRow.svelte';
 	import Icon from '@iconify/svelte';
+	import WhiteTileRow from '$lib/components/WhiteTileRow.svelte';
 
 	export let data: PageData;
 
@@ -56,8 +57,8 @@
 	</div>
 </div>
 
-<WhiteTileRow />
-<WhiteTileRow />
+<GreenTileRow />
+<GreenTileRow />
 
 <div class="flex flex-col">
 	{#if $searchStore.filtered.length === 0}
@@ -71,21 +72,23 @@
 			<BarAdder addEndpoint={'?/createBar'} />
 		{/if}
 	{:else}
-		<div class="grid grid-cols-[1fr_50px]">
 			{#each $searchStore.filtered.slice(0, 20) as bar, index}
-				<a class={`border-b border-black no-underline`} href={`/bars/${bar.uniqueName}`}>
-					<div class="flex flex-col gap-1 px-5 py-3">
-						<h3 class="font-bold">{bar.name}</h3>
+				<div class="grid grid-cols-[1fr_50px]">	
+					<a class={`no-underline`} href={`/bars/${bar.uniqueName}`}>
+						<div class="flex flex-col gap-1 px-5 py-3">
+							<h3 class="font-bold">{bar.name}</h3>
 
-						<p class="text-sm font-medium">{bar.address}</p>
+							<p class="text-sm font-medium">{bar.address}</p>
+						</div>
+					</a>
+
+					<div class={`} flex items-center justify-center`}>
+						<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
 					</div>
-				</a>
-
-				<div class={`} flex items-center justify-center border-b border-black`}>
-					<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
 				</div>
+				<WhiteTileRow/>
 			{/each}
-		</div>
+		
 		{#if $searchStore.filtered.length - 20 > 0}
 			<p class="px-5 py-2 text-sm text-gray-400">
 				and {$searchStore.filtered.length - 20} more
@@ -94,7 +97,7 @@
 	{/if}
 </div>
 
-<WhiteTileRow />
-<WhiteTileRow />
+<GreenTileRow />
+<GreenTileRow />
 
 <ActivityIndicatorLegend />

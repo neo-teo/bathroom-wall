@@ -4,7 +4,7 @@
 	import type { Post } from '$lib/database.types';
 	import Tile from '$lib/components/Tile.svelte';
 	import Header from '$lib/components/header/Header.svelte';
-	import WhiteTileRow from '$lib/components/header/WhiteTileRow.svelte';
+	import GreenTileRow from '$lib/components/GreenTileRow.svelte';
 
 	export let data: PageData;
 	export let form: ActionData;
@@ -28,5 +28,5 @@
 	{/each}
 </div>
 
-<WhiteTileRow />
-<WhiteTileRow />
+<GreenTileRow />
+<GreenTileRow />

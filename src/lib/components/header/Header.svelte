@@ -1,19 +1,19 @@
 <script lang="ts">
-	import WhiteTileRow from './WhiteTileRow.svelte';
+	import GreenTileRow from '../GreenTileRow.svelte';
 
 	export let barName: string | undefined = undefined;
 </script>
 
-<WhiteTileRow />
-<WhiteTileRow />
+<GreenTileRow />
+<GreenTileRow />
 
-<div class="grid h-10 grid-cols-[41.6%_auto] border-black">
-	<div class="flex items-center bg-black">
-		<a class="bg-gray-900 px-2 py-1 text-xl font-black text-white no-underline" href="/">bath</a>
-		<a class="flex h-full items-center bg-white px-2 py-1 text-xl font-black no-underline" href="/"
+<div class="grid h-10 grid-cols-[33.33%_auto]">
+	<div class="flex bg-black">
+		<a class="h-full flex items-center text-center bg-gray-900 px-1 text-xl font-black text-white no-underline" href="/">bath</a>
+		<a class="h-full flex items-center bg-white px-1 text-xl font-black no-underline" href="/"
 			>wall</a
 		>
-		<a class="bg-gray-900 px-2 py-1 text-xl font-black text-white no-underline" href="/">.co</a>
+		<a class="h-full flex items-center bg-gray-900 px-1 text-xl font-black text-white no-underline" href="/">.co</a>
 	</div>
 
 	{#if barName}
@@ -23,11 +23,11 @@
 			</div>
 		</div>
 	{:else}
-		<div class="flex rotate-0 items-end justify-end px-2 py-1 text-right text-xs font-medium">
-			leave your mark <br /> on the bathroom wall🤙
+		<div class="flex items-center justify-end px-2 py-1 text-right text-xs italic font-medium">
+			leave your mark on the bathroom wall 🤙
 		</div>
 	{/if}
 </div>
 
-<WhiteTileRow />
-<WhiteTileRow />
+<GreenTileRow />
+<GreenTileRow />
