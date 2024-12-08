@@ -1,39 +1,35 @@
 <script lang="ts">
-	import GreenTileRow from '../GreenTileRow.svelte';
+	import TileSeparator from '../TileSeparator.svelte';
 
 	export let barName: string | undefined = undefined;
 </script>
 
-<GreenTileRow />
-<GreenTileRow />
+<TileSeparator />
 
-<div class="grid h-10 grid-cols-[33.33%_auto]">
-	<div class="flex bg-black">
-		<a
-			class="flex h-full items-center bg-gray-900 px-1 text-center text-xl font-black text-white no-underline"
-			href="/">bath</a
-		>
-		<a class="flex h-full items-center bg-white px-1 text-xl font-black no-underline" href="/"
-			>wall</a
-		>
-		<a
-			class="flex h-full items-center bg-gray-900 px-1 text-xl font-black text-white no-underline"
-			href="/">.co</a
-		>
+<div class="grid h-10 grid-cols-[140px_auto]">
+	<div class="logo flex bg-gray-800 text-xl font-bold">
+		<a class="text-white" href="/">bath</a>
+		<a class="bg-white text-black" href="/">wall</a>
+		<a class="text-white" href="/">.co</a>
 	</div>
 
-	{#if barName}
-		<div class="flex items-center justify-end px-2 font-bold">
-			<div class="truncate">
-				{barName}
-			</div>
-		</div>
-	{:else}
-		<div class="flex items-center justify-end px-2 py-1 text-right text-xs font-medium italic">
-			leave your mark on the bathroom wall
-		</div>
-	{/if}
+	<div class="flex items-center justify-end px-2">
+		{#if !barName}
+			a guest book for cafes and bars
+		{:else}
+			{barName}
+		{/if}
+	</div>
 </div>
 
-<GreenTileRow />
-<GreenTileRow />
+<TileSeparator />
+
+<style lang="postcss">
+	.logo > a {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+</style>

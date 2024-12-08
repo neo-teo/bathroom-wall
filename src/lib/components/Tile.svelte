@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Post } from '$lib/database.types';
 	import Modal from './Modal.svelte';
-	import PostContent from './Post.svelte';
 	import NewPostForm from './NewPostForm.svelte';
 	import PostThumbnail from './PostThumbnail.svelte';
 
@@ -17,28 +16,18 @@
 	function handleClick() {
 		showModal = true;
 	}
-
-	let colorCss = row % 2 === col % 2 ? 'bg-white text-black' : 'bg-black text-white';
-
-	let borderCss = `border-b border-black border-opacity-80 ${col === 3 ? '' : 'border-r'}`;
 </script>
 
-<button
-	class="flex aspect-square cursor-pointer items-center justify-center
-          {colorCss} {borderCss}"
-	on:click={handleClick}
->
+<button class="flex aspect-square overflow-hidden border-b border-r" on:click={handleClick}>
 	{#if post}
-		<div class="text-ellipsis text-sm font-bold">
-			<PostThumbnail {post} />
-		</div>
+		<PostThumbnail {post} />
 	{/if}
 </button>
 
 {#if showModal}
 	{#if post}
 		<Modal bind:showModal>
-			<PostContent {post} barUniqueName="" />
+			<PostThumbnail {post} />
 		</Modal>
 	{:else}
 		<Modal bind:showModal>
@@ -48,7 +37,4 @@
 {/if}
 
 <style lang="postcss">
-	.ridge {
-		border-style: ridge;
-	}
 </style>

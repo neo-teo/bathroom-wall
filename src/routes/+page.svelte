@@ -9,13 +9,9 @@
 	import ActivityIndicatorLegend from '$lib/components/ActivityIndicatorLegend.svelte';
 	import BarSortCriteria from '$lib/components/BarSortCriteria.svelte';
 	import Header from '$lib/components/header/Header.svelte';
-	import GreenTileRow from '$lib/components/GreenTileRow.svelte';
-	import Icon from '@iconify/svelte';
-	import WhiteTileRow from '$lib/components/WhiteTileRow.svelte';
+	import TileSeparator from '$lib/components/TileSeparator.svelte';
 
 	export let data: PageData;
-
-	let adding = false;
 
 	$: {
 		searchStore.set({
@@ -44,51 +40,40 @@
 
 <Header />
 
-<div class="flex flex-col border-b border-t border-black">
+<div class="grid grid-cols-[auto_120px]">
+	<input
+		class="border-none focus:outline-none"
+		placeholder="search for a spot..."
+		type="text"
+		bind:value={$searchStore.search}
+	/>
 	<BarSortCriteria />
-
-	<div class="flex flex-col pl-3">
-		<input
-			class="border-none focus:outline-none"
-			placeholder="search bars by name or address..."
-			type="text"
-			bind:value={$searchStore.search}
-		/>
-	</div>
 </div>
 
-<GreenTileRow />
-<GreenTileRow />
+<TileSeparator />
 
 <div class="flex flex-col">
 	{#if $searchStore.filtered.length === 0}
-		<!-- if there aren't any items, let the user know they can add one -->
-		<div class="flex flex-wrap gap-[5px] px-5 py-2">
-			<p class="whitespace-nowrap">Don't see the bar you're looking for? Try</p>
-			<button class="text-blue-400" on:click={() => (adding = true)}>adding</button>
-			<p class="whitespace-nowrap">a spot.</p>
-		</div>
-		{#if adding}
+		<div class="flex border-b">
+			<div class="py-2 pl-2">Your spot is not on bathwall yet.</div>
 			<BarAdder addEndpoint={'?/createBar'} />
-		{/if}
+		</div>
 	{:else}
-			{#each $searchStore.filtered.slice(0, 20) as bar, index}
-				<div class="grid grid-cols-[1fr_50px]">	
-					<a class={`no-underline`} href={`/bars/${bar.uniqueName}`}>
-						<div class="flex flex-col gap-1 px-5 py-3">
-							<h3 class="font-bold">{bar.name}</h3>
+		{#each $searchStore.filtered.slice(0, 20) as bar, index}
+			<a
+				class="border-b decoration-blue-400 hover:decoration-wavy"
+				href={`/bars/${bar.uniqueName}`}
+			>
+				<div class="flex flex-col gap-1 px-2 py-3 no-underline">
+					<h3 class="font-medium">{bar.name}</h3>
 
-							<p class="text-sm font-medium">{bar.address}</p>
-						</div>
-					</a>
-
-					<div class={`} flex items-center justify-center`}>
-						<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
-					</div>
+					<p class="text-sm">{bar.address}</p>
 				</div>
-				<WhiteTileRow/>
-			{/each}
-		
+			</a>
+
+			<!-- <ActivityIndicator value={bar.posts.length} maxValue={maxPosts} /> -->
+		{/each}
+
 		{#if $searchStore.filtered.length - 20 > 0}
 			<p class="px-5 py-2 text-sm text-gray-400">
 				and {$searchStore.filtered.length - 20} more
@@ -97,7 +82,6 @@
 	{/if}
 </div>
 
-<GreenTileRow />
-<GreenTileRow />
+<TileSeparator />
 
 <ActivityIndicatorLegend />

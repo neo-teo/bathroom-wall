@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
 
     const bars: Bar[] = await response.json();
 
-    return { title: "bathroom wall", bars };
+    return { title: "bathwall", bars };
 };
 
 export const actions: Actions = {

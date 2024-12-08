@@ -1,19 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-	let sortByDistance = false;
-	let geolocationError: string | undefined;
+	$: sortByDistance = $page.url.searchParams.has('lat') && $page.url.searchParams.has('lng');
 
-	function toggleSort() {
-		if (!sortByDistance) {
-			sortByDistance = true;
-			getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
-		} else {
-			sortByDistance = false;
-			goto('/');
-		}
-	}
+	let geolocationError: string | undefined;
 
 	async function getUserLocation() {
 		const storedLoc = getStoredLocation();
@@ -38,6 +30,7 @@
 		return null;
 	}
 
+	// TODO: move this to a geo helpers lib ..
 	async function requestGeolocation() {
 		if ('geolocation' in navigator) {
 			try {
@@ -63,32 +56,26 @@
 		}
 	}
 
-	// onMount(() => {
-	// 	getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
-	// });
+	onMount(() => {
+		getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
+	});
 </script>
 
-<div class="grid grid-cols-[80px_1fr_1fr] border-b border-black">
-	<div class="border-r border-black py-2 pl-5 text-gray-400">sort:</div>
-
+<div class="grid grid-cols-[1fr_1fr] border-l">
 	<button
 		on:click={() => {
-			sortByDistance = true;
 			getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
 		}}
-		class={`border-r border-black ${sortByDistance ? 'bg-black text-white' : 'bg-white'}`}
+		class={`p-2 ${sortByDistance ? 'bg-black text-white' : 'bg-white'}`}
 	>
-		Closest
+		Close
 	</button>
 
 	<button
-		on:click={() => {
-			sortByDistance = false;
-			goto('/');
-		}}
-		class={`${sortByDistance ? 'bg-white' : 'bg-black text-white'}`}
+		on:click={() => goto('/')}
+		class={`p-2 ${sortByDistance ? 'bg-white' : 'bg-black text-white'}`}
 	>
-		Most Active
+		Active
 	</button>
 </div>
 

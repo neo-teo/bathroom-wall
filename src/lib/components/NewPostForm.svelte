@@ -49,7 +49,7 @@
 
 	<div class="flex flex-col gap-[5px]">
 		<label for="message" hidden> Message </label>
-		<div class="flex flex-col rounded-md border border-gray-300 bg-white">
+		<div class="flex flex-col border bg-white">
 			<textarea
 				id="message"
 				name="message"
@@ -77,10 +77,10 @@
 
 	<button
 		type="submit"
-		class={`relative h-[30px] rounded-md border bg-blue-500 p-0.5 text-white ${loading ? 'bg-blue-600' : ''}`}
+		class={`relative h-[30px] border p-0.5 ${loading ? 'bg-blue-600' : ''}`}
 		disabled={loading}
 	>
-		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">Post</div>
+		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">+</div>
 		{#if loading}
 			<div class="absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">
 				<Icon icon="line-md:loading-loop" color={'white'} />

@@ -1,44 +1,30 @@
 <script lang="ts">
 	import type { Post } from '$lib/database.types';
-	import { onMount } from 'svelte';
+	import PostMedia from './PostMedia.svelte';
 
 	export let post: Post;
 
-	let loading = true;
-
-	onMount(() => {
-		if (post.media) {
-			loading = true;
-
-			const img = new Image();
-			img.src = `https://res.cloudinary.com/dlub8oz6b/image/upload/${post.media?.id}`;
-
-			img.onload = () => {
-				loading = false;
-			};
-			img.onerror = () => {
-				loading = false;
-			};
-		}
-	});
+	let rotation = -(Math.random() * 4) + -(Math.random() * 4);
 </script>
 
-{#if post.media}
-	<div class="relative aspect-square">
-		{#if loading}
-			<div
-				class="absolute inset-0 flex animate-pulse items-center justify-center rounded-sm bg-gray-200"
-			></div>
+<div
+	class="flex aspect-square h-full flex-col justify-between gap-2 p-1 text-left font-mono text-xs sm:text-sm"
+>
+	<div class="flex flex-col gap-2">
+		{#if post.message}
+			<div class={`${post.media ? 'line-clamp-1' : 'line-clamp-6'}`}>{post.message}</div>
 		{/if}
-		<img
-			class="aspect-square object-cover"
-			src={`https://res.cloudinary.com/dlub8oz6b/image/upload/${post.media.id}`}
-			alt={post.media.id}
-			on:load={() => (loading = false)}
-		/>
+
+		{#if post.media}
+			<PostMedia media={post.media} />
+		{/if}
 	</div>
-{:else}
-	<div class="line-clamp-3 px-2">
-		<div>{post.message}</div>
+
+	<div>
+		by: <b>{post.nickname}</b>
 	</div>
-{/if}
+
+	<!-- <div class="flex gap-[3px]">
+		<p class="font-bold">{post.date}</p>
+	</div> -->
+</div>

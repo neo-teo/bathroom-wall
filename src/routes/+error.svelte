@@ -1,10 +1,9 @@
 <script>
 	import { page } from '$app/stores';
-	import GreenTileRow from '$lib/components/GreenTileRow.svelte';
+	import TileSeparator from '$lib/components/TileSeparator.svelte';
 </script>
 
-<GreenTileRow />
-<GreenTileRow />
+<TileSeparator />
 
 <div class="flex flex-col gap-5 px-5 py-5">
 	<h1>Uh oh! Something went wrong.</h1>
@@ -18,5 +17,4 @@
 	</h3>
 </div>
 
-<GreenTileRow />
-<GreenTileRow />
+<TileSeparator />

@@ -1,4 +1,4 @@
-on bathroom wall users contribute to a shared wall of text and image at a particular place on a particular day.
+on bathwall users contribute to a shared wall of text and image at a particular place on a particular day.
 
 view a live version of the application at [bathwall.co](https://bathwall.co)
 

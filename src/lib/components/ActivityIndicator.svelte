@@ -17,6 +17,6 @@
 </script>
 
 <div
-	class="h-4 w-4 rounded-xl border border-gray-400"
+	class="h-4 w-4 border border-gray-400"
 	style="background-color: {getColorIntensity(value, maxValue)}"
 />

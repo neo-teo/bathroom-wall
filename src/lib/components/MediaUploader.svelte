@@ -34,11 +34,9 @@
 	};
 </script>
 
-<div
-	class="flex min-h-[40px] items-center gap-[10px] rounded-sm border-t border-dashed border-gray-200 px-2"
->
+<div class="flex min-h-[40px] items-center gap-[10px] border-t border-dashed px-2">
 	<button
-		class="flex items-center gap-2 rounded-xl bg-gray-100 px-2 text-blue-400"
+		class="flex items-center gap-2 bg-gray-100 px-2 text-blue-400"
 		on:click|preventDefault={openFileInput}
 	>
 		<Icon icon="material-symbols:add-photo-alternate" />

@@ -12,7 +12,7 @@
 	function share() {
 		if (navigator.share) {
 			navigator.share({
-				text: `check out this bathroom wall tag by: ${post.nickname}`,
+				text: `check out this bathwall tag by: ${post.nickname}`,
 				url: url
 			});
 		} else {

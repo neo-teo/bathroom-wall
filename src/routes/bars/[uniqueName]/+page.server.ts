@@ -63,13 +63,12 @@ export const actions: Actions = {
 
         cookies.set("nickname", nickname, { path: "/" })
 
-        const { success } = await rateLimit.createPost.limit(
-            clientIp
-        )
-
-        if (!success) {
-            return { message, imageData, error: `You're posting a bit too much atm, try again in a (very) little bit`, status: 429 }
-        }
+        // const { success } = await rateLimit.createPost.limit(
+        //     clientIp
+        // )
+        // if (!success) {
+        //     return { message, imageData, error: `You're posting a bit too much atm, try again in a (very) little bit`, status: 429 }
+        // }
 
         const date = new Date();
         const row = +tileRow;
