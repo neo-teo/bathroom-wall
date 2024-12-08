@@ -56,9 +56,9 @@
 		}
 	}
 
-	onMount(() => {
-		getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
-	});
+	// onMount(() => {
+	// 	getUserLocation().then((loc) => loc && goto(`/?lat=${loc.lat}&lng=${loc.lng}`));
+	// });
 </script>
 
 <div class="grid grid-cols-[1fr_1fr] border-l">
