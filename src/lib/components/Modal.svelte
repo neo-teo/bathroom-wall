@@ -11,10 +11,9 @@
 	bind:this={dialog}
 	on:close={() => (showModal = false)}
 	on:click|self={() => dialog.close()}
-	class="max-w-[600px]"
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div on:click|stopPropagation class="p-4">
+	<div on:click|stopPropagation>
 		<slot />
 	</div>
 </dialog>

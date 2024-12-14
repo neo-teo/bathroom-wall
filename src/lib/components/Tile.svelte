@@ -2,7 +2,7 @@
 	import type { Post } from '$lib/database.types';
 	import Modal from './Modal.svelte';
 	import NewPostForm from './NewPostForm.svelte';
-	import PostThumbnail from './PostThumbnail.svelte';
+	import Tag from './Tag.svelte';
 
 	export let data: any;
 	export let form: any;
@@ -18,16 +18,18 @@
 	}
 </script>
 
-<button class="flex aspect-square overflow-hidden border-b border-r" on:click={handleClick}>
+<button class="border-b border-r" on:click={handleClick}>
 	{#if post}
-		<PostThumbnail {post} />
+		<Tag {post} />
 	{/if}
 </button>
 
 {#if showModal}
 	{#if post}
 		<Modal bind:showModal>
-			<PostThumbnail {post} />
+			<div class="">
+				<Tag {post} />
+			</div>
 		</Modal>
 	{:else}
 		<Modal bind:showModal>

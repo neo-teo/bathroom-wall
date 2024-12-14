@@ -28,7 +28,7 @@
 	action={'?/createPost'}
 	method="POST"
 	enctype="multipart/form-data"
-	class="flex min-w-[300px] flex-col gap-[10px]"
+	class="flex min-w-[300px] flex-col gap-[10px] p-2"
 	use:enhance={() => {
 		loading = true;
 

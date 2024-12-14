@@ -61,7 +61,7 @@
 	{:else}
 		{#each $searchStore.filtered.slice(0, 20) as bar, index}
 			<a
-				class="border-b decoration-blue-400 hover:decoration-wavy"
+				class="flex items-center justify-between border-b decoration-gray-300 hover:decoration-wavy"
 				href={`/bars/${bar.uniqueName}`}
 			>
 				<div class="flex flex-col gap-1 px-2 py-3 no-underline">
@@ -69,9 +69,9 @@
 
 					<p class="text-sm">{bar.address}</p>
 				</div>
-			</a>
 
-			<!-- <ActivityIndicator value={bar.posts.length} maxValue={maxPosts} /> -->
+				<ActivityIndicator value={bar.posts.length} maxValue={maxPosts} />
+			</a>
 		{/each}
 
 		{#if $searchStore.filtered.length - 20 > 0}
@@ -84,4 +84,4 @@
 
 <TileSeparator />
 
-<ActivityIndicatorLegend />
+<!-- <ActivityIndicatorLegend /> -->
