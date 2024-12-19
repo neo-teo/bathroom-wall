@@ -4,7 +4,7 @@
 	import { loadGooglePlacesLibrary } from './loader';
 
 	let options: google.maps.places.AutocompleteOptions = { types: ['bar', 'night_club', 'cafe'] };
-	let placeholder: string = 'But you can be the one to add it...';
+	let placeholder: string = "Don't see what you're looking for? Be the one to add it...";
 
 	let shortName = '';
 	let longName = '';
@@ -141,7 +141,7 @@
 	on:change={onChange}
 	on:keydown={onKeyDown}
 	{placeholder}
-	class="w-full border-none focus:outline-none"
+	class="w-screen border-none focus:outline-none"
 	name={'longName'}
 	value={longName}
 />

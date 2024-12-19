@@ -54,8 +54,7 @@
 
 <div class="flex flex-col">
 	{#if $searchStore.filtered.length === 0}
-		<div class="flex border-b">
-			<div class="py-2 pl-2">Your spot is not on bathwall yet.</div>
+		<div class="flex">
 			<BarAdder addEndpoint={'?/createBar'} />
 		</div>
 	{:else}
