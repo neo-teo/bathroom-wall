@@ -8,9 +8,6 @@
 	export let data: any;
 	export let form: any;
 
-	export let row: number;
-	export let col: number;
-
 	const dispatch = createEventDispatcher();
 
 	let loading = false;
@@ -38,14 +35,15 @@
 			nickname = '';
 			nickname = data.nickname ?? '';
 			loading = false;
+			invalidateAll();
 		};
 	}}
 >
 	<input type="hidden" id="barId" name="barId" value={data.bar.id} />
 	<input type="hidden" id="barUniqueName" name="barUniqueName" value={data.bar.uniqueName} />
 
-	<input type="hidden" id="tileRow" name="tileRow" value={row} />
-	<input type="hidden" id="tileCol" name="tileCol" value={col} />
+	<input type="hidden" id="tileRow" name="tileRow" value={0} />
+	<input type="hidden" id="tileCol" name="tileCol" value={0} />
 
 	<div class="flex flex-col gap-[5px]">
 		<label for="message" hidden> Message </label>
@@ -77,7 +75,7 @@
 
 	<button
 		type="submit"
-		class={`relative h-[30px] border p-0.5 ${loading ? 'bg-blue-600' : ''}`}
+		class={`relative h-[30px] border p-0.5 ${loading ? 'bg-gray-800 text-white' : ''}`}
 		disabled={loading}
 	>
 		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">+</div>

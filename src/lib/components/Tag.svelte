@@ -10,20 +10,31 @@
 	function formatDate(date: Date): string {
 		const options: Intl.DateTimeFormatOptions = {
 			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
+			month: 'short', // Use 'short' for abbreviated month
+			day: 'numeric'
+		};
+
+		// Get the time in 24-hour format (e.g., 17:34)
+		const time = date.toLocaleTimeString('en-US', {
 			hour: '2-digit',
 			minute: '2-digit',
 			hour12: false
-		};
-		return date.toLocaleString('en-US', options).replace(',', '');
+		});
+
+		const formattedDate = date.toLocaleDateString('en-US', options);
+
+		return `${time} ~ ${formattedDate}`;
 	}
 </script>
 
-<div class="relative aspect-square w-full w-screen max-w-full p-2">
+<div class="relative aspect-square p-2">
 	<div class="flex h-full flex-col justify-between gap-1 p-1 text-left text-xs sm:text-sm">
 		{#if post.message}
-			<div class={post.media ? 'line-clamp-1' : 'line-clamp-6'}>
+			<div
+				class={post.media
+					? 'absolute z-10 line-clamp-1 bg-white px-1'
+					: 'line-clamp-6 px-1 text-3xl'}
+			>
 				{post.message}
 			</div>
 		{/if}
@@ -32,9 +43,11 @@
 			<PostMedia media={post.media} />
 		{/if}
 
-		<div class="italic">
-			{post.nickname}
-			<!-- <p class="text-xs">{formatDate(post.date)}</p> -->
+		<div class="flex items-center justify-between text-xs">
+			<div class="flex gap-1">
+				# <p class="px-1 italic">{post.nickname}</p>
+			</div>
+			<p class="italic">{formatDate(post.date)}</p>
 		</div>
 	</div>
 </div>

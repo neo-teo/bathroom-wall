@@ -2,7 +2,7 @@
 	export let count;
 
 	function getRandomColor() {
-		const colors = ['red', 'blue', 'green', 'orange', 'purple', 'magenta'];
+		const colors = ['#444444', 'white'];
 		return colors[Math.floor(Math.random() * colors.length)];
 	}
 
@@ -16,14 +16,14 @@
 	<div class="grid grid-cols-2 gap-1">
 		{#each Array(count) as _, index}
 			<div
-				class="square text-xs font-bold text-white"
+				class="square border border-gray-400 text-xs text-white"
 				class:col-span-2={count % 2 === 1 && index === count - 1}
 				style="
             background-color: {getRandomColor()}; 
             transform: rotate({Math.random() * 45 - 22.5}deg)
             "
 			>
-				{getRandomLetter()}
+				<!-- {getRandomLetter()} -->
 			</div>
 		{/each}
 	</div>

@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
                 ...post,
                 date: new Date(post.date)
             }
-        }) as Post[]
+        }).sort((a: Post, b: Post) => a.date > b.date) as Post[]
     }
 
     // if barData does not exist for id, redirect to home page.
@@ -46,7 +46,7 @@ export const load: PageServerLoad = async ({ params, url, cookies, fetch }) => {
     const timezone = find(+bar.lat, +bar.lng)[0];
 
     // NOTE: title below is used for site meta check src/routes/+layout.svelte
-    return { title: bar.name, bar, nickname, postId, timezone, numRows: TILE_WALL_NUM_ROWS, numCols: TILE_WALL_NUM_COLS };
+    return { title: bar.name, bar, nickname, postId, timezone, };
 };
 
 export const actions: Actions = {
