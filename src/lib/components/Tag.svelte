@@ -6,10 +6,8 @@
 
 	let rotation = -(Math.random() * 4) + -(Math.random() * 4);
 
-	// Function to format the date
 	function formatDate(date: Date): string {
 		const options: Intl.DateTimeFormatOptions = {
-			year: 'numeric',
 			month: 'short', // Use 'short' for abbreviated month
 			day: 'numeric'
 		};
@@ -21,9 +19,13 @@
 			hour12: false
 		});
 
-		const formattedDate = date.toLocaleDateString('en-US', options);
+		// Get the month and day part
+		const monthDay = date.toLocaleDateString('en-US', options);
 
-		return `${time} ~ ${formattedDate}`;
+		// Get the short year manually
+		const shortYear = `'${date.getFullYear().toString().slice(-2)}`;
+
+		return `${time} - ${monthDay} ${shortYear}`;
 	}
 </script>
 
