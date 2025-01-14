@@ -2,7 +2,7 @@
 	import type { ActionData, PageData } from './$types';
 
 	import Tile from '$lib/components/Tile.svelte';
-	import Header from '$lib/components/header/Header.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import TileSeparator from '$lib/components/TileSeparator.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import NewPostForm from '$lib/components/NewPostForm.svelte';
@@ -28,15 +28,8 @@
 	>
 		+
 	</button>
-	<Modal bind:showModal>
-		<NewPostForm
-			{data}
-			{form}
-			on:submit={() => {
-				console.log('submitting form');
-				showModal = false;
-			}}
-		/>
+	<Modal bind:showModal on:closeModal={() => (showModal = false)}>
+		<NewPostForm {data} {form} />
 	</Modal>
 
 	{#each posts as post}

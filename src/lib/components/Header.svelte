@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TileSeparator from '../TileSeparator.svelte';
+	import TileSeparator from './TileSeparator.svelte';
 
 	export let barName: string | undefined = undefined;
 </script>

@@ -8,7 +8,7 @@
 	import ActivityIndicator from '$lib/components/ActivityIndicator.svelte';
 	import ActivityIndicatorLegend from '$lib/components/ActivityIndicatorLegend.svelte';
 	import BarSortCriteria from '$lib/components/BarSortCriteria.svelte';
-	import Header from '$lib/components/header/Header.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import TileSeparator from '$lib/components/TileSeparator.svelte';
 
 	export let data: PageData;

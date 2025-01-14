@@ -30,12 +30,12 @@
 		loading = true;
 
 		return async ({ result, update }) => {
-			dispatch('submit');
 			await update();
 			nickname = '';
 			nickname = data.nickname ?? '';
 			loading = false;
 			invalidateAll();
+			dispatch('closeModal');
 		};
 	}}
 >
