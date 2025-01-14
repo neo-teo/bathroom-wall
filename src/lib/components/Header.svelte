@@ -17,7 +17,7 @@
 		{#if !barName}
 			a guest book for cafes and bars
 		{:else}
-			{barName}
+			<h3 class="font-medium">{barName}</h3>
 		{/if}
 	</div>
 </div>
