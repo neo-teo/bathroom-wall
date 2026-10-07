@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import Icon from '@iconify/svelte';
+	import Sticker from './Sticker.svelte';
 	import MediaUploader from './MediaUploader.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
@@ -21,11 +21,12 @@
 	}
 </script>
 
+<!-- Full-screen new post: a photo area on top, the caption under it, then nickname and the submit button. -->
 <form
 	action={'?/createPost'}
 	method="POST"
 	enctype="multipart/form-data"
-	class="flex min-w-[300px] flex-col gap-[10px] p-2"
+	class="flex min-h-0 flex-1 flex-col gap-3 p-3"
 	use:enhance={() => {
 		loading = true;
 
@@ -35,7 +36,7 @@
 			nickname = data.nickname ?? '';
 			loading = false;
 			invalidateAll();
-			dispatch('closeModal');
+			if (result.type === 'success') dispatch('closeModal');
 		};
 	}}
 >
@@ -45,48 +46,31 @@
 	<input type="hidden" id="tileRow" name="tileRow" value={0} />
 	<input type="hidden" id="tileCol" name="tileCol" value={0} />
 
-	<div class="flex flex-col gap-[5px]">
-		<label for="message" hidden> Message </label>
-		<div class="flex flex-col border bg-white">
-			<textarea
-				id="message"
-				name="message"
-				rows={2}
-				value={message}
-				required={!imageData}
-				class="resize-none border-none"
-			/>
-			<MediaUploader {imageData} on:change={imageDataChanged} />
-		</div>
-	</div>
+	<MediaUploader {imageData} on:change={imageDataChanged} />
 
-	<div class="flex flex-col gap-[5px]">
-		<label for="nickname" hidden> Nickname </label>
-		<input
-			type="text"
-			class="focus:outline-none"
-			id="nickname"
-			name="nickname"
-			placeholder="nickname (i.e. wall artist)"
-			value={nickname}
-			required
-		/>
-	</div>
+	<label for="message" hidden> Caption </label>
+	<textarea
+		id="message"
+		name="message"
+		rows={4}
+		placeholder="Caption"
+		value={message}
+		required={!imageData}
+		class="min-h-24 resize-none"
+	/>
 
-	<button
-		type="submit"
-		class={`relative h-[30px] border p-0.5 ${loading ? 'bg-gray-800 text-white' : ''}`}
-		disabled={loading}
-	>
-		<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">+</div>
-		{#if loading}
-			<div class="absolute left-1/2 top-1/2 -translate-x-10 -translate-y-1/2">
-				<Icon icon="line-md:loading-loop" color={'white'} />
-			</div>
-		{/if}
-	</button>
+	<label for="nickname" hidden> Nickname </label>
+	<input type="text" id="nickname" name="nickname" placeholder="Nickname" value={nickname} required />
 
 	{#if form?.error}
 		<p class="text-sm text-rose-500">{form.error}</p>
 	{/if}
+
+	<button
+		type="submit"
+		class="group flex h-14 shrink-0 items-center justify-center border hover:bg-black focus:outline-none disabled:bg-black"
+		disabled={loading}
+	>
+		<Sticker size="sm" tilt={-2}>{loading ? 'posting...' : 'post'}</Sticker>
+	</button>
 </form>

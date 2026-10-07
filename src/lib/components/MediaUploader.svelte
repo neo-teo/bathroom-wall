@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { resizeAndConvertToJPEG } from '$lib/utils/fileUtils';
-	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
+	import Sticker from './Sticker.svelte';
 
 	export let imageData: string | null = null;
 
 	const dispatch = createEventDispatcher();
 
-	const openFileInput = () => {
-		const fileInput = document.getElementById('capture') as HTMLInputElement;
-		fileInput.click();
-	};
+	let fileInput: HTMLInputElement;
 
 	const captureMedia = (event: Event) => {
 		const input = event.target as HTMLInputElement;
@@ -32,25 +29,36 @@
 			}
 		}
 	};
+
+	function removeImage() {
+		fileInput.value = '';
+		dispatch('change', { imageData: null });
+	}
 </script>
 
-<div class="flex min-h-[40px] items-center gap-[10px] border-t border-dashed px-2">
+<!-- A big photo area: "add a photo" until one is picked, then a preview (tap it to pick another). -->
+<div class="group relative flex min-h-0 flex-1 border border-dashed hover:bg-black">
 	<button
-		class="flex items-center gap-2 bg-gray-100 px-2 text-blue-400"
-		on:click|preventDefault={openFileInput}
+		type="button"
+		class="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden focus:outline-none"
+		on:click={() => fileInput.click()}
 	>
-		<Icon icon="material-symbols:add-photo-alternate" />
-		Choose image
+		{#if imageData}
+			<img src={imageData} alt="preview" class="max-h-full max-w-full object-contain" />
+		{:else}
+			<Sticker size="sm" tilt={-1.5}>add a photo</Sticker>
+		{/if}
 	</button>
 
 	{#if imageData}
-		<img src={imageData} alt="preview" class="h-[40px]" />
+		<button type="button" class="absolute bottom-2 right-2 focus:outline-none" on:click={removeImage}>
+			<Sticker size="sm" tilt={2}>remove</Sticker>
+		</button>
 	{/if}
 </div>
 
 <!-- TODO: eventually add ", video/*" to the accept prop below to allow capturing video -->
-<input type="file" id="capture" accept="image/*" on:change={captureMedia} hidden />
-<!-- <input type="file" id="capture" accept="video/*" on:change={captureMedia} hidden /> -->
+<input type="file" accept="image/*" bind:this={fileInput} on:change={captureMedia} hidden />
 
 <!-- The following hidden input stores the capture's data -->
-<input type="text" name="imageData" value={imageData} hidden />
+<input type="text" name="imageData" value={imageData ?? ''} hidden />

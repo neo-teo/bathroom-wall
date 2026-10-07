@@ -46,8 +46,8 @@
 	</div>
 {/if}
 
-<Modal bind:showModal on:closeModal={() => (showModal = false)}>
-	<NewPostForm {data} {form} />
+<Modal {showModal} on:close={() => (showModal = false)}>
+	<NewPostForm {data} {form} on:closeModal={() => (showModal = false)} />
 </Modal>
 
 <TileSeparator />

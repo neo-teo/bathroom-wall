@@ -45,7 +45,7 @@
 <TileSeparator />
 
 <div class="grid h-10 grid-cols-[140px_auto]">
-	<div class="logo group flex text-xl font-bold">
+	<div class="logo group flex text-lg font-bold">
 		<a class="bg-black text-white group-hover:bg-white group-hover:text-black" href="/">
 			<span>bath</span>
 		</a>
@@ -61,7 +61,7 @@
 	<!-- On a bar page its name is stuck on next to the logo; the tagline "?" sits on the right on every page. -->
 	<div class="flex min-w-0 items-center justify-between gap-4 pr-2" class:pl-10={barName}>
 		{#if barName}
-			<h1 class="min-w-0 font-normal">
+			<h1 class="flex min-w-0 items-center font-normal">
 				<Sticker size="sm">{barName}</Sticker>
 			</h1>
 		{/if}

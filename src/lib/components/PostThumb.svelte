@@ -54,7 +54,7 @@
 
 			<!-- Who posted it, at the bottom center of the photo (under the caption) -->
 			<div class="absolute inset-x-0 bottom-3 z-20 flex justify-center px-3">
-				<Sticker size="sm" tilt={-tilt - 1}>{post.nickname}</Sticker>
+				<Sticker size="sm" tilt={-tilt - 1} class="min-w-0">{post.nickname}</Sticker>
 			</div>
 		</div>
 	{:else if post.message}
@@ -67,7 +67,7 @@
 			<div class="max-w-full shrink-0 text-center leading-none" style="transform: rotate({tilt}deg);">
 				<Sticker wrap size="sm">{post.message}</Sticker>
 			</div>
-			<div class="sticky bottom-0 z-10 shrink-0">
+			<div class="sticky bottom-0 z-10 min-w-0 max-w-full shrink-0">
 				<Sticker size="sm" tilt={-tilt - 1}>{post.nickname}</Sticker>
 			</div>
 		</div>
