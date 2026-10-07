@@ -4,9 +4,15 @@
 	export let tilt = 0; // degrees; ignored when wrapping (tilt the container instead, inline text can't rotate)
 	export let wrap = false; // multi-line text, each line on its own strip
 	export let tone: 'dark' | 'light' = 'dark'; // black sticker with white text, or the reverse
-	export let size: 'sm' | 'lg' = 'lg'; // lg for the wall and header, sm for small labels like search rows
+	// lg for the wall, sm for small labels like search rows, responsive for wall tiles (sm on phones, lg from md up)
+	export let size: 'sm' | 'lg' | 'responsive' = 'lg';
 
-	$: textSize = size === 'lg' ? 'text-xl' : 'text-sm sm:text-base';
+	const textSizes = {
+		sm: 'text-sm sm:text-base',
+		lg: 'text-xl',
+		responsive: 'text-sm sm:text-base md:text-xl'
+	};
+	$: textSize = textSizes[size];
 
 	// Both tones flip on hover, since whatever is behind them flips too.
 	$: colors =

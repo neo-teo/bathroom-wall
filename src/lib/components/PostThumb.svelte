@@ -42,7 +42,14 @@
 			/>
 
 			{#if post.message}
-				<CaptionSticker mediaId={post.media.id} message={post.message} {tilt} maxLines={2} raised />
+				<CaptionSticker
+					mediaId={post.media.id}
+					message={post.message}
+					{tilt}
+					maxLines={2}
+					size="responsive"
+					raised
+				/>
 			{/if}
 
 			<!-- Who posted it, at the bottom center of the photo (under the caption) -->
@@ -54,7 +61,7 @@
 		<!-- The message, with who posted it right underneath -->
 		<div class="flex flex-col items-center gap-2 p-4" class:invisible={showLightbox}>
 			<div class="line-clamp-6 text-center leading-relaxed" style="transform: rotate({tilt}deg);">
-				<Sticker wrap>{post.message}</Sticker>
+				<Sticker wrap size="responsive">{post.message}</Sticker>
 			</div>
 			<Sticker size="sm" tilt={-tilt - 1}>{post.nickname}</Sticker>
 		</div>

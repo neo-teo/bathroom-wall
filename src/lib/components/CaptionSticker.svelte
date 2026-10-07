@@ -9,6 +9,7 @@
 	export let tilt = 0;
 	export let maxLines: number | undefined = undefined;
 	export let raised = false; // sit higher, leaving room for an author sticker underneath
+	export let size: 'sm' | 'lg' | 'responsive' = 'lg';
 
 	// A black sticker over light photos, a white one over dark photos.
 	let tone: 'dark' | 'light' = 'dark';
@@ -25,6 +26,6 @@
 		class:line-clamp-2={maxLines === 2}
 		style="transform: rotate({tilt}deg);"
 	>
-		<Sticker wrap {tone}>{message}</Sticker>
+		<Sticker wrap {tone} {size}>{message}</Sticker>
 	</div>
 </div>
