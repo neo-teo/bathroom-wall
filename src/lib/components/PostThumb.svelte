@@ -29,7 +29,7 @@
 </script>
 
 <button
-	class="group relative !aspect-square border-b border-r p-1 hover:bg-black hover:text-white"
+	class="group relative !aspect-square min-h-0 overflow-hidden border-b border-r p-1 hover:bg-black hover:text-white"
 	on:click={handleClick}
 >
 
@@ -47,7 +47,7 @@
 					message={post.message}
 					{tilt}
 					maxLines={2}
-					size="responsive"
+					size="sm"
 					raised
 				/>
 			{/if}
@@ -58,12 +58,18 @@
 			</div>
 		</div>
 	{:else if post.message}
-		<!-- The message, with who posted it right underneath -->
-		<div class="flex flex-col items-center gap-2 p-4" class:invisible={showLightbox}>
-			<div class="line-clamp-6 text-center leading-relaxed" style="transform: rotate({tilt}deg);">
-				<Sticker wrap size="responsive">{post.message}</Sticker>
+		<!-- The message, with who posted it right underneath. The tile never grows: a long message runs off the bottom
+		     of the tile (starting from the top instead of centered), and the author sticks to the bottom on top of it. -->
+		<div
+			class="flex h-full flex-col items-center [justify-content:safe_center] gap-1 overflow-hidden p-2 md:gap-2 md:p-4"
+			class:invisible={showLightbox}
+		>
+			<div class="max-w-full shrink-0 text-center leading-none" style="transform: rotate({tilt}deg);">
+				<Sticker wrap size="sm">{post.message}</Sticker>
 			</div>
-			<Sticker size="sm" tilt={-tilt - 1}>{post.nickname}</Sticker>
+			<div class="sticky bottom-0 z-10 shrink-0">
+				<Sticker size="sm" tilt={-tilt - 1}>{post.nickname}</Sticker>
+			</div>
 		</div>
 	{/if}
 </button>

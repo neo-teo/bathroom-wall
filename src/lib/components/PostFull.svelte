@@ -42,12 +42,12 @@
 				class="block max-h-[calc(100vh-7rem)] max-w-[calc(100vw-2rem)] object-contain"
 			/>
 			{#if post.message}
-				<CaptionSticker mediaId={post.media.id} message={post.message} {tilt} />
+				<CaptionSticker mediaId={post.media.id} message={post.message} {tilt} size="sm" />
 			{/if}
 		</div>
 	{:else if post.message}
-		<div class="max-w-2xl text-center leading-relaxed" style="transform: rotate({tilt}deg);">
-			<Sticker wrap>{post.message}</Sticker>
+		<div class="max-w-2xl text-center leading-none" style="transform: rotate({tilt}deg);">
+			<Sticker wrap size="sm">{post.message}</Sticker>
 		</div>
 	{/if}
 
