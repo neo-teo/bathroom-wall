@@ -16,10 +16,12 @@ export const createSearchStore = <T extends Record<PropertyKey, any>>(data: T[])
     return { subscribe, set, update }
 }
 
-export const searchHandler = <T extends Record<PropertyKey, any>>(store: SearchStoreModel<T>) => {
+// Returns the model with `filtered` recomputed from `data` and `search`, without mutating the input.
+export const searchHandler = <T extends Record<PropertyKey, any>>(store: SearchStoreModel<T>): SearchStoreModel<T> => {
     const searchTerm = store.search.toLowerCase() || "";
 
-    store.filtered = store.data.filter((item) => {
-        return item.searchTerms.toLowerCase().includes(searchTerm)
-    })
+    return {
+        ...store,
+        filtered: store.data.filter((item) => item.searchTerms.toLowerCase().includes(searchTerm))
+    }
 }

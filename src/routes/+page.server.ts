@@ -6,7 +6,7 @@ import transporter from '$lib/emailSetup.server';
 import { clientIp } from '../hooks.server';
 import type { BarSummaryPage } from '$lib/database.types';
 import { slugify } from 'transliteration';
-import { approximateLocationFromHeaders } from '$lib/utils/geoUtils';
+import { approximateLocationFromHeaders } from '$lib/server/geo';
 
 export const load: PageServerLoad = async ({ url, fetch, request }) => {
 

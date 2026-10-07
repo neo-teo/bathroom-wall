@@ -6,10 +6,11 @@
 	import BarTable from '$lib/components/BarTable.svelte';
 	import { formatAddress } from '$lib/utils/addressUtils';
 	import { distanceLabel } from '$lib/utils/geoUtils';
+	import type { LatLng } from '$lib/utils/userLocation';
 
 	export let addEndpoint: string;
 	export let query: string;
-	export let userLocation: { lat: number; lng: number } | null = null;
+	export let userLocation: LatLng | null = null;
 	export let isApproximate = false;
 
 	const sticker = 'tap to add to bathwall';
@@ -78,10 +79,9 @@
 		loading = true;
 		timer = setTimeout(() => {
 			const requestId = ++latestRequest;
-			// With an origin, Google includes each result's `distance_meters` (missing from our old typings).
-			const origin = userLocation && new google.maps.LatLng(userLocation.lat, userLocation.lng);
+			// With an origin, Google includes each result's `distance_meters`.
 			autocompleteService.getPlacePredictions(
-				{ input: trimmed, types, sessionToken, ...(origin && { origin }) } as google.maps.places.AutocompletionRequest,
+				{ input: trimmed, types, sessionToken, origin: userLocation ?? undefined },
 				(results, status) => {
 					// Ignore responses for queries the user has already typed past.
 					if (requestId !== latestRequest) return;
@@ -97,7 +97,7 @@
 
 	// Shape Google's predictions like bars on the wall so they render with the same BarRow.
 	$: rows = predictions.map((prediction): BarRowData => {
-		const meters = (prediction as { distance_meters?: number }).distance_meters;
+		const meters = prediction.distance_meters;
 
 		return {
 			key: prediction.place_id,
@@ -143,7 +143,8 @@
 				// A session ends with the details call, so start a fresh one for any further searching.
 				sessionToken = new google.maps.places.AutocompleteSessionToken();
 
-				if (status !== google.maps.places.PlacesServiceStatus.OK || !place?.geometry) {
+				const location = place?.geometry?.location;
+				if (status !== google.maps.places.PlacesServiceStatus.OK || !place || !location) {
 					addingKey = null;
 					failed = true;
 					return;
@@ -154,8 +155,8 @@
 					address: place.formatted_address || '',
 					placeId: place.place_id || prediction.place_id,
 					location: locationFrom(place.address_components),
-					lat: place.geometry.location.lat().toString(),
-					lng: place.geometry.location.lng().toString()
+					lat: location.lat().toString(),
+					lng: location.lng().toString()
 				};
 				// Let the hidden inputs pick up the new values, then post to createBar (which redirects to the new wall).
 				tick().then(() => form.requestSubmit());

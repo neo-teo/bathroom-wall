@@ -27,21 +27,6 @@ export function formatDistance(km: number, locale: string = 'en-US') {
 }
 
 
-// Netlify adds an `x-nf-geo` header (base64 JSON) with the visitor's IP-based location, roughly city level.
-export function approximateLocationFromHeaders(headers: Headers) {
-    const header = headers.get('x-nf-geo');
-    if (!header) return null;
-
-    try {
-        const geo = JSON.parse(Buffer.from(header, 'base64').toString('utf8'));
-        const lat = Number(geo.latitude);
-        const lng = Number(geo.longitude);
-        return Number.isFinite(lat) && Number.isFinite(lng) && (lat || lng) ? { lat, lng } : null;
-    } catch {
-        return null;
-    }
-}
-
 
 // Distance label in the visitor's units, with a "~" when it's based on an IP guess rather than real location.
 export function distanceLabel(km: number, isApproximate = false) {

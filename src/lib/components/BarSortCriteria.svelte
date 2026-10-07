@@ -1,58 +1,25 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
+	import { getStoredLocation, requestLocation } from '$lib/utils/userLocation';
 
 	$: sortByDistance = $page.url.searchParams.has('lat') && $page.url.searchParams.has('lng');
 
 	let geolocationError: string | undefined;
 
 	async function getUserLocation() {
-		const storedLoc = getStoredLocation();
-
-		if (storedLoc) {
-			return storedLoc;
-		}
-
-		const loc = await requestGeolocation();
-		return loc;
-	}
-
-	function getStoredLocation() {
-		const storedLocation = localStorage.getItem('user_location');
-		if (storedLocation) {
-			const { lat, lng, timestamp } = JSON.parse(storedLocation);
-			// 1 hr = 60 * 60 * 1000 ms
-			if (Date.now() - timestamp < 60 * 60 * 1000) {
-				return { lat, lng };
-			}
-		}
-		return null;
-	}
-
-	// TODO: move this to a geo helpers lib ..
-	async function requestGeolocation() {
-		if ('geolocation' in navigator) {
-			try {
-				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-					navigator.geolocation.getCurrentPosition(resolve, reject);
-				});
-				const { latitude, longitude } = position.coords;
-
-				localStorage.setItem(
-					'user_location',
-					JSON.stringify({ lat: latitude, lng: longitude, timestamp: Date.now() })
-				);
-
-				return { lat: latitude, lng: longitude };
-			} catch (error) {
-				geolocationError =
-					'Unable to request location. Check location services settings for this browser.';
-				console.error(error);
-			}
-		} else {
+		if (!('geolocation' in navigator)) {
 			geolocationError = 'This browser does not support geolocation.';
 			console.error('Geolocation is not supported by this browser');
+			return;
+		}
+
+		try {
+			return getStoredLocation() ?? (await requestLocation());
+		} catch (error) {
+			geolocationError =
+				'Unable to request location. Check location services settings for this browser.';
+			console.error(error);
 		}
 	}
 

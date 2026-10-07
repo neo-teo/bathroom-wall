@@ -62,7 +62,10 @@ export const GET = async ({ url }) => {
         });
     }
 
-    const bars = barData.slice(offset, offset + limit) as unknown as BarSummary[];
+    // Dates go out as ISO strings, which is what BarSummary describes.
+    const bars: BarSummary[] = barData
+        .slice(offset, offset + limit)
+        .map((bar) => ({ ...bar, latestPostDate: bar.latestPostDate?.toISOString() ?? null }));
     const nextOffset = offset + limit < barData.length ? offset + limit : null;
 
     const page: BarSummaryPage = {
@@ -72,5 +75,5 @@ export const GET = async ({ url }) => {
         nextOffset,
     };
 
-    return json(page); // otherwise json(fail(<statusCode>, ...))
+    return json(page);
 }

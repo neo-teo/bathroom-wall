@@ -2,15 +2,15 @@
 	import type { PageData } from './$types';
 
 	import { createSearchStore, searchHandler } from '$lib/stores/search';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { distanceLabel, haversine } from '$lib/utils/geoUtils';
 	import { formatAddress } from '$lib/utils/addressUtils';
+	import { getLocationWithoutPrompt, type LatLng } from '$lib/utils/userLocation';
 
 	import BarAdder from '$lib/components/BarAdder.svelte';
 	import BarRow, { type BarRowData } from '$lib/components/BarRow.svelte';
 	import BarTable from '$lib/components/BarTable.svelte';
-	import ActivityIndicatorLegend from '$lib/components/ActivityIndicatorLegend.svelte';
 	import BarSortCriteria from '$lib/components/BarSortCriteria.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import TileSeparator from '$lib/components/TileSeparator.svelte';
@@ -61,34 +61,15 @@
 		data: bars.map((bar) => ({ ...bar, searchTerms: `${bar.name} ${bar.address}` }))
 	}));
 
-	const unsubscribe = searchStore.subscribe((model) => searchHandler(model));
-
-	onDestroy(() => unsubscribe());
+	$: filtered = searchHandler($searchStore).filtered;
 
 	// Prefer the location in the url ("Close" sort), else one cached by BarSortCriteria in the last hour,
 	// else ask the browser if the visitor has already granted location access (no prompt),
 	// else use the server's IP-based guess.
-	let knownLocation: { lat: number; lng: number } | null = null;
+	let knownLocation: LatLng | null = null;
 
 	onMount(async () => {
-		try {
-			const stored = JSON.parse(localStorage.getItem('user_location') ?? 'null');
-			if (stored && Date.now() - stored.timestamp < 60 * 60 * 1000) {
-				knownLocation = { lat: stored.lat, lng: stored.lng };
-				return;
-			}
-
-			const permission = await navigator.permissions?.query({ name: 'geolocation' });
-			if (permission?.state !== 'granted') return;
-
-			navigator.geolocation.getCurrentPosition(({ coords }) => {
-				knownLocation = { lat: coords.latitude, lng: coords.longitude };
-				localStorage.setItem(
-					'user_location',
-					JSON.stringify({ ...knownLocation, timestamp: Date.now() })
-				);
-			});
-		} catch {}
+		knownLocation = (await getLocationWithoutPrompt()) ?? knownLocation;
 	});
 
 	$: urlLat = $page.url.searchParams.get('lat');
@@ -101,7 +82,7 @@
 
 	function toRow(
 		bar: ListBar,
-		from: { lat: number; lng: number } | null,
+		from: LatLng | null,
 		isApproximate: boolean
 	): BarRowData {
 		const km =
@@ -137,7 +118,7 @@
 <TileSeparator />
 
 <div class="flex flex-col">
-	{#if $searchStore.filtered.length === 0}
+	{#if filtered.length === 0}
 		<div class="flex">
 			<BarAdder
 				addEndpoint={'?/createBar'}
@@ -148,7 +129,7 @@
 		</div>
 	{:else}
 		<BarTable>
-			{#each $searchStore.filtered as bar (bar.id)}
+			{#each filtered as bar (bar.id)}
 				<BarRow row={toRow(bar, userLocation, isApproximate)} maxActivity={maxPosts} />
 			{/each}
 		</BarTable>

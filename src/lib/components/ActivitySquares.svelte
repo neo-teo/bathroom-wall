@@ -1,5 +1,5 @@
-<script>
-	export let count;
+<script lang="ts">
+	export let count: number;
 
 	function getRandomColor() {
 		const colors = ['#444444', 'white'];

@@ -11,7 +11,7 @@
 		"strict": true,
 		"moduleResolution": "bundler",
 		"types": [
-			"googlemaps"
+			"google.maps"
 		]
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
