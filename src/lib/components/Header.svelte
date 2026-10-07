@@ -1,7 +1,44 @@
 <script lang="ts">
 	import TileSeparator from './TileSeparator.svelte';
 
+	import { onDestroy } from 'svelte';
+
 	export let barName: string | undefined = undefined;
+
+	// Tapping the "?" types out the tagline one letter at a time, holds it, then erases it back to "?".
+	const tagline = 'a guest book for cafes and bars';
+	const typeMs = 45;
+	const eraseMs = 25;
+	const holdMs = 2500;
+
+	let shown = 0; // how many letters of the tagline are visible
+	let timer: ReturnType<typeof setTimeout> | undefined;
+
+	function play() {
+		if (timer) return; // already animating
+
+		const type = () => {
+			if (shown < tagline.length) {
+				shown += 1;
+				timer = setTimeout(type, typeMs);
+			} else {
+				timer = setTimeout(erase, holdMs);
+			}
+		};
+
+		const erase = () => {
+			if (shown > 0) {
+				shown -= 1;
+				timer = setTimeout(erase, eraseMs);
+			} else {
+				timer = undefined;
+			}
+		};
+
+		type();
+	}
+
+	onDestroy(() => clearTimeout(timer));
 </script>
 
 <TileSeparator />
@@ -9,23 +46,41 @@
 <div class="grid h-10 grid-cols-[140px_auto]">
 	<div class="logo group flex text-xl font-bold">
 		<a class="bg-black text-white group-hover:bg-white group-hover:text-black" href="/">
-			<span class="rotate-[4deg] group-hover:-rotate-[4deg]">bath</span>
+			<span>bath</span>
 		</a>
 		<a class="bg-white text-black group-hover:bg-black group-hover:text-white" href="/">
-			<span class="-rotate-[4deg] group-hover:rotate-[4deg]">wall</span>
+			<span>wall</span>
 		</a>
-		<a class="bg-black text-white group-hover:bg-white group-hover:text-black" href="/">
-			<span class="rotate-[4deg] group-hover:-rotate-[4deg]">.co</span>
+		<!-- border-r keeps the logo's edge visible when hover turns this tile white -->
+		<a class="border-r bg-black text-white group-hover:bg-white group-hover:text-black" href="/">
+			<span>.co</span>
 		</a>
 	</div>
 
-	<div class="flex items-center justify-end px-2">
-		{#if !barName}
-			a guest book for cafes and bars
-		{:else}
-			<h3 class="font-medium">{barName}</h3>
-		{/if}
-	</div>
+	{#if barName}
+		<!-- On a bar page the logo's tiles continue: a blank white square, then the bar name on a black tile. -->
+		<div class="flex min-w-0">
+			<div class="w-10 shrink-0 bg-white"></div>
+			<div class="flex min-w-0 items-center bg-black px-2 text-white">
+				<h3 class="truncate font-normal">{barName}</h3>
+			</div>
+		</div>
+	{:else}
+		<div class="flex items-center justify-end px-2">
+			<button
+				class="focus:outline-none"
+				class:cursor-default={shown > 0}
+				aria-label={tagline}
+				on:click={play}
+			>
+				{#if shown === 0}
+					<span class="text-xl">?</span>
+				{:else}
+					{tagline.slice(0, shown)}
+				{/if}
+			</button>
+		</div>
+	{/if}
 </div>
 
 <TileSeparator />

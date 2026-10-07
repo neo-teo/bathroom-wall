@@ -33,7 +33,7 @@
 	this={row.href ? 'a' : 'button'}
 	href={row.href}
 	type={row.href ? undefined : 'button'}
-	class="group relative col-span-full grid grid-cols-subgrid items-center overflow-hidden border-b text-left no-underline hover:bg-black hover:text-white focus:outline-none"
+	class="group relative col-span-full grid grid-cols-subgrid items-center overflow-hidden border-b text-left last:border-b-0 no-underline hover:bg-black hover:text-white focus:outline-none"
 	on:click={() => !row.href && dispatch('select', row)}
 	role={row.href ? undefined : 'button'}
 >

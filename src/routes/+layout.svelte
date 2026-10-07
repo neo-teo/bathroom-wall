@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import '../app.css';
+	import XeroxFilter from '$lib/components/XeroxFilter.svelte';
 </script>
 
 <svelte:head>
@@ -13,6 +14,8 @@
 		content="https://res.cloudinary.com/dlub8oz6b/image/upload/v1707868939/zefjp7gvtnbdtri5md88.png"
 	/>
 </svelte:head>
+
+<XeroxFilter />
 
 <div class="flex grid min-h-screen justify-center">
 	<div class="flex w-screen flex-col">

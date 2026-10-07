@@ -1,7 +1,8 @@
 import { db } from "$lib/db";
 import { json } from "@sveltejs/kit";
 import { haversine } from "$lib/utils/geoUtils";
-import type { BarSummary, BarSummaryPage } from "$lib/database.types";
+import type { BarSummaryPage } from "$lib/database.types";
+import { barSummarySelect, flattenBarSummary, toBarSummary } from "$lib/server/bars";
 
 const MAX_LIMIT = 200;
 
@@ -12,29 +13,7 @@ export const GET = async ({ url }) => {
     const limit = Math.min(Math.max(Number(url.searchParams.get('limit')) || MAX_LIMIT, 1), MAX_LIMIT);
     const offset = Math.max(Number(url.searchParams.get('offset')) || 0, 0);
 
-    // Only what the list needs: the bar itself, how many posts it has, and when the latest one was.
-    const rows = await db.bar.findMany({
-        select: {
-            id: true,
-            name: true,
-            address: true,
-            uniqueName: true,
-            lat: true,
-            lng: true,
-            _count: { select: { posts: true } },
-            posts: {
-                select: { date: true },
-                orderBy: { date: 'desc' },
-                take: 1,
-            },
-        },
-    });
-
-    const barData = rows.map(({ _count, posts, ...bar }) => ({
-        ...bar,
-        postCount: _count.posts,
-        latestPostDate: posts[0]?.date ?? null,
-    }));
+    const barData = (await db.bar.findMany({ select: barSummarySelect })).map(flattenBarSummary);
 
     if (lat && lng) {
         const userLat = parseFloat(lat);
@@ -62,10 +41,7 @@ export const GET = async ({ url }) => {
         });
     }
 
-    // Dates go out as ISO strings, which is what BarSummary describes.
-    const bars: BarSummary[] = barData
-        .slice(offset, offset + limit)
-        .map((bar) => ({ ...bar, latestPostDate: bar.latestPostDate?.toISOString() ?? null }));
+    const bars = barData.slice(offset, offset + limit).map(toBarSummary);
     const nextOffset = offset + limit < barData.length ? offset + limit : null;
 
     const page: BarSummaryPage = {

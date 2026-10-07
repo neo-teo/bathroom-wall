@@ -21,20 +21,32 @@
 
 <Header barName={data.bar.name} />
 
-<div class={`grid w-full grid-cols-2 self-center md:grid-cols-3 xl:grid-cols-4`}>
+{#if posts.length === 0}
+	<!-- Empty wall: the whole thing is one big "+" until the first post goes up. -->
 	<button
-		class="border-b border-r bg-gray-50 text-3xl font-thin text-gray-500"
+		class="h-[60vh] min-h-64 w-full border-b bg-gray-50 text-6xl font-thin text-gray-500 hover:bg-black hover:text-white focus:outline-none"
+		aria-label="Add the first post"
 		on:click={showNewTagForm}
 	>
 		+
 	</button>
-	<Modal bind:showModal on:closeModal={() => (showModal = false)}>
-		<NewPostForm {data} {form} />
-	</Modal>
+{:else}
+	<div class={`grid w-full grid-cols-2 self-center md:grid-cols-3 xl:grid-cols-4`}>
+		<button
+			class="border-b border-r bg-gray-50 text-3xl font-thin text-gray-500 hover:bg-black hover:text-white focus:outline-none"
+			on:click={showNewTagForm}
+		>
+			+
+		</button>
 
-	{#each posts as post}
-		<PostThumb {post} />
-	{/each}
-</div>
+		{#each posts as post}
+			<PostThumb {post} />
+		{/each}
+	</div>
+{/if}
+
+<Modal bind:showModal on:closeModal={() => (showModal = false)}>
+	<NewPostForm {data} {form} />
+</Modal>
 
 <TileSeparator />

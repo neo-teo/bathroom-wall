@@ -108,7 +108,7 @@
 <div class="grid grid-cols-[auto_120px]">
 	<input
 		class="border-none focus:outline-none"
-		placeholder="search for a spot..."
+		placeholder="Search for a cafe or bar"
 		type="text"
 		bind:value={$searchStore.search}
 	/>
@@ -125,6 +125,7 @@
 				query={$searchStore.search}
 				{userLocation}
 				{isApproximate}
+				maxActivity={maxPosts}
 			/>
 		</div>
 	{:else}

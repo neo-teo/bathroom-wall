@@ -7,11 +7,13 @@
 	import { formatAddress } from '$lib/utils/addressUtils';
 	import { distanceLabel } from '$lib/utils/geoUtils';
 	import type { LatLng } from '$lib/utils/userLocation';
+	import type { KnownPlaces } from '$lib/database.types';
 
 	export let addEndpoint: string;
 	export let query: string;
 	export let userLocation: LatLng | null = null;
 	export let isApproximate = false;
+	export let maxActivity = 0;
 
 	const sticker = 'tap to add to bathwall';
 	const armedSticker = 'tap again';
@@ -31,6 +33,8 @@
 	let loading = false;
 	let failed = false;
 	let predictions: google.maps.places.AutocompletePrediction[] = [];
+	// Results that are already on the wall, matched exactly by Google place id.
+	let known: KnownPlaces = {};
 
 	let autocompleteService: google.maps.places.AutocompleteService;
 	let placesService: google.maps.places.PlacesService;
@@ -72,6 +76,7 @@
 
 		if (!trimmed) {
 			predictions = [];
+			known = {};
 			loading = false;
 			return;
 		}
@@ -82,28 +87,58 @@
 			// With an origin, Google includes each result's `distance_meters`.
 			autocompleteService.getPlacePredictions(
 				{ input: trimmed, types, sessionToken, origin: userLocation ?? undefined },
-				(results, status) => {
+				async (results, status) => {
 					// Ignore responses for queries the user has already typed past.
 					if (requestId !== latestRequest) return;
 
-					loading = false;
 					const { OK, ZERO_RESULTS } = google.maps.places.PlacesServiceStatus;
+					const found = (status === OK && results) || [];
+					// Look up which results we already have before showing any, so rows don't flip after appearing.
+					const knownFound = await lookUpKnownPlaces(found.map((p) => p.place_id));
+					if (requestId !== latestRequest) return;
+
+					loading = false;
 					failed = status !== OK && status !== ZERO_RESULTS;
-					predictions = (status === OK && results) || [];
+					predictions = found;
+					known = knownFound;
 				}
 			);
 		}, debounceMs);
 	}
 
+	async function lookUpKnownPlaces(placeIds: string[]): Promise<KnownPlaces> {
+		if (placeIds.length === 0) return {};
+		try {
+			const response = await fetch(`/api/known-places?ids=${placeIds.map(encodeURIComponent).join(',')}`);
+			return response.ok ? await response.json() : {};
+		} catch {
+			return {}; // worst case they show as addable, and createBar still redirects to the existing bar
+		}
+	}
+
 	// Shape Google's predictions like bars on the wall so they render with the same BarRow.
+	// Ones we already have render exactly like wall bars: our name and address, a link, and activity.
 	$: rows = predictions.map((prediction): BarRowData => {
 		const meters = prediction.distance_meters;
+		const distance = typeof meters === 'number' ? distanceLabel(meters / 1000, isApproximate) : '';
+		const bar = known[prediction.place_id];
+
+		if (bar) {
+			return {
+				key: prediction.place_id,
+				name: bar.name,
+				...formatAddress(bar.address),
+				distance,
+				activity: bar.postCount,
+				href: `/bars/${bar.uniqueName}`
+			};
+		}
 
 		return {
 			key: prediction.place_id,
 			name: prediction.structured_formatting.main_text,
 			...formatAddress(prediction.structured_formatting.secondary_text ?? ''),
-			distance: typeof meters === 'number' ? distanceLabel(meters / 1000, isApproximate) : '',
+			distance,
 			activity: null,
 			sticker:
 				prediction.place_id === addingKey
@@ -181,7 +216,7 @@
 	{:else if predictions.length > 0}
 		<BarTable>
 			{#each rows as row (row.key)}
-				<BarRow {row} on:select={(event) => chooseRow(event.detail)} />
+				<BarRow {row} {maxActivity} on:select={(event) => chooseRow(event.detail)} />
 			{/each}
 		</BarTable>
 	{:else if loading || !ready}
