@@ -1,10 +1,13 @@
 <script lang="ts">
 	import type { Post } from '$lib/database.types';
 	import PostMedia from './PostMedia.svelte';
+	import Sticker from './Sticker.svelte';
+	import CaptionSticker from './CaptionSticker.svelte';
+	import { postTilt } from '$lib/utils/media';
 
 	export let post: Post;
 
-	let rotation = -(Math.random() * 4) + -(Math.random() * 4);
+	const tilt = postTilt(post.id);
 
 	function formatDate(date: Date): string {
 		const options: Intl.DateTimeFormatOptions = {
@@ -23,29 +26,33 @@
 		const monthDay = date.toLocaleDateString('en-US', options);
 
 		// Get the short year manually
-		const shortYear = `'${date.getFullYear().toString().slice(-2)}`;
+		const shortYear = date.getFullYear().toString().slice(-2);
 
 		return `${time} - ${monthDay} ${shortYear}`;
 	}
 </script>
 
-<div class="flex max-h-full max-w-[600px] flex-col gap-2 bg-white bg-opacity-90 p-4">
+<!-- The expanded post looks like its wall tile, just bigger: the photo at its own aspect ratio, as large as the
+     screen allows, with the caption stuck on; or a text post as one big sticker. Author and date go underneath. -->
+<div class="flex flex-col items-center gap-3">
 	{#if post.media}
-		<PostMedia media={post.media} class="max-h-[70vh] w-full  object-contain" />
-	{/if}
-
-	{#if post.message}
-		<div class="px-1 text-left text-sm">
-			{post.message}
+		<div class="grain relative inline-block">
+			<PostMedia
+				media={post.media}
+				class="block max-h-[calc(100vh-7rem)] max-w-[calc(100vw-2rem)] object-contain"
+			/>
+			{#if post.message}
+				<CaptionSticker mediaId={post.media.id} message={post.message} {tilt} />
+			{/if}
+		</div>
+	{:else if post.message}
+		<div class="max-w-2xl text-center leading-relaxed" style="transform: rotate({tilt}deg);">
+			<Sticker wrap>{post.message}</Sticker>
 		</div>
 	{/if}
 
-	<div class="w-full px-1">
-		<div class="flex w-full items-center justify-between text-xs">
-			<div class="flex gap-1">
-				# <p class="px-1">{post.nickname}</p>
-			</div>
-			<p class="italic">{formatDate(post.date)}</p>
-		</div>
+	<div class="flex flex-wrap justify-center gap-3">
+		<Sticker size="sm" tilt={-tilt - 1}>{post.nickname}</Sticker>
+		<Sticker size="sm" tilt={tilt + 1}>{formatDate(post.date)}</Sticker>
 	</div>
 </div>

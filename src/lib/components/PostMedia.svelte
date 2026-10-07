@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { MediaFile } from '@prisma/client';
 	import { onMount } from 'svelte';
+	import { mediaUrl } from '$lib/utils/media';
 
 	export let media: MediaFile;
 
 	let loading = true;
 
-	$: url = `https://res.cloudinary.com/dlub8oz6b/image/upload/${media.id}`;
+	$: url = mediaUrl(media.id);
 
 	onMount(() => {
 		loading = true;

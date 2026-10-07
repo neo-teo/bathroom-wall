@@ -18,6 +18,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import ActivityIndicator from './ActivityIndicator.svelte';
+	import Sticker from './Sticker.svelte';
 
 	export let row: BarRowData;
 	export let maxActivity = 0;
@@ -49,14 +50,9 @@
 	{#if row.sticker}
 		<!-- Positioned against the whole row (not a grid cell), centered, and allowed to overlap whatever's under it. -->
 		<span
-			class="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap text-sm sm:text-base"
+			class="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap"
 		>
-			<span
-				class="bg-black px-1.5 text-white group-hover:bg-white group-hover:text-black"
-				style="transform: rotate({row.armed ? -tilt - 2 : tilt}deg);"
-			>
-				{row.sticker}
-			</span>
+			<Sticker size="sm" tilt={row.armed ? -tilt - 2 : tilt}>{row.sticker}</Sticker>
 		</span>
 	{/if}
 

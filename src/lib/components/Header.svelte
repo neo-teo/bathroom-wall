@@ -1,5 +1,6 @@
 <script lang="ts">
 	import TileSeparator from './TileSeparator.svelte';
+	import Sticker from './Sticker.svelte';
 
 	import { onDestroy } from 'svelte';
 
@@ -57,30 +58,27 @@
 		</a>
 	</div>
 
-	{#if barName}
-		<!-- On a bar page the logo's tiles continue: a blank white square, then the bar name on a black tile. -->
-		<div class="flex min-w-0">
-			<div class="w-10 shrink-0 bg-white"></div>
-			<div class="flex min-w-0 items-center bg-black px-2 text-white">
-				<h3 class="truncate font-normal">{barName}</h3>
-			</div>
-		</div>
-	{:else}
-		<div class="flex items-center justify-end px-2">
-			<button
-				class="focus:outline-none"
-				class:cursor-default={shown > 0}
-				aria-label={tagline}
-				on:click={play}
-			>
-				{#if shown === 0}
-					<span class="text-xl">?</span>
-				{:else}
-					{tagline.slice(0, shown)}
-				{/if}
-			</button>
-		</div>
-	{/if}
+	<!-- On a bar page its name is stuck on next to the logo; the tagline "?" sits on the right on every page. -->
+	<div class="flex min-w-0 items-center justify-between gap-4 pr-2" class:pl-10={barName}>
+		{#if barName}
+			<h1 class="min-w-0 font-normal">
+				<Sticker size="sm">{barName}</Sticker>
+			</h1>
+		{/if}
+
+		<button
+			class="ml-auto shrink-0 focus:outline-none"
+			class:cursor-default={shown > 0}
+			aria-label={tagline}
+			on:click={play}
+		>
+			{#if shown === 0}
+				<span class="text-xl">?</span>
+			{:else}
+				{tagline.slice(0, shown)}
+			{/if}
+		</button>
+	</div>
 </div>
 
 <TileSeparator />
