@@ -1,22 +1,40 @@
 import { db } from "$lib/db";
 import { json } from "@sveltejs/kit";
 import { haversine } from "$lib/utils/geoUtils";
+import type { BarSummary, BarSummaryPage } from "$lib/database.types";
+
+const MAX_LIMIT = 200;
 
 export const GET = async ({ url }) => {
 
     const lat = url.searchParams.get('lat');
     const lng = url.searchParams.get('lng');
+    const limit = Math.min(Math.max(Number(url.searchParams.get('limit')) || MAX_LIMIT, 1), MAX_LIMIT);
+    const offset = Math.max(Number(url.searchParams.get('offset')) || 0, 0);
 
-    const barData = await db.bar.findMany({
-        include: {
+    // Only what the list needs: the bar itself, how many posts it has, and when the latest one was.
+    const rows = await db.bar.findMany({
+        select: {
+            id: true,
+            name: true,
+            address: true,
+            uniqueName: true,
+            lat: true,
+            lng: true,
+            _count: { select: { posts: true } },
             posts: {
-                orderBy: {
-                    date: 'desc', // Order by date in descending order to get the most recent posts first
-                },
-                take: 15,
+                select: { date: true },
+                orderBy: { date: 'desc' },
+                take: 1,
             },
         },
     });
+
+    const barData = rows.map(({ _count, posts, ...bar }) => ({
+        ...bar,
+        postCount: _count.posts,
+        latestPostDate: posts[0]?.date ?? null,
+    }));
 
     if (lat && lng) {
         const userLat = parseFloat(lat);
@@ -29,20 +47,30 @@ export const GET = async ({ url }) => {
         });
     } else {
         // Maximums used for normalization
-        const mostPosts = Math.max(...barData.map(bar => bar.posts.length))
-        const latestDate = Math.max(...barData.map(bar => bar.posts[0]?.date.getTime() ?? 0))
+        const mostPosts = Math.max(1, ...barData.map(bar => bar.postCount))
+        const latestDate = Math.max(1, ...barData.map(bar => bar.latestPostDate?.getTime() ?? 0))
 
         barData.sort((a, b) => {
-            const latestA = a.posts[0]?.date.getTime() ?? 0;
-            const latestB = b.posts[0]?.date.getTime() ?? 0;
+            const latestA = a.latestPostDate?.getTime() ?? 0;
+            const latestB = b.latestPostDate?.getTime() ?? 0;
 
             // Weighted score for each bar
-            const scoreA = 1 * (a.posts.length / mostPosts) + 1000 * (latestA / latestDate);
-            const scoreB = 1 * (b.posts.length / mostPosts) + 1000 * (latestB / latestDate);
+            const scoreA = 1 * (a.postCount / mostPosts) + 1000 * (latestA / latestDate);
+            const scoreB = 1 * (b.postCount / mostPosts) + 1000 * (latestB / latestDate);
 
             return scoreB - scoreA;
         });
     }
 
-    return json(barData); // otherwise json(fail(<statusCode>, ...))
+    const bars = barData.slice(offset, offset + limit) as unknown as BarSummary[];
+    const nextOffset = offset + limit < barData.length ? offset + limit : null;
+
+    const page: BarSummaryPage = {
+        bars,
+        total: barData.length,
+        maxPostCount: Math.max(0, ...barData.map(bar => bar.postCount)),
+        nextOffset,
+    };
+
+    return json(page); // otherwise json(fail(<statusCode>, ...))
 }

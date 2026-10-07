@@ -4,10 +4,11 @@ import { db } from '$lib/db';
 import { GOOGLE_EMAIL } from '$env/static/private';
 import transporter from '$lib/emailSetup.server';
 import { clientIp } from '../hooks.server';
-import type { Bar } from '$lib/database.types';
+import type { BarSummaryPage } from '$lib/database.types';
 import { slugify } from 'transliteration';
+import { approximateLocationFromHeaders } from '$lib/utils/geoUtils';
 
-export const load: PageServerLoad = async ({ url, fetch }) => {
+export const load: PageServerLoad = async ({ url, fetch, request }) => {
 
     const lat = url.searchParams.get('lat');
     const lng = url.searchParams.get('lng');
@@ -21,9 +22,16 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
         method: 'GET'
     });
 
-    const bars: Bar[] = await response.json();
+    const { bars, total, maxPostCount, nextOffset }: BarSummaryPage = await response.json();
 
-    return { title: "bathwall", bars };
+    return {
+        title: "bathwall",
+        bars,
+        total,
+        maxPostCount,
+        nextOffset,
+        approximateLocation: approximateLocationFromHeaders(request.headers)
+    };
 };
 
 export const actions: Actions = {

@@ -16,7 +16,7 @@
 	<div class="grid grid-cols-2 gap-1">
 		{#each Array(count) as _, index}
 			<div
-				class="square border border-gray-400 text-xs text-white"
+				class="square border border-gray-400 text-xs text-white group-hover:invert"
 				class:col-span-2={count % 2 === 1 && index === count - 1}
 				style="
             background-color: {getRandomColor()}; 
